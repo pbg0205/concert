@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: concert_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../concert_mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'concert2025'
+      MYSQL_DATABASE: concert_db
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+  redis:
+    container_name: concert_redis
+    image: redis:7.4
+    ports:
+      - "6379:6379"
