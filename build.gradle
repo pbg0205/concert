@@ -79,9 +79,6 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     runtimeOnly 'com.mysql:mysql-connector-j'
-
-    // redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 bootJar {

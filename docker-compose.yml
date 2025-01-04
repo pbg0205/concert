@@ -13,8 +13,3 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-  redis:
-    container_name: concert_redis
-    image: redis:7.4
-    ports:
-      - "6379:6379"
