@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+
+import com.cooper.concert.business.dto.response.UserBalanceChargeResult;
+import com.cooper.concert.business.service.UserBalanceService;
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.interfaces.presentation.users.dto.request.UserBalanceReChargeRequest;
 import com.cooper.concert.interfaces.presentation.users.dto.response.UserBalanceCheckResponse;
@@ -17,12 +21,21 @@ import com.cooper.concert.interfaces.presentation.users.dto.response.UserBalance
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserBalanceController {
+
+	private final UserBalanceService userBalanceService;
 
 	@PostMapping("/balance/recharge")
 	public ResponseEntity<ApiResponse<UserBalanceRechargeResponse>> rechargeBalance(
 		@RequestBody final UserBalanceReChargeRequest userBalanceReChargeRequest) {
-		return ResponseEntity.ok().body(ApiResponse.success(new UserBalanceRechargeResponse(1000L)));
+
+		final UserBalanceChargeResult userBalanceChargeResult = userBalanceService.chargePoint(
+			userBalanceReChargeRequest.getUserId(),
+			userBalanceReChargeRequest.getPoint());
+
+		return ResponseEntity.ok()
+			.body(ApiResponse.success(new UserBalanceRechargeResponse(userBalanceChargeResult.balance())));
 	}
 
 	@GetMapping("/{userId}/balance")
