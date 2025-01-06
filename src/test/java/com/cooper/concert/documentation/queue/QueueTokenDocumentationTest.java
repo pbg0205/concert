@@ -1,4 +1,4 @@
-package com.cooper.concert.documentation.reservations;
+package com.cooper.concert.documentation.queue;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
@@ -21,7 +21,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
 import com.cooper.concert.common.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
-import com.cooper.concert.reservations.presentation.dto.request.QueueTokenIssueRequest;
+import com.cooper.concert.queue.presentation.dto.request.QueueTokenIssueRequest;
 
 class QueueTokenDocumentationTest extends RestDocsDocumentationTest {
 

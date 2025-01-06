@@ -1,4 +1,4 @@
-package com.cooper.concert.reservations.presentation.dto.response;
+package com.cooper.concert.queue.presentation.dto.request;
 
 import java.util.UUID;
 
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-public class QueueTokenIssueResponse {
-	private final UUID token;
-	private final Integer waitingPosition;
+public class QueueTokenIssueRequest {
+	private final UUID userId;
 }

@@ -1,4 +1,4 @@
-package com.cooper.concert.reservations.presentation;
+package com.cooper.concert.queue.presentation;
 
 import java.util.UUID;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cooper.concert.common.api.support.response.ApiResponse;
-import com.cooper.concert.reservations.presentation.dto.request.QueueTokenIssueRequest;
-import com.cooper.concert.reservations.presentation.dto.response.QueueTokenIssueResponse;
+import com.cooper.concert.queue.presentation.dto.request.QueueTokenIssueRequest;
+import com.cooper.concert.queue.presentation.dto.response.QueueTokenIssueResponse;
 
 @RestController
 @RequestMapping("/api/queue")
