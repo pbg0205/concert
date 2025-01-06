@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.epages.restdocs.apispec.ResourceSnippet;
@@ -61,10 +62,11 @@ public class UserBalanceDocumentationTest extends RestDocsDocumentationTest {
 	}
 
 	@Test
+	@Sql("classpath:sql/user_balance_integration.sql")
 	void 유저_잔액_충전_성공() throws Exception {
 		// given
 		final UserBalanceReChargeRequest userBalanceReChargeRequest =
-			new UserBalanceReChargeRequest(UUID.randomUUID(), 1000L);
+			new UserBalanceReChargeRequest(UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11"), 1000L);
 
 		final String requestBody = objectMapper.writeValueAsString(userBalanceReChargeRequest);
 
