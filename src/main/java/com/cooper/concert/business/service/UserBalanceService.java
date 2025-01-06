@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.business.dto.response.UserBalanceChargeResult;
+import com.cooper.concert.business.dto.response.UserBalanceReadResult;
 import com.cooper.concert.business.errors.UserErrorType;
 import com.cooper.concert.business.errors.exception.UserBalanceNotFoundException;
 import com.cooper.concert.business.errors.exception.UserNotFoundException;
@@ -33,5 +34,16 @@ public class UserBalanceService {
 
 		final Long availableBalance = userBalance.addPoint(point);
 		return new UserBalanceChargeResult(availableBalance);
+	}
+
+	@Transactional(readOnly = true)
+	public UserBalanceReadResult readUserBalance(final UUID userAltId) {
+		final User user = Optional.ofNullable(userRepository.findByAltId(userAltId))
+			.orElseThrow(() -> new UserNotFoundException(UserErrorType.USER_NOT_FOUND));
+
+		final UserBalance userBalance = Optional.ofNullable(userBalanceRepository.findByUserId(user.getId()))
+			.orElseThrow(() -> new UserBalanceNotFoundException(UserErrorType.USER_BALANCE_NOT_FOUND));
+
+		return new UserBalanceReadResult(userBalance.getPoint());
 	}
 }
