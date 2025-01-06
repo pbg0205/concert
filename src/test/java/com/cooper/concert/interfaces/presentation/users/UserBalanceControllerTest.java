@@ -2,6 +2,7 @@ package com.cooper.concert.interfaces.presentation.users;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.cooper.concert.business.dto.response.UserBalanceChargeResult;
+import com.cooper.concert.business.dto.response.UserBalanceReadResult;
 import com.cooper.concert.business.errors.UserErrorType;
 import com.cooper.concert.business.errors.exception.InvalidUserPointException;
 import com.cooper.concert.business.errors.exception.UserNotFoundException;
@@ -40,7 +42,7 @@ class UserBalanceControllerTest {
 
 	@Test
 	@DisplayName("없는 사용자의 식별자인 경우, 사용자 포인트 충전 실패")
-	void 없는_사용자_아이디_경우_포인트_요청_실패() throws Exception {
+	void 없는_사용자_아이디_경우_포인트_충전_요청_실패() throws Exception {
 		// given
 		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
 		final Long point = 1000L;
@@ -68,7 +70,7 @@ class UserBalanceControllerTest {
 
 	@Test
 	@DisplayName("요청 포인트가 음수인 경우, 사용자 포인트 충전 실패")
-	void 요청_포인트_음수인_경우_포인트_요청_실패() throws Exception {
+	void 요청_포인트_음수인_경우_포인트_충전_요청_실패() throws Exception {
 		// given
 		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
 		final Long point = -1L;
@@ -96,7 +98,7 @@ class UserBalanceControllerTest {
 
 	@Test
 	@DisplayName("사용자 포인트 충전 성공")
-	void 포인트_요청_성공() throws Exception {
+	void 포인트_충전_요청_성공() throws Exception {
 		// given
 		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
 		final Long point = 1000L;
@@ -111,6 +113,51 @@ class UserBalanceControllerTest {
 		final ResultActions sut = mockMvc.perform(post("/api/users/balance/recharge")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
+
+		// then
+		sut.andExpectAll(
+			status().isOk(),
+			jsonPath("$.result").value("SUCCESS"),
+			jsonPath("$.data.balance").value(2000),
+			jsonPath("$.error").doesNotExist()
+		);
+	}
+
+	@Test
+	@DisplayName("없는 사용자의 식별자인 경우, 사용자 포인트 조회 실패")
+	void 없는_사용자_아이디_경우_포인트_조회_요청_실패() throws Exception {
+		// given
+		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
+
+		when(userBalanceService.readUserBalance(any()))
+			.thenThrow(new UserNotFoundException(UserErrorType.USER_NOT_FOUND));
+
+		// when
+		final ResultActions sut = mockMvc.perform(get("/api/users/{userId}/balance", userId)
+			.contentType(MediaType.APPLICATION_JSON));
+
+		// then
+		sut.andExpectAll(
+			status().isBadRequest(),
+			jsonPath("$.result").value("ERROR"),
+			jsonPath("$.data").doesNotExist(),
+			jsonPath("$.error.code").value("ERROR_USER04"),
+			jsonPath("$.error.message").value("유저를 찾을 수 없습니다")
+		);
+	}
+
+	@Test
+	@DisplayName("사용자 포인트 조회 성공")
+	void 포인트_조회_요청_성공() throws Exception {
+		// given
+		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
+
+		when(userBalanceService.readUserBalance(any()))
+			.thenReturn(new UserBalanceReadResult(2000L));
+
+		// when
+		final ResultActions sut = mockMvc.perform(get("/api/users/{userId}/balance", userId)
+			.contentType(MediaType.APPLICATION_JSON));
 
 		// then
 		sut.andExpectAll(

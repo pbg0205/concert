@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.business.dto.response.UserBalanceChargeResult;
+import com.cooper.concert.business.dto.response.UserBalanceReadResult;
 import com.cooper.concert.business.service.UserBalanceService;
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.interfaces.presentation.users.dto.request.UserBalanceReChargeRequest;
@@ -41,6 +42,10 @@ public class UserBalanceController {
 	@GetMapping("/{userId}/balance")
 	public ResponseEntity<ApiResponse<UserBalanceCheckResponse>> getBalance(
 		@PathVariable(name = "userId") final UUID userId) {
-		return ResponseEntity.ok().body(ApiResponse.success(new UserBalanceCheckResponse(1000L)));
+
+		final UserBalanceReadResult userBalanceReadResult = userBalanceService.readUserBalance(userId);
+
+		return ResponseEntity.ok()
+			.body(ApiResponse.success(new UserBalanceCheckResponse(userBalanceReadResult.balance())));
 	}
 }
