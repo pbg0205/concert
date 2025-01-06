@@ -37,7 +37,7 @@ class UserBalanceServiceTest {
 	private UserRepository userRepository;
 
 	@Test
-	@DisplayName("유저를 조회하지 못할 경우, UserNotFoundException 반환")
+	@DisplayName("유저를 조회하지 못할 경우, UserNotFoundException 반환하며 포인트 충전 실패")
 	void 유저_조회_실패하면_포인트_충전_실패() {
 		// given
 		final UUID userAltId = UUID.randomUUID();
@@ -53,7 +53,7 @@ class UserBalanceServiceTest {
 	}
 
 	@Test
-	@DisplayName("유저를 조회하지 못할 경우, UserNotFoundException 반환")
+	@DisplayName("유저 잔고 조회하지 못할 경우, UserBalanceNotFoundException 반환하며 포인트 충전 실패")
 	void 유저_잔고_조회_실패하면_포인트_충전_실패() {
 		// given
 		final UUID userAltId = UUID.randomUUID();
