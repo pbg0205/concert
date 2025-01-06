@@ -34,6 +34,7 @@ class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 
 		// when
 		final ResultActions result = mockMvc.perform(post("/api/payments")
+			.header("QUEUE-TOKEN", "queue-token")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
 
@@ -53,6 +54,7 @@ class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 				.summary("결제 API")
 				.description("콘서트 예약 금액을 결제한다.")
 				.requestHeaders(
+					headerWithName("QUEUE-TOKEN").description("대기열 토큰"),
 					headerWithName(HttpHeaders.CONTENT_TYPE).description("컨텐츠 타입"))
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),

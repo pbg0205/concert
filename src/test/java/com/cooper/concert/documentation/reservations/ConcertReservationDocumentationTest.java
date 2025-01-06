@@ -38,6 +38,7 @@ class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 
 		// when
 		final ResultActions result = mockMvc.perform(post("/api/concert/seats/reservation")
+			.header("QUEUE-TOKEN", "queue-token")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
 
@@ -57,6 +58,7 @@ class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 				.summary("콘서트 예약 API")
 				.description("콘서트 좌석을 예약한다.")
 				.requestHeaders(
+					headerWithName("QUEUE-TOKEN").description("대기열 토큰"),
 					headerWithName(HttpHeaders.CONTENT_TYPE).description("컨텐츠 타입"))
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
