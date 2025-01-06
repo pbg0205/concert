@@ -29,9 +29,13 @@ import com.cooper.concert.interfaces.presentation.users.dto.request.UserBalanceR
 public class UserBalanceDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
+	@Sql("classpath:sql/user_balance_integration.sql")
 	void 유저_잔액_조회_성공() throws Exception {
-		// given, when
-		final ResultActions result = mockMvc.perform(get("/api/users/{userId}/balance", UUID.randomUUID())
+		// given
+		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
+
+		// when
+		final ResultActions result = mockMvc.perform(get("/api/users/{userId}/balance", userId)
 			.contentType(MediaType.APPLICATION_JSON));
 
 		// then
