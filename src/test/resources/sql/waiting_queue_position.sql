@@ -1,17 +1,17 @@
 INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (1, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e', '-', '')), 1, 'WAITING', 0),
-       (2, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f78f', '-', '')), 2, 'PROCESSING',
-        1704759600), -- 현재 시간 + 3분
-       (3, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f79d', '-', '')), 3, 'COMPLETED',
-        1704756000), -- 현재 시간 - 10분
-       (4, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7ab', '-', '')), 4, 'WAITING', 0),
-       (5, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7bb', '-', '')), 5, 'PROCESSING',
-        1704759300), -- 현재 시간 + 4분
-       (6, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7c4', '-', '')), 6, 'COMPLETED',
-        1704755400), -- 현재 시간 - 15분
-       (7, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7d2', '-', '')), 7, 'WAITING', 0),
-       (8, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7e1', '-', '')), 8, 'PROCESSING',
-        1704758700), -- 현재 시간 + 2분
-       (9, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7f5', '-', '')), 9, 'COMPLETED',
-        1704755100), -- 현재 시간 - 20분
-       (10, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f804', '-', '')), 10, 'WAITING', 0);
+VALUES (1001, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e', '-', '')), 1001, 'COMPLETED',
+        1736251200000), --2025.01.07T12:00:00
+       (1002, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f78f', '-', '')), 1002, 'PROCESSING',
+        1736251230000), --2025.01.07T12:00:30
+       (1003, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f79d', '-', '')), 1003, 'COMPLETED',
+        1736251260000),--2025.01.07T12:01:00
+       (1004, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7ab', '-', '')), 1004, 'COMPLETED',
+        1736251290000), --2025.01.07T12:01:30
+       (1005, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7bb', '-', '')), 1005, 'PROCESSING',
+        1736251320000),--2025.01.07T12:02:00
+       (1006, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7c4', '-', '')), 1006, 'COMPLETED',
+        1736251350000),--2025.01.07T12:02:30
+       (1007, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7d2', '-', '')), 1007, 'WAITING', 0),
+       (1008, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7e1', '-', '')), 1008, 'WAITING', 0),
+       (1009, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f7f5', '-', '')), 1009, 'WAITING', 0),
+       (1010, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f804', '-', '')), 1010, 'WAITING', 0);
