@@ -13,8 +13,8 @@ import org.mockito.Mockito;
 
 import com.cooper.concert.domain.queues.generator.TokenIdGenerator;
 import com.cooper.concert.domain.queues.models.QueueToken;
-import com.cooper.concert.domain.queues.repository.QueueTokenCommandRepository;
 import com.cooper.concert.domain.queues.service.dto.response.QueueTokenIssueInfo;
+import com.cooper.concert.domain.queues.service.repository.QueueTokenCommandRepository;
 
 class QueueTokenIssueServiceTest {
 

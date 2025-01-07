@@ -14,9 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cooper.concert.domain.queues.models.QueueToken;
-import com.cooper.concert.domain.queues.repository.WaitingQueueCommandRepository;
-import com.cooper.concert.domain.queues.repository.WaitingQueueQueryRepository;
 import com.cooper.concert.domain.queues.service.dto.response.WaitingTokenPositionInfo;
+import com.cooper.concert.domain.queues.service.repository.WaitingQueueCommandRepository;
+import com.cooper.concert.domain.queues.service.repository.WaitingQueueQueryRepository;
 
 @ExtendWith(MockitoExtension.class)
 class WaitingQueueServiceTest {

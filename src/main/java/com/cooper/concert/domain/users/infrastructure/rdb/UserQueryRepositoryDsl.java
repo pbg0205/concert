@@ -11,7 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.domain.users.repository.UserQueryRepository;
+import com.cooper.concert.domain.users.service.repository.UserQueryRepository;
 import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @Repository

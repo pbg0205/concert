@@ -12,10 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.cooper.concert.domain.users.repository.UserBalanceQueryRepository;
 import com.cooper.concert.domain.users.service.errors.UserErrorCode;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.UserBalanceNotFoundException;
+import com.cooper.concert.domain.users.service.repository.UserBalanceQueryRepository;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 
 @ExtendWith(MockitoExtension.class)

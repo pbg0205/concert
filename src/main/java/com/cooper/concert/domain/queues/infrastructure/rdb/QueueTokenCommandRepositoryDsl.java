@@ -1,12 +1,11 @@
 package com.cooper.concert.domain.queues.infrastructure.rdb;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.queues.models.QueueToken;
-import com.cooper.concert.domain.queues.repository.QueueTokenCommandRepository;
+import com.cooper.concert.domain.queues.service.repository.QueueTokenCommandRepository;
 
 @Repository
 @RequiredArgsConstructor
