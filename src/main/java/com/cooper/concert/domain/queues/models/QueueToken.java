@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -17,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@DynamicUpdate
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QueueToken {
@@ -55,6 +57,15 @@ public class QueueToken {
 		}
 
 		this.status = QueueTokenStatus.CANCELLED;
+		return true;
+	}
+
+	public boolean updateProcessing() {
+		if (this.status != QueueTokenStatus.WAITING) {
+			return false;
+		}
+
+		this.status = QueueTokenStatus.PROCESSING;
 		return true;
 	}
 }
