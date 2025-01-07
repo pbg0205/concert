@@ -1,4 +1,4 @@
-package com.cooper.concert.domain.users.business.repository;
+package com.cooper.concert.domain.users.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,15 +11,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.domain.users.models.UserBalance;
-import com.cooper.concert.domain.users.repository.UserBalanceRepository;
 
 @DataJpaTest
 @ComponentScan(basePackages = {"com.cooper.concert.domain.users.infrastructure.rdb",  "com.cooper.concert.common.jpa"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class UserBalanceRepositoryTest {
+class UserBalanceCommandRepositoryTest {
 
 	@Autowired
-	private UserBalanceRepository userBalanceRepository;
+	private UserBalanceCommandRepository userBalanceCommandRepository;
 
 	@Test
 	@DisplayName("유저 존재하지 않을 경우, null 반환")
@@ -29,7 +28,7 @@ class UserBalanceRepositoryTest {
 		final Long userId = 1000L;
 
 		// when
-		final UserBalance sut = userBalanceRepository.findByUserId(userId);
+		final UserBalance sut = userBalanceCommandRepository.findByUserId(userId);
 
 		// then
 		assertThat(sut).isNull();
@@ -43,7 +42,7 @@ class UserBalanceRepositoryTest {
 		final Long userId = 1L;
 
 		// when
-		final UserBalance sut = userBalanceRepository.findByUserId(userId);
+		final UserBalance sut = userBalanceCommandRepository.findByUserId(userId);
 
 		// then
 		assertThat(sut.getUserId()).isEqualTo(userId);
