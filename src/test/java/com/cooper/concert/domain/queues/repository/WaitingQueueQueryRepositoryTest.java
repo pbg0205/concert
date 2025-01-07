@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.jdbc.Sql;
 
+import com.cooper.concert.domain.queues.models.QueueTokenStatus;
+
 @DataJpaTest
 @ComponentScan(basePackages = {"com.cooper.concert.domain.queues.infrastructure.rdb", "com.cooper.concert.common.jpa"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -32,5 +34,20 @@ class WaitingQueueQueryRepositoryTest {
 
 		// then
 		assertThat(sut).isEqualTo(4);
+	}
+
+	@Test
+	@DisplayName("사용 가능한 대기 토큰 존재여부 성공")
+	@Sql("classpath:sql/waiting_queue_position.sql")
+	void 사용_가능한_대기_토큰_존재여부_성공() {
+		// given
+		final Long userId = 1007L; // WAITING 대기열 토믄
+		final String tokenStatus = QueueTokenStatus.WAITING.name();
+
+		// when
+		final boolean sut = waitingQueueQueryRepository.existsTokenByUserIdAndStatus(userId, tokenStatus);
+
+		// then
+		assertThat(sut).isTrue();
 	}
 }

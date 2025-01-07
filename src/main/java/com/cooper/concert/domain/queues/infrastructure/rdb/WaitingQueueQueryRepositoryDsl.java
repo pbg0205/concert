@@ -34,4 +34,12 @@ public class WaitingQueueQueryRepositoryDsl implements WaitingQueueQueryReposito
 				queueToken.id.lt(targetId))
 			.fetchOne();
 	}
+
+	public boolean existsTokenByUserIdAndStatus(final Long userId, String status) {
+		return queryFactory
+			.select(queueToken.id)
+			.from(queueToken)
+			.where(queueToken.userId.eq(userId).and(queueToken.status.stringValue().eq(status)))
+			.fetchFirst() != null;
+	}
 }
