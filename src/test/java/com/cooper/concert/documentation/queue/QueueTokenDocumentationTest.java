@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.epages.restdocs.apispec.ResourceSnippet;
@@ -26,9 +27,11 @@ import com.cooper.concert.interfaces.api.queues.dto.request.QueueTokenIssueReque
 class QueueTokenDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
+	@Sql("classpath:sql/queue_token_issue_integration.sql")
 	void 대기열_토큰_발급_성공() throws Exception {
 		// given
-		final QueueTokenIssueRequest userBalanceReChargeRequest = new QueueTokenIssueRequest(UUID.randomUUID());
+		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
+		final QueueTokenIssueRequest userBalanceReChargeRequest = new QueueTokenIssueRequest(userId);
 
 		final String requestBody = objectMapper.writeValueAsString(userBalanceReChargeRequest);
 
@@ -57,7 +60,7 @@ class QueueTokenDocumentationTest extends RestDocsDocumentationTest {
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
 					fieldWithPath("data.token").type(JsonFieldType.STRING).description("대기열 토큰"),
-					fieldWithPath("data.waitingPosition").type(JsonFieldType.NUMBER).description("대기열 순서"),
+					fieldWithPath("data.position").type(JsonFieldType.NUMBER).description("대기열 순서"),
 					fieldWithPath("error").type(JsonFieldType.NULL).description("에러 정보"))
 				.build()
 		);
