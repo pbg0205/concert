@@ -2,7 +2,7 @@ package com.cooper.concert.domain.queues.models;
 
 public enum QueueTokenStatus {
 	WAITING,
-	AVAILABLE,
+	PROCESSING,
 	CANCELLED,
 	EXPIRED,
 	COMPLETED,
