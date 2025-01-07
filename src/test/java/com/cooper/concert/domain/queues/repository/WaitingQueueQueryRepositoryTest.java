@@ -2,6 +2,10 @@ package com.cooper.concert.domain.queues.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -50,5 +54,34 @@ class WaitingQueueQueryRepositoryTest {
 
 		// then
 		assertThat(sut).isTrue();
+	}
+
+	@Test
+	@DisplayName("대기열 토큰 활성화 상태 사용자 수 조회 성공")
+	@Sql("classpath:/sql/processing_token_counts_sample.sql")
+	void 대기열_토큰_활성화_상태_사용자_수_조회_성공() {
+		// given
+		final LocalDateTime expiredAt = Instant.ofEpochMilli(1736251200000L)
+			.atOffset(ZoneOffset.UTC)
+			.toLocalDateTime(); // 2025.01.07T12:00:00
+
+		// when
+		final Integer sut = waitingQueueQueryRepository.countsTokenByStatusAndExpiredAt(
+			QueueTokenStatus.PROCESSING.name(), expiredAt);
+
+		// then
+		assertThat(sut).isEqualTo(3);
+	}
+
+	@Test
+	@DisplayName("일정 수, 특정 토큰 상태 아이디 목록 조회 성공")
+	@Sql("classpath:sql/waiting_queue_ids_limit_position.sql")
+	void 일정_수_특정_토큰_상태_아이디_목록_조회_성공() {
+		// given, when
+		final List<Long> sut = waitingQueueQueryRepository.findAccessibleIdsByStatusOrderByIdAsc(
+			QueueTokenStatus.WAITING.name(), 3);
+
+		// then
+		assertThat(sut).containsAll(List.of(1007L, 1008L, 1009L));
 	}
 }

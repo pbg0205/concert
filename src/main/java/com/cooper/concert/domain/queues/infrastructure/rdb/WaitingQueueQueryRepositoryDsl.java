@@ -2,6 +2,8 @@ package com.cooper.concert.domain.queues.infrastructure.rdb;
 
 import static com.cooper.concert.domain.queues.models.QQueueToken.queueToken;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -41,5 +43,23 @@ public class WaitingQueueQueryRepositoryDsl implements WaitingQueueQueryReposito
 			.from(queueToken)
 			.where(queueToken.userId.eq(userId).and(queueToken.status.stringValue().eq(status)))
 			.fetchFirst() != null;
+	}
+
+	@Override
+	public Integer countsTokenByStatusAndExpiredAt(final String status, LocalDateTime expiredAt) {
+		return queryFactory.select(queueToken.id)
+			.from(queueToken)
+			.where(queueToken.status.stringValue().eq(status).and(queueToken.expiredAt.gt(expiredAt)))
+			.fetch().size();
+	}
+
+	@Override
+	public List<Long> findAccessibleIdsByStatusOrderByIdAsc(final String status, final Integer accessibleCount) {
+		return queryFactory.select(queueToken.id)
+			.from(queueToken)
+			.where(queueToken.status.stringValue().eq(status))
+			.orderBy(queueToken.id.asc())
+			.limit(accessibleCount)
+			.fetch();
 	}
 }
