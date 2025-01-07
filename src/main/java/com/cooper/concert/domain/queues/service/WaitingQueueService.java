@@ -8,9 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+import com.cooper.concert.domain.queues.models.QueueToken;
 import com.cooper.concert.domain.queues.models.QueueTokenStatus;
+import com.cooper.concert.domain.queues.repository.WaitingQueueCommandRepository;
 import com.cooper.concert.domain.queues.repository.WaitingQueueQueryRepository;
 import com.cooper.concert.domain.queues.service.dto.response.WaitingTokenPositionInfo;
+import com.cooper.concert.domain.queues.service.errors.TokenErrorType;
+import com.cooper.concert.domain.queues.service.errors.exception.TokenNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ import com.cooper.concert.domain.queues.service.dto.response.WaitingTokenPositio
 public class WaitingQueueService {
 
 	private final WaitingQueueQueryRepository waitingQueueQueryRepository;
+	private final WaitingQueueCommandRepository waitingQueueCommandRepository;
 
 	public WaitingTokenPositionInfo getWaitingTokenPosition(final UUID tokenId) {
 		final Long position = waitingQueueQueryRepository.findTokenPositionByTokenId(
