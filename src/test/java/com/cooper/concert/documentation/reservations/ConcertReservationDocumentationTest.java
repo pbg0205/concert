@@ -22,7 +22,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
 import com.cooper.concert.common.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
-import com.cooper.concert.interfaces.presentation.reservations.dto.request.ConcertReservationRequest;
+import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
 
 class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 

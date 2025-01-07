@@ -21,7 +21,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
 import com.cooper.concert.common.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
-import com.cooper.concert.interfaces.presentation.queues.dto.request.QueueTokenIssueRequest;
+import com.cooper.concert.interfaces.api.queues.dto.request.QueueTokenIssueRequest;
 
 class QueueTokenDocumentationTest extends RestDocsDocumentationTest {
 

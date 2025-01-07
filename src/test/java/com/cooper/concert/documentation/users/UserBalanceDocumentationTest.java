@@ -24,7 +24,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
 import com.cooper.concert.common.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
-import com.cooper.concert.interfaces.presentation.users.dto.request.UserBalanceReChargeRequest;
+import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
 
 public class UserBalanceDocumentationTest extends RestDocsDocumentationTest {
 

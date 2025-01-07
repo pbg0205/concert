@@ -21,7 +21,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
 import com.cooper.concert.common.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
-import com.cooper.concert.interfaces.presentation.payments.dto.request.PaymentProcessRequest;
+import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequest;
 
 class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 
