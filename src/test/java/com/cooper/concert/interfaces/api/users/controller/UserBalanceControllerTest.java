@@ -25,8 +25,9 @@ import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPointException;
 import com.cooper.concert.domain.users.service.errors.exception.UserNotFoundException;
-import com.cooper.concert.domain.users.service.UserBalanceService;
 import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
+import com.cooper.concert.interfaces.api.users.usercase.UserBalanceChargeUseCase;
+import com.cooper.concert.interfaces.api.users.usercase.UserBalanceReadUseCase;
 
 @WebMvcTest(UserBalanceController.class)
 class UserBalanceControllerTest {
@@ -38,7 +39,11 @@ class UserBalanceControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockitoBean
-	private UserBalanceService userBalanceService;
+	private UserBalanceChargeUseCase userBalanceChargeUseCase;
+
+	@MockitoBean
+	private UserBalanceReadUseCase userBalanceReadUseCase;
+
 
 	@Test
 	@DisplayName("없는 사용자의 식별자인 경우, 사용자 포인트 충전 실패")
@@ -50,7 +55,7 @@ class UserBalanceControllerTest {
 		final UserBalanceReChargeRequest userBalanceReChargeRequest = new UserBalanceReChargeRequest(userId, point);
 		final String requestBody = objectMapper.writeValueAsString(userBalanceReChargeRequest);
 
-		when(userBalanceService.chargePoint(any(), any()))
+		when(userBalanceChargeUseCase.chargePoint(any(), any()))
 			.thenThrow(new UserNotFoundException(UserErrorType.USER_NOT_FOUND));
 
 		// when
@@ -78,7 +83,7 @@ class UserBalanceControllerTest {
 		final UserBalanceReChargeRequest userBalanceReChargeRequest = new UserBalanceReChargeRequest(userId, point);
 		final String requestBody = objectMapper.writeValueAsString(userBalanceReChargeRequest);
 
-		when(userBalanceService.chargePoint(any(), any()))
+		when(userBalanceChargeUseCase.chargePoint(any(), any()))
 			.thenThrow(new InvalidUserPointException(UserErrorType.CHARGING_POINT_NEGATIVE));
 
 		// when
@@ -106,7 +111,7 @@ class UserBalanceControllerTest {
 		final UserBalanceReChargeRequest userBalanceReChargeRequest = new UserBalanceReChargeRequest(userId, point);
 		final String requestBody = objectMapper.writeValueAsString(userBalanceReChargeRequest);
 
-		when(userBalanceService.chargePoint(any(), any()))
+		when(userBalanceChargeUseCase.chargePoint(any(), any()))
 			.thenReturn(new UserBalanceChargeResult(2000L));
 
 		// when
@@ -129,7 +134,7 @@ class UserBalanceControllerTest {
 		// given
 		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
 
-		when(userBalanceService.readUserBalance(any()))
+		when(userBalanceReadUseCase.readUserBalance(any()))
 			.thenThrow(new UserNotFoundException(UserErrorType.USER_NOT_FOUND));
 
 		// when
@@ -152,7 +157,7 @@ class UserBalanceControllerTest {
 		// given
 		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
 
-		when(userBalanceService.readUserBalance(any()))
+		when(userBalanceReadUseCase.readUserBalance(any()))
 			.thenReturn(new UserBalanceReadResult(2000L));
 
 		// when

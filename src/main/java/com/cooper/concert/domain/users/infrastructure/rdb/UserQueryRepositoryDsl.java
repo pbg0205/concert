@@ -6,22 +6,24 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.domain.users.models.User;
-import com.cooper.concert.domain.users.repository.UserRepository;
+import com.cooper.concert.domain.users.repository.UserQueryRepository;
+import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @Repository
 @RequiredArgsConstructor
-public class QueryDslUserRepository implements UserRepository {
+public class UserQueryRepositoryDsl implements UserQueryRepository {
 
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public User findByAltId(final UUID altId) {
-		return queryFactory.selectFrom(user)
+	public UserReadResult findByAltId(final UUID altId) {
+		return queryFactory.select(Projections.constructor(UserReadResult.class, user.id, user.name))
+			.from(user)
 			.where(user.altId.eq(altId))
 			.fetchFirst();
 	}

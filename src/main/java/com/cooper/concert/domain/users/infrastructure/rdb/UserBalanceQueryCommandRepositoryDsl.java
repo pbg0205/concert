@@ -9,11 +9,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.users.models.UserBalance;
-import com.cooper.concert.domain.users.repository.UserBalanceRepository;
+import com.cooper.concert.domain.users.repository.UserBalanceCommandRepository;
 
 @Repository
 @RequiredArgsConstructor
-public class QueryDslUserBalanceReadRepository implements UserBalanceRepository {
+public class UserBalanceQueryCommandRepositoryDsl implements UserBalanceCommandRepository {
 
 	private final JPAQueryFactory queryFactory;
 

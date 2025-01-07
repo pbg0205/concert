@@ -47,7 +47,7 @@ class UserTest {
 	@DisplayName("유저 생성 성공")
 	void 유저__생성_성공() {
 		// given
-		final UUID altId = UUID.randomUUID();
+		final UUID altId = UUID.fromString("01943efe-ba03-7424-bba5-79c797d0a499"); // uuid v7;
 		final String name = "cooper";
 
 		// when

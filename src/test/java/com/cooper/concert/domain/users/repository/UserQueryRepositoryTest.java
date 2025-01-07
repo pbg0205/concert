@@ -1,4 +1,4 @@
-package com.cooper.concert.domain.users.business.repository;
+package com.cooper.concert.domain.users.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,16 +12,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.jdbc.Sql;
 
-import com.cooper.concert.domain.users.models.User;
-import com.cooper.concert.domain.users.repository.UserRepository;
+import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @DataJpaTest
 @ComponentScan(basePackages = {"com.cooper.concert.domain.users.infrastructure.rdb",  "com.cooper.concert.common.jpa"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class UserRepositoryTest {
+class UserQueryRepositoryTest {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserQueryRepository userQueryRepository;
 
 	@Test
 	@DisplayName("유저 존재하지 않을 경우, null 반환")
@@ -31,7 +30,7 @@ class UserRepositoryTest {
 		final UUID userAltId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e29999");
 
 		// when
-		final User sut = userRepository.findByAltId(userAltId);
+		final UserReadResult sut = userQueryRepository.findByAltId(userAltId);
 
 		// then
 		assertThat(sut).isNull();
@@ -45,9 +44,9 @@ class UserRepositoryTest {
 		final UUID userAltId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
 
 		// when
-		final User sut = userRepository.findByAltId(userAltId);
+		final UserReadResult sut = userQueryRepository.findByAltId(userAltId);
 
 		// then
-		assertThat(sut.getAltId()).isEqualTo(userAltId);
+		assertThat(sut.userId()).isEqualTo(1L);
 	}
 }

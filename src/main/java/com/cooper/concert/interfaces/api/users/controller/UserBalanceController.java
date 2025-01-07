@@ -12,26 +12,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import com.cooper.concert.domain.users.service.UserBalanceReadService;
 import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
-import com.cooper.concert.domain.users.service.UserBalanceService;
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
 import com.cooper.concert.interfaces.api.users.dto.response.UserBalanceCheckResponse;
 import com.cooper.concert.interfaces.api.users.dto.response.UserBalanceRechargeResponse;
+import com.cooper.concert.interfaces.api.users.usercase.UserBalanceChargeUseCase;
+import com.cooper.concert.interfaces.api.users.usercase.UserBalanceReadUseCase;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserBalanceController {
 
-	private final UserBalanceService userBalanceService;
+	private final UserBalanceChargeUseCase userBalanceChargeUseCase;
+	private final UserBalanceReadUseCase userBalanceReadUseCase;
 
 	@PostMapping("/balance/recharge")
 	public ResponseEntity<ApiResponse<UserBalanceRechargeResponse>> rechargeBalance(
 		@RequestBody final UserBalanceReChargeRequest userBalanceReChargeRequest) {
 
-		final UserBalanceChargeResult userBalanceChargeResult = userBalanceService.chargePoint(
+		final UserBalanceChargeResult userBalanceChargeResult = userBalanceChargeUseCase.chargePoint(
 			userBalanceReChargeRequest.getUserId(),
 			userBalanceReChargeRequest.getPoint());
 
@@ -41,9 +44,9 @@ public class UserBalanceController {
 
 	@GetMapping("/{userId}/balance")
 	public ResponseEntity<ApiResponse<UserBalanceCheckResponse>> getBalance(
-		@PathVariable(name = "userId") final UUID userId) {
+		@PathVariable(name = "userId") final UUID userAltId) {
 
-		final UserBalanceReadResult userBalanceReadResult = userBalanceService.readUserBalance(userId);
+		final UserBalanceReadResult userBalanceReadResult = userBalanceReadUseCase.readUserBalance(userAltId);
 
 		return ResponseEntity.ok()
 			.body(ApiResponse.success(new UserBalanceCheckResponse(userBalanceReadResult.balance())));
