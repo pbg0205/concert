@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.cooper.concert.domain.queues.models.QueueToken;
+import com.cooper.concert.domain.queues.repository.WaitingQueueCommandRepository;
 import com.cooper.concert.domain.queues.repository.WaitingQueueQueryRepository;
 import com.cooper.concert.domain.queues.service.dto.response.WaitingTokenPositionInfo;
 
@@ -24,6 +26,9 @@ class WaitingQueueServiceTest {
 
 	@Mock
 	private WaitingQueueQueryRepository waitingQueueQueryRepository;
+
+	@Mock
+	private WaitingQueueCommandRepository waitingQueueCommandRepository;
 
 	@Test
 	@DisplayName("토큰 식별자로 대기열 순서 조회 성공")
