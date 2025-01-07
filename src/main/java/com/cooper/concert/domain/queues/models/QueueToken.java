@@ -51,4 +51,13 @@ public class QueueToken {
 	public static QueueToken createWaitingToken(final UUID tokenId, final Long userId) {
 		return new QueueToken(tokenId, userId, QueueTokenStatus.WAITING); // TODO UUIDv7 코드 작성하기
 	}
+
+	public boolean updateCanceled() {
+		if (this.status != QueueTokenStatus.WAITING) {
+			return false;
+		}
+
+		this.status = QueueTokenStatus.CANCELLED;
+		return true;
+	}
 }
