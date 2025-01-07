@@ -28,7 +28,7 @@ import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPoint
 @DynamicUpdate
 public class UserBalance {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)
