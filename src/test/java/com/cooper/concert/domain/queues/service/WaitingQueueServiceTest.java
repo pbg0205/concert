@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.cooper.concert.domain.queues.models.QueueToken;
 import com.cooper.concert.domain.queues.service.dto.response.WaitingTokenPositionInfo;
@@ -76,5 +79,42 @@ class WaitingQueueServiceTest {
 
 		// then
 		assertThat(sut).isTrue();
+	}
+
+	@Test
+	@DisplayName("활성화된 토큰이 최대 수용량 이라면 활성화 토큰으로 변환 안함")
+	void 활성화된_토큰이_최대_수용량_이라면_활성화_토큰으로_변환_안함() {
+		// given
+		ReflectionTestUtils.setField(waitingQueueService, "processingTokenCapacity", 30);
+
+		when(waitingQueueQueryRepository.countsTokenByStatusAndExpiredAt(any(), any())).thenReturn(30);
+
+		// when
+		final Integer successCount = waitingQueueService.updateToProcessing(LocalDateTime.now());
+
+		// then
+		assertThat(successCount).isZero();
+	}
+
+	@Test
+	@DisplayName("활성화된 토큰이 최대 수용량 보다 적다면 활성화 토큰으로 변환 성공")
+	void 활성화된_토큰이_최대_수용량_보다_적다면_활성화_토큰으로_변환_성공() {
+		// given
+		ReflectionTestUtils.setField(waitingQueueService, "processingTokenCapacity", 30);
+		when(waitingQueueQueryRepository.countsTokenByStatusAndExpiredAt(any(), any())).thenReturn(25);
+		when(waitingQueueCommandRepository.findAllByIds(any()))
+			.thenReturn(List.of(
+				QueueToken.createWaitingToken(UUID.randomUUID(), 1L),
+				QueueToken.createWaitingToken(UUID.randomUUID(), 2L),
+				QueueToken.createWaitingToken(UUID.randomUUID(), 3L),
+				QueueToken.createWaitingToken(UUID.randomUUID(), 4L),
+				QueueToken.createWaitingToken(UUID.randomUUID(), 5L)
+			));
+
+		// when
+		final Integer successCount = waitingQueueService.updateToProcessing(LocalDateTime.now());
+
+		// then
+		assertThat(successCount).isEqualTo(5);
 	}
 }

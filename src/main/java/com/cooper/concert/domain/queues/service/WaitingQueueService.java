@@ -1,8 +1,11 @@
 package com.cooper.concert.domain.queues.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,9 @@ import com.cooper.concert.domain.queues.service.repository.WaitingQueueQueryRepo
 @RequiredArgsConstructor
 @Transactional
 public class WaitingQueueService {
+
+	@Value("${processing.queue.capacity}")
+	private Integer processingTokenCapacity;
 
 	private final WaitingQueueQueryRepository waitingQueueQueryRepository;
 	private final WaitingQueueCommandRepository waitingQueueCommandRepository;
@@ -42,4 +48,24 @@ public class WaitingQueueService {
 
 		return queueToken.updateCanceled();
 	}
+
+	public Integer updateToProcessing(final LocalDateTime expiredAt) {
+		final Integer processingTokenCount =
+			waitingQueueQueryRepository.countsTokenByStatusAndExpiredAt(QueueTokenStatus.PROCESSING.name(), expiredAt);
+
+		final int accessibleCount = processingTokenCapacity - processingTokenCount;
+		if (accessibleCount <= 0) {
+			return 0;
+		}
+
+		final List<Long> accessibleQueueTokenIds = waitingQueueQueryRepository.findAccessibleIdsByStatusOrderByIdAsc(
+			QueueTokenStatus.WAITING.name(),
+			accessibleCount);
+
+		return waitingQueueCommandRepository.findAllByIds(accessibleQueueTokenIds)
+			.stream()
+			.mapToInt(queueToken -> queueToken.updateProcessing() ? 1 : 0)
+			.sum();
+	}
+
 }
