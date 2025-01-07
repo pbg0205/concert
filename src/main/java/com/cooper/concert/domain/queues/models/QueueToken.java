@@ -12,8 +12,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +19,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "userId")})
 public class QueueToken {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false, columnDefinition = "BINARY(16)")
@@ -38,7 +35,7 @@ public class QueueToken {
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private QueueTokenStatus status;
 
-	@Column(nullable = false)
+	@Column
 	@ColumnDefault("0")
 	private LocalDateTime expiredAt;
 
@@ -49,7 +46,7 @@ public class QueueToken {
 	}
 
 	public static QueueToken createWaitingToken(final UUID tokenId, final Long userId) {
-		return new QueueToken(tokenId, userId, QueueTokenStatus.WAITING); // TODO UUIDv7 코드 작성하기
+		return new QueueToken(tokenId, userId, QueueTokenStatus.WAITING);
 	}
 
 	public boolean updateCanceled() {
