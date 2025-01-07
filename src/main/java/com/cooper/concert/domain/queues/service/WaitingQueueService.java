@@ -10,11 +10,11 @@ import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.queues.models.QueueToken;
 import com.cooper.concert.domain.queues.models.QueueTokenStatus;
-import com.cooper.concert.domain.queues.repository.WaitingQueueCommandRepository;
-import com.cooper.concert.domain.queues.repository.WaitingQueueQueryRepository;
 import com.cooper.concert.domain.queues.service.dto.response.WaitingTokenPositionInfo;
 import com.cooper.concert.domain.queues.service.errors.TokenErrorType;
 import com.cooper.concert.domain.queues.service.errors.exception.TokenNotFoundException;
+import com.cooper.concert.domain.queues.service.repository.WaitingQueueCommandRepository;
+import com.cooper.concert.domain.queues.service.repository.WaitingQueueQueryRepository;
 
 @Service
 @RequiredArgsConstructor

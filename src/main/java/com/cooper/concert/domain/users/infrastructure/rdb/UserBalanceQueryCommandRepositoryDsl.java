@@ -9,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.users.models.UserBalance;
-import com.cooper.concert.domain.users.repository.UserBalanceCommandRepository;
+import com.cooper.concert.domain.users.service.repository.UserBalanceCommandRepository;
 
 @Repository
 @RequiredArgsConstructor

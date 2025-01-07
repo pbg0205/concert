@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.domain.users.repository.UserBalanceQueryRepository;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.UserBalanceNotFoundException;
+import com.cooper.concert.domain.users.service.repository.UserBalanceQueryRepository;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 
 @Service

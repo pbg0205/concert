@@ -1,4 +1,4 @@
-package com.cooper.concert.domain.queues.repository;
+package com.cooper.concert.domain.queues.service.repository;
 
 import java.util.UUID;
 

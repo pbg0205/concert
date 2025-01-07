@@ -9,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.queues.models.QueueToken;
-import com.cooper.concert.domain.queues.repository.WaitingQueueCommandRepository;
+import com.cooper.concert.domain.queues.service.repository.WaitingQueueCommandRepository;
 
 @Repository
 @RequiredArgsConstructor

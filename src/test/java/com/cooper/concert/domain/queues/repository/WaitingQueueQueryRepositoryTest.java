@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.domain.queues.models.QueueTokenStatus;
+import com.cooper.concert.domain.queues.service.repository.WaitingQueueQueryRepository;
 
 @DataJpaTest
 @ComponentScan(basePackages = {"com.cooper.concert.domain.queues.infrastructure.rdb", "com.cooper.concert.common.jpa"})
