@@ -79,6 +79,9 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Uuid v7
+    implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
 }
 
 bootJar {
