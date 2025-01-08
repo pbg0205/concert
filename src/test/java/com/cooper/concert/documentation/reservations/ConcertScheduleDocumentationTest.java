@@ -70,7 +70,7 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 	void 예약_가능_날짜_좌석_조회_성공() throws Exception {
 		// given, when
 		final ResultActions result = mockMvc.perform(
-			get("/api/concert/{concertId}/{concertDate}/seats", 1L, "2025-01-05")
+			get("/api/concert/{concertScheduleId}/seats?page={page}", 1L, 1)
 				.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
 				.contentType(MediaType.APPLICATION_JSON));
 
@@ -93,8 +93,7 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 					headerWithName("QUEUE-TOKEN").description("대기열 토큰"),
 					headerWithName(HttpHeaders.CONTENT_TYPE).description("컨텐츠 타입"))
 				.pathParameters(
-					parameterWithName("concertId").description("콘서트 아이디"),
-					parameterWithName("concertDate").description("콘서트 예약 가능 날짜 (yyyy-MM-dd)")
+					parameterWithName("concertScheduleId").description("콘서트 스케줄 아이디")
 				)
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
