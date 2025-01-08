@@ -21,3 +21,7 @@ processing:
   token:
     valid:
       minutes: 5
+concert:
+  schedules:
+    read:
+      limit: 10
