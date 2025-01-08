@@ -96,3 +96,13 @@ bootJar {
     }
     dependsOn('openapi3') // openapi3 실행하고 이후에 bootJar 실행
 }
+
+def querydslSrcDir = 'src/main/generated'
+
+clean {
+    delete file(querydslSrcDir)
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
