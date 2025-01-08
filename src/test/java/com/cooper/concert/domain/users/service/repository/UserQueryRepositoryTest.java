@@ -1,4 +1,4 @@
-package com.cooper.concert.domain.users.repository;
+package com.cooper.concert.domain.users.service.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +14,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
-import com.cooper.concert.domain.users.service.repository.UserQueryRepository;
 import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @DataJpaTest
