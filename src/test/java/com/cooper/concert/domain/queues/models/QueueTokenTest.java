@@ -1,5 +1,6 @@
 package com.cooper.concert.domain.queues.models;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import java.time.LocalDateTime;
@@ -125,5 +126,51 @@ class QueueTokenTest {
 			softAssertions.assertThat(expired).isTrue();
 			softAssertions.assertThat(sut.getStatus()).isEqualTo(QueueTokenStatus.EXPIRED);
 		});
+	}
+
+	@Test
+	@DisplayName("상태는 활성화지만 만료 시간을 초과한 경우 비활성화 토큰")
+	void 상태는_활성화지만_만료_시간을_초과한_경우_비활성화_토큰 () {
+		// given
+		final QueueToken sut = QueueToken.createWaitingToken(UUID.randomUUID(), 1L);
+
+		sut.updateProcessing(LocalDateTime.of(2025, 1, 8, 11, 50), 5);
+
+		// when
+		final boolean validProcessing = sut.isValidProcessingToken(LocalDateTime.of(2025, 1, 8, 11, 58));
+
+		// then
+		assertThat(validProcessing).isFalse();
+	}
+
+	@Test
+	@DisplayName("상태가 활성화가 아닌 경우 비활성화 토큰")
+	void 상태가_활성화가_아닌_경우_비활성화_토큰 () {
+		// given
+		final UUID tokenId = UUID.fromString("0194466b-33bb-7f5f-8db4-c2c2c988bb70"); // uuid ver7
+
+		final QueueToken sut = QueueToken.createWaitingToken(tokenId, 1L);
+
+		// when
+		final boolean validProcessing = sut.isValidProcessingToken(LocalDateTime.of(2025, 1, 8, 11, 58));
+
+		// then
+		assertThat(validProcessing).isFalse();
+	}
+
+
+	@Test
+	@DisplayName("상태는 활성화이고 만료 시간 이내인 경우 활성화 토큰")
+	void 상태는_활성화이고_만료_시간_이내인_경우_활성화_토큰 () {
+		// given
+		final QueueToken sut = QueueToken.createWaitingToken(UUID.randomUUID(), 1L);
+
+		sut.updateProcessing(LocalDateTime.of(2025, 1, 8, 11, 50), 5);
+
+		// when
+		final boolean validProcessing = sut.isValidProcessingToken(LocalDateTime.of(2025, 1, 8, 11, 52));
+
+		// then
+		assertThat(validProcessing).isTrue();
 	}
 }
