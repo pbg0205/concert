@@ -25,11 +25,12 @@ import com.cooper.concert.documentation.RestDocsDocumentationTest;
 class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
-	@Sql("classpath:sql/concert_schedules.sql")
+	@Sql({"classpath:sql/concert_schedule_available_dates_integration_sample_data.sql",
+		"classpath:sql/concert_schedule_integration_queue_token.sql"})
 	void 예약_가능_날짜_조회_성공() throws Exception {
 		// given, when
 		final ResultActions result = mockMvc.perform(get("/api/concert/{concertId}/available-dates?page={page}", 1, 1)
-			.header("QUEUE-TOKEN", "queue-token")
+			.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
 			.contentType(MediaType.APPLICATION_JSON));
 
 		// then
@@ -65,11 +66,12 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 	}
 
 	@Test
+	@Sql("classpath:sql/concert_schedule_integration_queue_token.sql")
 	void 예약_가능_날짜_좌석_조회_성공() throws Exception {
 		// given, when
 		final ResultActions result = mockMvc.perform(
 			get("/api/concert/{concertId}/{concertDate}/seats", 1L, "2025-01-05")
-				.header("QUEUE-TOKEN", "queue-token")
+				.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
 				.contentType(MediaType.APPLICATION_JSON));
 
 		// then
