@@ -1,8 +1,8 @@
-package com.cooper.concert.domain.queues.repository;
+package com.cooper.concert.domain.queues.service.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,11 +11,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
 import com.cooper.concert.domain.queues.models.QueueToken;
-import com.cooper.concert.domain.queues.models.QueueTokenStatus;
 import com.cooper.concert.domain.queues.service.repository.QueueTokenCommandRepository;
 
 @DataJpaTest
@@ -23,23 +21,26 @@ import com.cooper.concert.domain.queues.service.repository.QueueTokenCommandRepo
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestExecutionListeners(value = {
 	DataCleanUpExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-class QueueTokenCommandRepositoryTest {
+class QueueTokenStoreRepositoryTest {
 
 	@Autowired
 	private QueueTokenCommandRepository queueTokenCommandRepository;
 
 	@Test
-	@DisplayName("활성화 토큰 목록 조회 성공")
-	@Sql("classpath:sql/processing_token_repository.sql")
-	void 활성화_토큰_목록_조회_성공() {
+	@DisplayName("대기열 토큰 저장 성공")
+	void 대기열_토큰_저장_성공() {
 		// given
-		QueueTokenStatus status = QueueTokenStatus.PROCESSING;
+		final QueueToken waitingToken = QueueToken.createWaitingToken(UUID.randomUUID(), 1L);
 
 		// when
-		final List<QueueToken> sut = queueTokenCommandRepository.findAllByStatus(status.name());
+		final QueueToken sut = queueTokenCommandRepository.save(waitingToken);
 
 		// then
-		assertThat(sut).hasSize(2);
+		assertSoftly(softAssertions -> {
+			softAssertions.assertThat(sut.getTokenId()).isNotNull();
+			softAssertions.assertThat(sut)
+				.extracting("status")
+				.satisfies(status -> softAssertions.assertThat(status.toString()).isEqualTo("WAITING"));
+		});
 	}
-
 }
