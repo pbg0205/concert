@@ -27,6 +27,9 @@ public class WaitingQueueService {
 	@Value("${processing.queue.capacity}")
 	private Integer processingTokenCapacity;
 
+	@Value("${processing.token.valid.minutes}")
+	private Integer processingTokenMinutes;
+
 	private final WaitingQueueQueryRepository waitingQueueQueryRepository;
 	private final WaitingQueueCommandRepository waitingQueueCommandRepository;
 
@@ -64,7 +67,7 @@ public class WaitingQueueService {
 
 		return waitingQueueCommandRepository.findAllByIds(accessibleQueueTokenIds)
 			.stream()
-			.mapToInt(queueToken -> queueToken.updateProcessing() ? 1 : 0)
+			.mapToInt(queueToken -> queueToken.updateProcessing(LocalDateTime.now(), processingTokenMinutes) ? 1 : 0)
 			.sum();
 	}
 

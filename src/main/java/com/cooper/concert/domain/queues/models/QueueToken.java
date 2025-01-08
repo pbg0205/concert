@@ -60,12 +60,13 @@ public class QueueToken {
 		return true;
 	}
 
-	public boolean updateProcessing() {
+	public boolean updateProcessing(final LocalDateTime currentTime, final Integer validTokenProcessingMinutes) {
 		if (this.status != QueueTokenStatus.WAITING) {
 			return false;
 		}
 
 		this.status = QueueTokenStatus.PROCESSING;
+		this.expiredAt = currentTime.plusMinutes(validTokenProcessingMinutes);
 		return true;
 	}
 }

@@ -18,3 +18,6 @@ spring:
 processing:
   queue:
     capacity: 30
+  token:
+    valid:
+      minutes: 5
