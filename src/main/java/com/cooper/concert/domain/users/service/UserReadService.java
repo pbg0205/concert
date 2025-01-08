@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserReadService {
 
 	private final UserQueryRepository userQueryRepository;

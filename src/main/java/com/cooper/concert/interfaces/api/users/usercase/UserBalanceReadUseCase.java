@@ -2,6 +2,8 @@ package com.cooper.concert.interfaces.api.users.usercase;
 
 import java.util.UUID;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.common.annotations.Facade;
@@ -12,6 +14,7 @@ import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @Facade
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserBalanceReadUseCase {
 
 	private final UserReadService userReadService;

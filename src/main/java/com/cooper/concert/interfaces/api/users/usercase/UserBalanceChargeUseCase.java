@@ -14,11 +14,11 @@ import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @Facade
 @RequiredArgsConstructor
+@Transactional
 public class UserBalanceChargeUseCase {
 	private final UserReadService userReadService;
 	private final UserBalanceChargeService userBalanceChargeService;
 
-	@Transactional
 	public UserBalanceChargeResult chargePoint(final UUID userAltId, final Long point) {
 		final UserReadResult userReadResult = userReadService.findByAltId(userAltId);
 		return userBalanceChargeService.chargePoint(userReadResult.userId(), point);
