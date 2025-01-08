@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import com.cooper.concert.common.annotations.Facade;
 import com.cooper.concert.domain.reservations.service.ConcertScheduleReadService;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
 
 @Facade
 @RequiredArgsConstructor
@@ -22,4 +23,8 @@ public class ConcertScheduleReadUseCase {
 		return concertScheduleReadService.findByAllByConcertIdAndPaging(concertId, offset, limit);
 	}
 
+	public ConcertScheduleSeatsResult readAvailableSeatsByScheduleId(
+		final Long concertScheduleId, final Integer offset, final Integer limit) {
+		return concertScheduleReadService.findAvailableSeatsByScheduleIdAndPaging(concertScheduleId, offset, limit);
+	}
 }
