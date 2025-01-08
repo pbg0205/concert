@@ -15,17 +15,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.cooper.concert.common.api.config.WebConfig;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
+import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleReadUseCase;
 
-@WebMvcTest(value = ConcertScheduleController.class)
+@WebMvcTest(value = ConcertScheduleController.class, excludeFilters = {@ComponentScan.Filter(
+	type = FilterType.ASSIGNABLE_TYPE, classes = {WebConfig.class, QueueTokenValidationInterceptor.class})})
 class ConcertScheduleControllerTest {
 
 	@Autowired

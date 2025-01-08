@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,13 +21,16 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.cooper.concert.common.api.config.WebConfig;
 import com.cooper.concert.domain.queues.service.dto.QueueTokenIssueResult;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.UserNotFoundException;
 import com.cooper.concert.interfaces.api.queues.dto.request.QueueTokenIssueRequest;
+import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.queues.usecase.QueueTokenIssueUseCase;
 
-@WebMvcTest(QueueTokenController.class)
+@WebMvcTest(value = QueueTokenController.class, excludeFilters = {@ComponentScan.Filter(
+	type = FilterType.ASSIGNABLE_TYPE, classes = {WebConfig.class, QueueTokenValidationInterceptor.class})})
 class QueueTokenControllerTest {
 	@Autowired
 	private MockMvc mockMvc;

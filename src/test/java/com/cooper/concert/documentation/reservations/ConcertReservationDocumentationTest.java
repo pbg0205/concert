@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.epages.restdocs.apispec.ResourceSnippet;
@@ -24,6 +25,7 @@ import com.cooper.concert.common.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
 
+@Sql("classpath:sql/concert_reservation_integration_queue_token.sql")
 class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
@@ -38,7 +40,7 @@ class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 
 		// when
 		final ResultActions result = mockMvc.perform(post("/api/concert/seats/reservation")
-			.header("QUEUE-TOKEN", "queue-token")
+			.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
 
