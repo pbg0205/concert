@@ -69,4 +69,22 @@ public class QueueToken {
 		this.expiredAt = currentTime.plusMinutes(validTokenProcessingMinutes);
 		return true;
 	}
+
+	public boolean expire(final LocalDateTime expiredAt) {
+		if (this.status != QueueTokenStatus.PROCESSING) {
+			return false;
+		}
+
+		if (isValidExpiredTime(expiredAt)) {
+			return false;
+		}
+
+		this.status = QueueTokenStatus.EXPIRED;
+		return true;
+	}
+
+	private boolean isValidExpiredTime(final LocalDateTime expiredAt) {
+		return this.expiredAt.isAfter(expiredAt) || this.expiredAt.isEqual(expiredAt);
+	}
+
 }
