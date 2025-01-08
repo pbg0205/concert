@@ -31,4 +31,18 @@ class TokenSchedulerTest {
 		// then
 		assertThat(successCount).isEqualTo(4);
 	}
+
+	@Test
+	@DisplayName("토큰 예정 토큰 만료 상태 변경 성공")
+	@Sql("classpath:sql/token_expire_scheduler.sql")
+	void 토큰_예정_토큰_만료_상태_변경_성공() {
+		// given
+		final LocalDateTime expiredAt = LocalDateTime.of(2025, 1, 7, 12, 10);
+
+		// when
+		final Integer successCount = tokenSchedulerUseCase.expireToken(expiredAt);
+
+		// then
+		assertThat(successCount).isEqualTo(2);
+	}
 }
