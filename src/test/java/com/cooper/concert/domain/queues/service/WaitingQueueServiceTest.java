@@ -101,6 +101,8 @@ class WaitingQueueServiceTest {
 	void 활성화된_토큰이_최대_수용량_보다_적다면_활성화_토큰으로_변환_성공() {
 		// given
 		ReflectionTestUtils.setField(waitingQueueService, "processingTokenCapacity", 30);
+		ReflectionTestUtils.setField(waitingQueueService, "processingTokenMinutes", 5);
+
 		when(waitingQueueQueryRepository.countsTokenByStatusAndExpiredAt(any(), any())).thenReturn(25);
 		when(waitingQueueCommandRepository.findAllByIds(any()))
 			.thenReturn(List.of(
