@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.epages.restdocs.apispec.ResourceSnippet;
@@ -24,9 +25,10 @@ import com.cooper.concert.documentation.RestDocsDocumentationTest;
 class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
+	@Sql("classpath:sql/concert_schedules.sql")
 	void 예약_가능_날짜_조회_성공() throws Exception {
 		// given, when
-		final ResultActions result = mockMvc.perform(get("/api/concert/{concertId}/available-dates", 1L)
+		final ResultActions result = mockMvc.perform(get("/api/concert/{concertId}/available-dates?page={page}", 1, 1)
 			.header("QUEUE-TOKEN", "queue-token")
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -49,11 +51,14 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 					headerWithName("QUEUE-TOKEN").description("대기열 토큰"),
 					headerWithName(HttpHeaders.CONTENT_TYPE).description("컨텐츠 타입"))
 				.pathParameters(
-					parameterWithName("concertId").description("콘서트 아이디")
+					parameterWithName("concertId").description("콘서트 아이디"))
+				.queryParameters(
+					parameterWithName("page").description("페이지")
 				)
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
-					fieldWithPath("data.availableDates").type(JsonFieldType.ARRAY).description("콘서트 예약 가능 날짜"),
+					fieldWithPath("data.[0].concertScheduleId").type(JsonFieldType.NUMBER).description("콘서트 스케줄 아이디"),
+					fieldWithPath("data.[0].availableDate").type(JsonFieldType.STRING).description("콘서트 스케줄 날짜"),
 					fieldWithPath("error").type(JsonFieldType.NULL).description("에러 정보"))
 				.build()
 		);
