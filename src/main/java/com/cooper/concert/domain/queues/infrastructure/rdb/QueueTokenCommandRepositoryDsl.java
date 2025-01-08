@@ -5,6 +5,7 @@ import static com.cooper.concert.domain.queues.models.QQueueToken.queueToken;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -15,6 +16,7 @@ import com.cooper.concert.domain.queues.service.repository.QueueTokenCommandRepo
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class QueueTokenCommandRepositoryDsl implements QueueTokenCommandRepository {
 
 	private final JpaQueueTokenRepository jpaQueueTokenRepository;
