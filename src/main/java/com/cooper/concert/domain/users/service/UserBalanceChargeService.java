@@ -12,7 +12,6 @@ import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.UserBalanceNotFoundException;
 import com.cooper.concert.domain.users.service.repository.UserBalanceCommandRepository;
 import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
-import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 
 @Service
 @Transactional
@@ -26,14 +25,5 @@ public class UserBalanceChargeService {
 
 		final Long availableBalance = userBalance.addPoint(point);
 		return new UserBalanceChargeResult(availableBalance);
-	}
-
-	// TODO 테스트 수정 후, 제거
-	@Transactional(readOnly = true)
-	public UserBalanceReadResult readUserBalance(final Long userId) {
-		final UserBalance userBalance = Optional.ofNullable(userBalanceCommandRepository.findByUserId(userId))
-			.orElseThrow(() -> new UserBalanceNotFoundException(UserErrorType.USER_BALANCE_NOT_FOUND));
-
-		return new UserBalanceReadResult(userBalance.getPoint());
 	}
 }
