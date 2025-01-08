@@ -66,7 +66,8 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 	}
 
 	@Test
-	@Sql("classpath:sql/concert_schedule_integration_queue_token.sql")
+	@Sql({"classpath:sql/concert_schedule_integration_queue_token.sql",
+		"classpath:sql/concert_available_seats_integration.sql"})
 	void 예약_가능_날짜_좌석_조회_성공() throws Exception {
 		// given, when
 		final ResultActions result = mockMvc.perform(
