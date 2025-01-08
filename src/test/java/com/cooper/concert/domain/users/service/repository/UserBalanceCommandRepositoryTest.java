@@ -1,4 +1,4 @@
-package com.cooper.concert.domain.users.repository;
+package com.cooper.concert.domain.users.service.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +13,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
 import com.cooper.concert.domain.users.models.UserBalance;
-import com.cooper.concert.domain.users.service.repository.UserBalanceCommandRepository;
 
 @DataJpaTest
 @ComponentScan(basePackages = {"com.cooper.concert.domain.users.infrastructure.rdb",  "com.cooper.concert.common.jpa"})
