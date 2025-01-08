@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
 import com.cooper.concert.interfaces.api.reservations.dto.response.ConcertAvailableDateResponse;
 import com.cooper.concert.interfaces.api.reservations.dto.response.ConcertAvailableSeatsResponse;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleReadUseCase;
@@ -25,7 +26,10 @@ import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleRea
 public class ConcertScheduleController {
 
 	@Value("${concert.schedules.read.limit}")
-	private int size;
+	private int scheduleSize;
+
+	@Value("${concert.seats.read.limit}")
+	private int seatSize;
 
 	private final ConcertScheduleReadUseCase concertScheduleReadUseCase;
 
@@ -34,10 +38,10 @@ public class ConcertScheduleController {
 		@PathVariable(name = "concertId") final Long concertId,
 		@RequestParam(name = "page") final Integer page) {
 
-		final Integer offset = (page - 1) * size;
+		final Integer offset = (page - 1) * scheduleSize;
 
 		final List<ConcertScheduleResult> concertScheduleResults
-			= concertScheduleReadUseCase.readAllScheduleByConcertIdAndPaging(concertId, offset, size);
+			= concertScheduleReadUseCase.readAllScheduleByConcertIdAndPaging(concertId, offset, scheduleSize);
 
 		final List<ConcertAvailableDateResponse> concertAvailableDateResponses = concertScheduleResults.stream()
 			.map(concertSchedule -> new ConcertAvailableDateResponse(
@@ -53,7 +57,18 @@ public class ConcertScheduleController {
 	public ResponseEntity<ApiResponse<ConcertAvailableSeatsResponse>> findAvailableSeats(
 		@PathVariable(name = "concertScheduleId") final Long concertScheduleId,
 		@RequestParam(name = "page") final Integer page) {
+
+		final Integer offset = (page - 1) * seatSize;
+		final ConcertScheduleSeatsResult concertScheduleSeatsResult =
+			concertScheduleReadUseCase.readAvailableSeatsByScheduleId(concertScheduleId, offset, seatSize);
+
+		final LocalDate concertDate = concertScheduleSeatsResult.date();
+		final List<Long> availableSeats = concertScheduleSeatsResult.availableSeats();
+
+		ConcertAvailableSeatsResponse concertScheduleSeatsResponse =
+			new ConcertAvailableSeatsResponse(concertDate, availableSeats);
+
 		return ResponseEntity.ok()
-			.body(ApiResponse.success(new ConcertAvailableSeatsResponse(LocalDate.of(2024, 12, 29), List.of(1L, 2L, 3L))));
+			.body(ApiResponse.success(concertScheduleSeatsResponse));
 	}
 }
