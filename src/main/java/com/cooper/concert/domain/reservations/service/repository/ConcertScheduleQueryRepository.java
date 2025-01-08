@@ -6,4 +6,5 @@ import com.cooper.concert.domain.reservations.service.dto.response.ConcertSchedu
 
 public interface ConcertScheduleQueryRepository {
 	List<ConcertScheduleResult> findByAllByConcertIdAndPaging(Long concertId, int page, int size);
+	ConcertScheduleResult findConcertScheduleResultById(Long scheduleId);
 }

@@ -35,4 +35,14 @@ public class ConcertScheduleQueryRepositoryDsl implements ConcertScheduleQueryRe
 			.limit(limit)
 			.fetch();
 	}
+
+	@Override
+	public ConcertScheduleResult findConcertScheduleResultById(final Long scheduleId) {
+		return queryFactory.select(Projections.constructor(ConcertScheduleResult.class,
+				concertSchedule.id,
+				concertSchedule.startAt))
+			.from(concertSchedule)
+			.where(concertSchedule.id.eq(scheduleId))
+			.fetchOne();
+	}
 }
