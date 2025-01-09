@@ -17,7 +17,6 @@ import com.cooper.concert.domain.users.service.UserBalanceChargeService;
 import com.cooper.concert.domain.users.service.UserReadService;
 import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
 import com.cooper.concert.domain.users.service.response.UserReadResult;
-import com.cooper.concert.interfaces.api.users.usercase.UserBalanceChargeUseCase;
 
 @ExtendWith(MockitoExtension.class)
 public class UserBalanceChargeUseCaseTest {
