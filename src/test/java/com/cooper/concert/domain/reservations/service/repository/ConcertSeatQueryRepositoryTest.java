@@ -14,6 +14,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatPriceInfo;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 
 @DataJpaTest
@@ -45,7 +46,7 @@ class ConcertSeatQueryRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("좌석 상태와 콘서트 스케줄 식별자를 통해 좌석 조회 성공")
+	@DisplayName("예약 가능 좌석 조회 페이지네이션 성공")
 	@Sql("classpath:sql/concert_seats_repository.sql")
 	void 예약_가능_좌석_조회_페이지네이션_성공() {
 		// given
@@ -61,4 +62,19 @@ class ConcertSeatQueryRepositoryTest {
 		// then
 		assertThat(sut).hasSize(5);
 	}
+
+	@Test
+	@DisplayName("좌석 상태와 콘서트 스케줄 식별자를 통해 좌석 조회 성공")
+	@Sql("classpath:sql/concert_seats_repository.sql")
+	void 예약_가능_좌석_가격_조회() {
+		// given
+		final Long seatId = 1L;
+
+		// when
+		final ConcertSeatPriceInfo sut = concertSeatQueryRepository.findConcertSeatPriceInfoById(seatId);
+
+		// then
+		assertThat(sut).extracting("price").isEqualTo(3000L);
+	}
+
 }

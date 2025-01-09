@@ -11,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatPriceInfo;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 import com.cooper.concert.domain.reservations.service.repository.ConcertSeatQueryRepository;
 
@@ -23,11 +24,21 @@ public class ConcertSeatQueryRepositoryDsl implements ConcertSeatQueryRepository
 	@Override
 	public List<ConcertSeatResult> findConcertSeatsByScheduleIdAndStatusAndPaging(
 		final Long scheduleId, final String status, final Integer offset, final Integer limit) {
-		return queryFactory.select(Projections.constructor(ConcertSeatResult.class, concertSeat.id, concertSeat.seatNumber))
+		return queryFactory.select(
+				Projections.constructor(ConcertSeatResult.class, concertSeat.id, concertSeat.seatNumber))
 			.from(concertSeat)
 			.where(concertSeat.scheduleId.eq(scheduleId).and(concertSeat.status.stringValue().eq(status)))
 			.limit(limit)
 			.offset(offset)
 			.fetch();
+	}
+
+	@Override
+	public ConcertSeatPriceInfo findConcertSeatPriceInfoById(final Long seatId) {
+		return queryFactory.select(Projections.constructor(ConcertSeatPriceInfo.class,
+				concertSeat.id, concertSeat.seatNumber, concertSeat.price))
+			.from(concertSeat)
+			.where(concertSeat.id.eq(seatId))
+			.fetchOne();
 	}
 }
