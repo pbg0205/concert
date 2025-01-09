@@ -2,6 +2,7 @@ package com.cooper.concert.domain.payments.infrastructure.rdb;
 
 import static com.cooper.concert.domain.payments.models.QPayment.payment;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -30,5 +31,12 @@ public class PaymentCommandRepositoryDsl implements PaymentCommandRepository {
 		return queryFactory.selectFrom(payment)
 			.where(payment.altId.eq(paymentAltId))
 			.fetchOne();
+	}
+
+	@Override
+	public List<Payment> findAllByReservationIds(final List<Long> reservationIds, String paymentStatus) {
+		return queryFactory.selectFrom(payment)
+			.where(payment.reservationId.in(reservationIds).and(payment.status.stringValue().eq(paymentStatus)))
+			.fetch();
 	}
 }

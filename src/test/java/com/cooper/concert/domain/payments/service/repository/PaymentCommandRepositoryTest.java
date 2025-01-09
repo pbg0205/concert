@@ -1,7 +1,9 @@
 package com.cooper.concert.domain.payments.service.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -61,4 +63,20 @@ class PaymentCommandRepositoryTest {
 			softAssertions.assertThat(sut).extracting("id").isNotNull();
 		});
 	}
+
+	@Test
+	@DisplayName("삭제 예정 결제 목록 조회")
+	@Sql("classpath:sql/payment_for_cancel_repository.sql")
+	void 삭제_예정_결제_목록_조회() {
+		// given
+		final List<Long> reservationIds = List.of(12345L, 12346L, 12347L, 12348L, 12349L, 12350L);
+		final String paymentStatus = "PENDING";
+
+		// when
+		final List<Payment> sut = paymentCommandRepository.findAllByReservationIds(reservationIds, paymentStatus);
+
+		// then
+		assertThat(sut).hasSize(4);
+	}
+
 }
