@@ -32,6 +32,10 @@ public class ConcertSeat {
 	@Column(nullable = false)
 	private Long seatNumber;
 
+	@Column(nullable = false)
+	@ColumnDefault("0")
+	private Long price;
+
 	@Column(nullable = false, length = 20)
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Getter(AccessLevel.PRIVATE)
