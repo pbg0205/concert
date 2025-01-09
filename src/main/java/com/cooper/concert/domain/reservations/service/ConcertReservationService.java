@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.reservations.models.ConcertSeat;
 import com.cooper.concert.domain.reservations.models.Reservation;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationCompletedInfo;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationInfo;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ReservationErrorType;
