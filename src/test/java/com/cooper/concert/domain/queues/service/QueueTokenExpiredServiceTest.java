@@ -46,10 +46,10 @@ class QueueTokenExpiredServiceTest {
 			.thenReturn(queueTokens);
 
 		// when
-		final Integer sut = queueTokenExpiredService.updateToExpired(expiredAt);
+		final List<Long> sut = queueTokenExpiredService.updateToExpired(expiredAt);
 
 		// then
-		assertThat(sut).isEqualTo(0);
+		assertThat(sut).hasSize(0);
 	}
 
 	@ParameterizedTest
@@ -68,10 +68,10 @@ class QueueTokenExpiredServiceTest {
 			.thenReturn(queueTokens);
 
 		// when
-		final Integer sut = queueTokenExpiredService.updateToExpired(expiredAt);
+		final List<Long> sut = queueTokenExpiredService.updateToExpired(expiredAt);
 
 		// then
-		assertThat(sut).isEqualTo(5);
+		assertThat(sut).hasSize(5);
 	}
 
 	private static Stream<Arguments> queueTokenSource() {
