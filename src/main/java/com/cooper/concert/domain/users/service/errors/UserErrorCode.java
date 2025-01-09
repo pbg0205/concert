@@ -6,5 +6,7 @@ public enum UserErrorCode {
 	ERROR_USER03,
 	ERROR_USER04,
 	ERROR_USER05,
-	ERROR_USER06
+	ERROR_USER06,
+	ERROR_USER07,
+	;
 }

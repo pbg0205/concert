@@ -11,7 +11,8 @@ public enum UserErrorType {
 	USER_BALANCE_NEGATIVE(UserErrorCode.ERROR_USER03, "유저 잔고는 음수일 수 없습니다."),
 	USER_NOT_FOUND(UserErrorCode.ERROR_USER04, "유저를 찾을 수 없습니다"),
 	USER_BALANCE_NOT_FOUND(UserErrorCode.ERROR_USER05, "유저 잔고를 찾을 수 없습니다."),
-	CHARGING_POINT_NEGATIVE(UserErrorCode.ERROR_USER06, "충전 포인트는 음수일 수 없습니다.");
+	CHARGING_POINT_NEGATIVE(UserErrorCode.ERROR_USER06, "충전 포인트는 음수일 수 없습니다."),
+	INSUFFICIENT_BALANCE(UserErrorCode.ERROR_USER07, "유저 잔고가 부족합니다.");
 
 	private final UserErrorCode errorCode;
 	private final String message;
