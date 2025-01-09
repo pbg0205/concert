@@ -34,6 +34,7 @@ public class ConcertSeat {
 
 	@Column(nullable = false, length = 20)
 	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Getter(AccessLevel.PRIVATE)
 	private ConcertSeatStatus status;
 
 	@CreationTimestamp
@@ -46,4 +47,35 @@ public class ConcertSeat {
 	@ColumnDefault("0")
 	private LocalDateTime modifiedAt;
 
+	private ConcertSeat(final Long scheduleId, final Long seatNumber, final ConcertSeatStatus status) {
+		this.scheduleId = scheduleId;
+		this.seatNumber = seatNumber;
+		this.status = status;
+	}
+
+	public static ConcertSeat createAvailableSeat(final Long scheduleId, final Long seatNumber) {
+		return new ConcertSeat(scheduleId, seatNumber, ConcertSeatStatus.AVAILABLE);
+	}
+
+	public boolean updateUnavailable() {
+		if (this.status != ConcertSeatStatus.AVAILABLE) {
+			return false;
+		}
+
+		this.status = ConcertSeatStatus.UNAVAILABLE;
+		return true;
+	}
+
+	public boolean updateAvailable() {
+		if (this.status != ConcertSeatStatus.UNAVAILABLE) {
+			return false;
+		}
+
+		this.status = ConcertSeatStatus.AVAILABLE;
+		return true;
+	}
+
+	public boolean isUnavailable() {
+		return this.status == ConcertSeatStatus.UNAVAILABLE;
+	}
 }
