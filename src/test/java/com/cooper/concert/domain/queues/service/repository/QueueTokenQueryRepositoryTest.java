@@ -53,4 +53,19 @@ class QueueTokenQueryRepositoryTest {
 		// then
 		assertThat(sut).isNotNull();
 	}
+
+	@Test
+	@DisplayName("토큰 아이디로 대기열 토큰 조회 성공")
+	@Sql("classpath:sql/token_read_repository.sql")
+	void 토큰_아이디로_유저_아이디_조회_성공() {
+		// given
+		final UUID tokenId = UUID.fromString("01b8f8a1-6f8c-7b6e-87c3-234a3c15f78f");
+
+		// when
+		final Long sut = queueTokenQueryRepository.findUserIdByTokenId(tokenId);
+
+		// then
+		assertThat(sut).isEqualTo(1002);
+	}
+
 }
