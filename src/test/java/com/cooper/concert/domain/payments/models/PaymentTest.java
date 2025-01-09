@@ -14,9 +14,10 @@ class PaymentTest {
 	void 결제_객체_생성하면_상태는_PENDING() {
 		// given
 		final UUID altId = UUID.fromString("01944a4c-5980-7920-97e3-b981fec463d5");
+		final Long reservationId = 1L;
 
 		// when
-		final Payment sut = Payment.createPendingPayment(altId);
+		final Payment sut = Payment.createPendingPayment(altId, reservationId);
 
 		// then
 		assertThat(sut).extracting("status").isEqualTo(PaymentStatus.PENDING);

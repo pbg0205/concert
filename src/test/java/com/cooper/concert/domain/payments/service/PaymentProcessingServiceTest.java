@@ -35,7 +35,8 @@ class PaymentProcessingServiceTest {
 	void 결제_생성_성공() {
 		// given
 		final UUID paymentAltId = paymentAltIdGenerator.generatePaymentAltId();
-		final Payment payment = Payment.createPendingPayment(paymentAltId);
+		final Long reservationId = 1L;
+		final Payment payment = Payment.createPendingPayment(paymentAltId, reservationId);
 
 		when(paymentCommandRepository.save(any())).thenReturn(payment);
 
