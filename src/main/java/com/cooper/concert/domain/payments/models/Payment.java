@@ -18,6 +18,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import com.cooper.concert.domain.payments.service.errors.PaymentErrorType;
+import com.cooper.concert.domain.payments.service.errors.exception.PaymentCompleteFailException;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "altId")})
@@ -53,5 +56,18 @@ public class Payment {
 
 	public static Payment createPendingPayment(final UUID paymentAltId, final Long reservationId) {
 		return new Payment(paymentAltId, reservationId, PaymentStatus.PENDING);
+	}
+
+	public boolean complete() {
+		if (this.status == PaymentStatus.CANCELLED) {
+			throw new PaymentCompleteFailException(PaymentErrorType.PAYMENT_CANCELED);
+		}
+
+		if (this.status == PaymentStatus.COMPLETED) {
+			throw new PaymentCompleteFailException(PaymentErrorType.PAYMENT_COMPLETED);
+		}
+
+		this.status = PaymentStatus.COMPLETED;
+		return true;
 	}
 }
