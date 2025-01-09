@@ -8,9 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,10 +28,7 @@ class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 	@Test
 	void 예약_요청() throws Exception {
 		// given
-		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(
-			UUID.randomUUID(),
-			LocalDate.of(2025, 1, 5),
-			3);
+		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(3L);
 
 		final String requestBody = objectMapper.writeValueAsString(concertReservationRequest);
 

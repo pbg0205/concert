@@ -1,5 +1,6 @@
 package com.cooper.concert.interfaces.api.reservations.controller;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ public class ConcertReservationController {
 	public ResponseEntity<ApiResponse<ConcertReservationResponse>> reserveConcertSeats(
 		@RequestBody final ConcertReservationRequest concertReservationRequest,
 		@RequestHeader("QUEUE-TOKEN") String tokenId
-		) {
+	) {
 		return ResponseEntity.ok()
 			.body(ApiResponse.success(new ConcertReservationResponse(
 				UUID.randomUUID(),
 				UUID.randomUUID(),
-				concertReservationRequest.getDate(),
-				concertReservationRequest.getSeat()))
+				LocalDate.of(2025, 1, 9),
+				1))
 			);
 	}
 }
