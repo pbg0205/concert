@@ -3,6 +3,7 @@ package com.cooper.concert.domain.reservations.service.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -58,4 +59,20 @@ class ReservationCommandRepositoryTest {
 			softAssertions.assertThat(sut.getId()).isEqualTo(reservationId);
 		});
 	}
+
+	@Test
+	@DisplayName("사용자 예약 취소 성공")
+	@Sql("classpath:sql/reservation_cancel_repository.sql")
+	void 사용자_예약_취소_성공() {
+		// given
+		final List<Long> userIds = List.of(1L, 2L, 3L, 4L);
+		String status = "PENDING";
+
+		// when
+		final List<Reservation> sut = reservationCommandRepository.findByUserIdsAndReservationStatus(userIds, status);
+
+		// then
+		assertThat(sut).hasSize(4);
+	}
+
 }
