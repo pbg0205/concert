@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.epages.restdocs.apispec.ResourceSnippet;
@@ -26,9 +27,11 @@ import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequ
 class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
+	@Sql("classpath:sql/payment_process_integration.sql")
 	void 결제_성공() throws Exception {
 		// given
-		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(UUID.randomUUID());
+		UUID paymentId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
@@ -58,7 +61,6 @@ class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 					headerWithName(HttpHeaders.CONTENT_TYPE).description("컨텐츠 타입"))
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
-					fieldWithPath("data.seatNumber").type(JsonFieldType.NUMBER).description("좌석 번호"),
 					fieldWithPath("data.reservationId").type(JsonFieldType.STRING).description("예약 아이디"),
 					fieldWithPath("error").type(JsonFieldType.NULL).description("에러 정보"))
 				.build()
