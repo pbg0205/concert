@@ -1,6 +1,7 @@
 package com.cooper.concert.interfaces.schedules.queues.usecase;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class TokenSchedulerUseCase {
 	}
 
 	public Integer expireToken(final LocalDateTime expiredAt) {
-		return queueTokenExpiredService.updateToExpired(expiredAt);
+		final List<Long> expiredTokenUserIds = queueTokenExpiredService.updateToExpired(expiredAt);
+		return expiredTokenUserIds.size();
 	}
 }

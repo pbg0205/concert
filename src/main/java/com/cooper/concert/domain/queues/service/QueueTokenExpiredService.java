@@ -1,6 +1,7 @@
 package com.cooper.concert.domain.queues.service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,19 +20,21 @@ public class QueueTokenExpiredService {
 
 	private final QueueTokenCommandRepository queueTokenCommandRepository;
 
-	public Integer updateToExpired(final LocalDateTime expiredAt) {
+	public List<Long> updateToExpired(final LocalDateTime expiredAt) {
 		final List<QueueToken> expiringQueueTokens =
 			queueTokenCommandRepository.findAllByStatus(QueueTokenStatus.PROCESSING.name());
 
+		List<Long> expiredTokenUserIds = Collections.emptyList();
 		if (expiringQueueTokens.isEmpty()) {
-			return 0;
+			return expiredTokenUserIds;
 		}
 
-		int successCount = 0;
 		for (QueueToken expiringQueueToken : expiringQueueTokens) {
-			successCount += expiringQueueToken.expire(expiredAt) ? 1 : 0;
+			if (expiringQueueToken.expire(expiredAt)) {
+				expiredTokenUserIds.add(expiringQueueToken.getUserId());
+			}
 		}
 
-		return successCount;
+		return expiredTokenUserIds;
 	}
 }
