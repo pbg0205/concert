@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
@@ -26,6 +27,7 @@ import com.cooper.concert.domain.payments.service.errors.exception.PaymentComple
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "altId")})
+@DynamicUpdate
 public class Payment {
 
 	@Id
@@ -70,6 +72,15 @@ public class Payment {
 			throw new PaymentCompleteFailException(PaymentErrorType.PAYMENT_CANCELED);
 		}
 
+		if (this.status == PaymentStatus.COMPLETED) {
+			throw new PaymentCompleteFailException(PaymentErrorType.PAYMENT_COMPLETED);
+		}
+
+		this.status = PaymentStatus.COMPLETED;
+		return true;
+	}
+
+	public boolean cancel() {
 		if (this.status == PaymentStatus.COMPLETED) {
 			throw new PaymentCompleteFailException(PaymentErrorType.PAYMENT_COMPLETED);
 		}
