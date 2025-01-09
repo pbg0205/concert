@@ -28,4 +28,12 @@ public class QueueTokenQueryRepositoryDsl implements QueueTokenQueryRepository {
 			.fetchOne();
 	}
 
+	@Override
+	public Long findUserIdByTokenId(final UUID tokenId) {
+		return queryFactory.select(queueToken.userId)
+			.from(queueToken)
+			.where(queueToken.tokenId.eq(tokenId))
+			.fetchOne();
+	}
+
 }
