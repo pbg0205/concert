@@ -73,4 +73,33 @@ class UserBalanceTest {
 		// then
 		assertThat(updatedBalance).isEqualTo(2000L);
 	}
+
+	@Test
+	@DisplayName("잔고 부족하면 포인트 사용 실패")
+	void 잔고_부족하면_포인트_사용_실패() {
+		// given
+		final Long point = 2000L;
+		final UserBalance sut = UserBalance.create(1L, 1000L);
+
+		// when, then
+		assertThatThrownBy(() -> sut.usePoint(point))
+			.isInstanceOf(InvalidUserPointException.class)
+			.extracting("errorType")
+			.satisfies(errorType -> assertThat(((UserErrorType)errorType)).isEqualTo(UserErrorType.INSUFFICIENT_BALANCE));
+	}
+
+	@Test
+	@DisplayName("포인트 보다 잔고가 많으면 포인트 사용 실패")
+	void 포인트_보다_잔고가_많으면_포인트_사용_성공() {
+		// given
+		final Long point = 500L;
+		final UserBalance sut = UserBalance.create(1L, 1000L);
+
+		// when
+		final Long balance = sut.usePoint(point);
+
+		// then
+		assertThat(balance).isEqualTo(500L);
+	}
+
 }

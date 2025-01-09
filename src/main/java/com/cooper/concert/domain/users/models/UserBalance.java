@@ -68,4 +68,11 @@ public class UserBalance {
 		this.point += point;
 		return this.point;
 	}
+
+	public Long usePoint(final Long point) {
+		this.point -= point;
+		validatePoint(this.point, UserErrorType.INSUFFICIENT_BALANCE);
+		return this.point;
+	}
+
 }
