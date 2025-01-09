@@ -12,15 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.domain.users.service.UserBalanceReadService;
 import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
 import com.cooper.concert.interfaces.api.users.dto.response.UserBalanceCheckResponse;
 import com.cooper.concert.interfaces.api.users.dto.response.UserBalanceRechargeResponse;
-import com.cooper.concert.interfaces.api.users.usercase.UserBalanceChargeUseCase;
-import com.cooper.concert.interfaces.api.users.usercase.UserBalanceReadUseCase;
+import com.cooper.concert.interfaces.api.users.usecase.UserBalanceChargeUseCase;
+import com.cooper.concert.interfaces.api.users.usecase.UserBalanceReadUseCase;
 
 @RestController
 @RequestMapping("/api/users")

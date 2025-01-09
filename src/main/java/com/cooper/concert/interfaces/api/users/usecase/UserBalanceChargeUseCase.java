@@ -1,4 +1,4 @@
-package com.cooper.concert.interfaces.api.users.usercase;
+package com.cooper.concert.interfaces.api.users.usecase;
 
 import java.util.UUID;
 

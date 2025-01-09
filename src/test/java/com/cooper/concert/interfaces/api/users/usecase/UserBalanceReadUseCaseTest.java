@@ -17,7 +17,6 @@ import com.cooper.concert.domain.users.service.UserBalanceReadService;
 import com.cooper.concert.domain.users.service.UserReadService;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 import com.cooper.concert.domain.users.service.response.UserReadResult;
-import com.cooper.concert.interfaces.api.users.usercase.UserBalanceReadUseCase;
 
 @ExtendWith(MockitoExtension.class)
 class UserBalanceReadUseCaseTest {

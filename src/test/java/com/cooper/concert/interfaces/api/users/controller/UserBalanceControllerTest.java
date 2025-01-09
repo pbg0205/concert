@@ -23,15 +23,15 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.cooper.concert.common.api.config.WebConfig;
-import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
-import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPointException;
 import com.cooper.concert.domain.users.service.errors.exception.UserNotFoundException;
+import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
+import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
 import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
-import com.cooper.concert.interfaces.api.users.usercase.UserBalanceChargeUseCase;
-import com.cooper.concert.interfaces.api.users.usercase.UserBalanceReadUseCase;
+import com.cooper.concert.interfaces.api.users.usecase.UserBalanceChargeUseCase;
+import com.cooper.concert.interfaces.api.users.usecase.UserBalanceReadUseCase;
 
 @WebMvcTest(value = UserBalanceController.class, excludeFilters = {@ComponentScan.Filter(
 	type = FilterType.ASSIGNABLE_TYPE, classes = {WebConfig.class, QueueTokenValidationInterceptor.class})})
