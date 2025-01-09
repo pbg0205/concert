@@ -45,12 +45,13 @@ public class Payment {
 	@ColumnDefault("0")
 	private LocalDateTime modifiedAt;
 
-	private Payment(final UUID altId, final PaymentStatus status) {
+	private Payment(final UUID altId, final Long reservationId, final PaymentStatus status) {
 		this.altId = altId;
+		this.reservationId = reservationId;
 		this.status = status;
 	}
 
-	public static Payment createPendingPayment(final UUID paymentAltId) {
-		return new Payment(paymentAltId, PaymentStatus.PENDING);
+	public static Payment createPendingPayment(final UUID paymentAltId, final Long reservationId) {
+		return new Payment(paymentAltId, reservationId, PaymentStatus.PENDING);
 	}
 }

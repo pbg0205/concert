@@ -31,7 +31,8 @@ class PaymentCommandRepositoryTest {
 	void 결제_객체_생성_성공() {
 		// given
 		final UUID paymentAltId = UUID.fromString("01944a6e-28a5-75d8-a25e-33738ed269c1");
-		final Payment payment = Payment.createPendingPayment(paymentAltId);
+		final Long reservationId = 1L;
+		final Payment payment = Payment.createPendingPayment(paymentAltId, reservationId);
 
 		// when
 		final Payment sut = paymentCommandRepository.save(payment);

@@ -21,7 +21,7 @@ public class PaymentProcessingService {
 
 	public PaymentCreationInfo createPendingPayment(final Long reservationId) {
 		final UUID paymentAltId = paymentAltIdGenerator.generatePaymentAltId();
-		final Payment savedPayment = paymentCommandRepository.save(Payment.createPendingPayment(paymentAltId));
+		final Payment savedPayment = paymentCommandRepository.save(Payment.createPendingPayment(paymentAltId, reservationId));
 		return new PaymentCreationInfo(savedPayment.getAltId());
 	}
 }
