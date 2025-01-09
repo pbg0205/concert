@@ -20,6 +20,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import com.cooper.concert.domain.reservations.service.errors.ReservationErrorType;
+import com.cooper.concert.domain.reservations.service.errors.exception.ReservationCanceledException;
+import com.cooper.concert.domain.reservations.service.errors.exception.ReservationReservedException;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,6 +45,7 @@ public class Reservation {
 
 	@Column(nullable = false, length = 20)
 	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Getter(AccessLevel.PRIVATE)
 	private ReservationStatus status;
 
 	@CreationTimestamp
@@ -62,5 +67,27 @@ public class Reservation {
 
 	public static Reservation createPendingReservation(final Long userId, final Long seatId, final UUID altId) {
 		return new Reservation(userId, seatId, altId, ReservationStatus.PENDING);
+	}
+
+	public boolean cancel() {
+		if (this.status == ReservationStatus.RESERVED) {
+			throw new ReservationReservedException(ReservationErrorType.RESERVATION_RESERVED);
+		}
+
+		this.status = ReservationStatus.CANCELED;
+		return true;
+	}
+
+	public boolean complete() {
+		if (this.status == ReservationStatus.CANCELED) {
+			throw new ReservationCanceledException(ReservationErrorType.RESERVATION_CANCELED);
+		}
+
+		if (this.status  == ReservationStatus.RESERVED) {
+			throw new ReservationReservedException(ReservationErrorType.RESERVATION_RESERVED);
+		}
+
+		this.status = ReservationStatus.RESERVED;
+		return true;
 	}
 }
