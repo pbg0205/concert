@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
+import com.cooper.concert.interfaces.api.reservations.controller.dto.response.ConcertSeatResponse;
 import com.cooper.concert.interfaces.api.reservations.dto.response.ConcertAvailableDateResponse;
 import com.cooper.concert.interfaces.api.reservations.dto.response.ConcertAvailableSeatsResponse;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleReadUseCase;
@@ -59,11 +60,15 @@ public class ConcertScheduleController {
 		@RequestParam(name = "page") final Integer page) {
 
 		final Integer offset = (page - 1) * seatSize;
+
 		final ConcertScheduleSeatsResult concertScheduleSeatsResult =
 			concertScheduleReadUseCase.readAvailableSeatsByScheduleId(concertScheduleId, offset, seatSize);
 
 		final LocalDate concertDate = concertScheduleSeatsResult.date();
-		final List<Long> availableSeats = concertScheduleSeatsResult.availableSeats();
+		final List<ConcertSeatResponse> availableSeats =
+			concertScheduleSeatsResult.availableSeats().stream()
+				.map(result -> new ConcertSeatResponse(result.id(), result.seatNumber()))
+				.toList();
 
 		ConcertAvailableSeatsResponse concertScheduleSeatsResponse =
 			new ConcertAvailableSeatsResponse(concertDate, availableSeats);

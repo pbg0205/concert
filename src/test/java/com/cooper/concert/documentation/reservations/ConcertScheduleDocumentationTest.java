@@ -98,8 +98,9 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 				)
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
-					fieldWithPath("data.date").type(JsonFieldType.STRING).description("콘서트 예약 가능 날짜"),
-					fieldWithPath("data.availableSeats").type(JsonFieldType.ARRAY).description("콘서트 예약 가능 좌석"),
+					fieldWithPath("data.date").type(JsonFieldType.STRING).description("예약 가능 날짜"),
+					fieldWithPath("data.availableSeats[0].id").type(JsonFieldType.NUMBER).description("예약 가능 좌석 아이디"),
+					fieldWithPath("data.availableSeats[0].seatNumber").type(JsonFieldType.NUMBER).description("예약 가능 좌석 번호"),
 					fieldWithPath("error").type(JsonFieldType.NULL).description("에러 정보"))
 				.build()
 		);

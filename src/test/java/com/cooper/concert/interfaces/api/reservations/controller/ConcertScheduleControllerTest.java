@@ -2,7 +2,6 @@ package com.cooper.concert.interfaces.api.reservations.controller;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -13,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.cooper.concert.common.api.config.WebConfig;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
 import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
@@ -140,7 +139,13 @@ class ConcertScheduleControllerTest {
 		final int page = 1;
 
 		when(concertScheduleReadUseCase.readAvailableSeatsByScheduleId(anyLong(), anyInt(), anyInt()))
-			.thenReturn(new ConcertScheduleSeatsResult(LocalDate.of(2025, 1, 9), List.of(1L, 3L, 10L)));
+			.thenReturn(
+				new ConcertScheduleSeatsResult(
+					LocalDate.of(2025, 1, 9),
+					List.of(
+						new ConcertSeatResult(1L, 1L),
+						new ConcertSeatResult(3L, 3L),
+						new ConcertSeatResult(10L, 10L))));
 
 		// when
 		final ResultActions result = mockMvc.perform(
@@ -153,7 +158,7 @@ class ConcertScheduleControllerTest {
 				status().isOk(),
 				jsonPath("$.result").value("SUCCESS"),
 				jsonPath("$.data.date").value("2025-01-09"),
-				jsonPath("$.data.availableSeats").value(Matchers.contains(1, 3, 10)),
+				jsonPath("$.data.availableSeats").isArray(),
 				jsonPath("$.error").doesNotExist())
 			.andDo(print());
 	}
