@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
 import com.cooper.concert.domain.payments.models.Payment;
@@ -36,6 +37,23 @@ class PaymentCommandRepositoryTest {
 
 		// when
 		final Payment sut = paymentCommandRepository.save(payment);
+
+		// then
+		assertSoftly(softAssertions -> {
+			softAssertions.assertThat(sut).isNotNull();
+			softAssertions.assertThat(sut).extracting("id").isNotNull();
+		});
+	}
+
+	@Test
+	@DisplayName("결제 대체키를 기반한 결제 조회 성공")
+	@Sql("classpath:sql/payment_repository.sql")
+	void 결제_대체키를_기반한_결제_조회_성공() {
+		// given
+		final UUID paymentAltId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+
+		// when
+		final Payment sut = paymentCommandRepository.findByAltId(paymentAltId);
 
 		// then
 		assertSoftly(softAssertions -> {
