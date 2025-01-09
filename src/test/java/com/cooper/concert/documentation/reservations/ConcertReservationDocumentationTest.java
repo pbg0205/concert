@@ -22,13 +22,13 @@ import com.cooper.concert.common.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
 
-@Sql("classpath:sql/concert_reservation_integration_queue_token.sql")
+@Sql("classpath:sql/concert_reservation_sample_integration.sql")
 class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
 	void 예약_요청() throws Exception {
 		// given
-		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(3L);
+		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(1L);
 
 		final String requestBody = objectMapper.writeValueAsString(concertReservationRequest);
 
@@ -60,8 +60,6 @@ class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
 					fieldWithPath("data.reservationId").type(JsonFieldType.STRING).description("예약 아이디"),
 					fieldWithPath("data.paymentId").type(JsonFieldType.STRING).description("결제 아이디"),
-					fieldWithPath("data.date").type(JsonFieldType.STRING).description("콘서트 날짜"),
-					fieldWithPath("data.seat").type(JsonFieldType.NUMBER).description("콘서트 좌석"),
 					fieldWithPath("error").type(JsonFieldType.NULL).description("에러 정보"))
 				.build()
 		);
