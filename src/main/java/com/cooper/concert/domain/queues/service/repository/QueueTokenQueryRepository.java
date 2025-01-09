@@ -6,4 +6,5 @@ import com.cooper.concert.domain.queues.models.QueueToken;
 
 public interface QueueTokenQueryRepository {
 	QueueToken findByTokenId(UUID tokenId);
+	Long findUserIdByTokenId(UUID tokenId);
 }
