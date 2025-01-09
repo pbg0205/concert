@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import com.cooper.concert.domain.reservations.models.ConcertSeatStatus;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
 import com.cooper.concert.domain.reservations.service.errors.exception.ConcertScheduleNotFoundException;
@@ -43,7 +44,7 @@ public class ConcertScheduleReadService {
 			Optional.ofNullable(concertScheduleQueryRepository.findConcertScheduleResultById(scheduleId))
 				.orElseThrow(() -> new ConcertScheduleNotFoundException(ConcertErrorType.CONCERT_SCHEDULE_NOT_FOUND));
 
-		final List<Long> availableSeats = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
+		final List<ConcertSeatResult> availableSeats = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
 			scheduleId, ConcertSeatStatus.AVAILABLE.name(), offset, limit);
 
 		return new ConcertScheduleSeatsResult(concertScheduleResult.startDateTime().toLocalDate(), availableSeats);

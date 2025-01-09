@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
 import com.cooper.concert.domain.reservations.service.errors.exception.ConcertScheduleNotFoundException;
@@ -116,7 +117,11 @@ class ConcertScheduleReadServiceTest {
 		final Long scheduleId = 1L;
 		final Integer offset = 0;
 		final Integer limit = 10;
-		final List<Long> availableSeats = List.of(1L, 3L, 5L, 10L);
+		final List<ConcertSeatResult> availableSeats = List.of(
+			new ConcertSeatResult(1L, 1L),
+			new ConcertSeatResult(3L, 3L),
+			new ConcertSeatResult(5L, 5L),
+			new ConcertSeatResult(10L, 10L));
 
 		when(concertScheduleQueryRepository.findConcertScheduleResultById(any()))
 			.thenReturn(new ConcertScheduleResult(1L, LocalDateTime.of(2025, 1, 9, 2, 30)));

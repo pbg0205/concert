@@ -14,6 +14,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 
 @DataJpaTest
 @ComponentScan(basePackages = {"com.cooper.concert.domain.reservations.infrastructure.rdb",  "com.cooper.concert.common.jpa"})
@@ -36,7 +37,7 @@ class ConcertSeatQueryRepositoryTest {
 		final Integer offset = 0;
 
 		// when
-		final List<Long> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
+		final List<ConcertSeatResult> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
 			scheduleId, status, offset, limit);
 
 		// then
@@ -54,7 +55,7 @@ class ConcertSeatQueryRepositoryTest {
 		final Integer offset = 20;
 
 		// when
-		final List<Long> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
+		final List<ConcertSeatResult> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
 			scheduleId, status, offset, limit);
 
 		// then
