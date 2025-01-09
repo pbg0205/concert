@@ -1,7 +1,7 @@
 package com.cooper.concert.domain.queues.service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class QueueTokenExpiredService {
 		final List<QueueToken> expiringQueueTokens =
 			queueTokenCommandRepository.findAllByStatus(QueueTokenStatus.PROCESSING.name());
 
-		List<Long> expiredTokenUserIds = Collections.emptyList();
+		List<Long> expiredTokenUserIds = new ArrayList<>();
 		if (expiringQueueTokens.isEmpty()) {
 			return expiredTokenUserIds;
 		}
