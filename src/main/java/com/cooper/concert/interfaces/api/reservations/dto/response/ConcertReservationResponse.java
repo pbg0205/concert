@@ -1,6 +1,5 @@
 package com.cooper.concert.interfaces.api.reservations.dto.response;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import lombok.AccessLevel;
@@ -14,6 +13,4 @@ import lombok.RequiredArgsConstructor;
 public class ConcertReservationResponse {
 	private final UUID reservationId;
 	private final UUID paymentId;
-	private final LocalDate date;
-	private final Integer seat;
 }
