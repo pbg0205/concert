@@ -2,6 +2,7 @@ package com.cooper.concert.domain.reservations.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cooper.concert.domain.reservations.models.ConcertSeat;
 import com.cooper.concert.domain.reservations.models.Reservation;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationCompletedInfo;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationInfo;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ReservationErrorType;
@@ -94,5 +96,28 @@ class ConcertReservationServiceTest {
 
 		// then
 		assertThat(sut.reservationAltId()).isEqualTo(reservationAltId);
+	}
+
+	@Test
+	@DisplayName("콘서트 예약을 성공하면 유저와 좌석 아이디 반환")
+	void 콘서트_예약을_성공하면_유저와_좌석_아이디_반환() {
+		// given
+		final Long reservationId = 1L;
+		final UUID reservationAltId = reservationAltIdGenerator.generateAltId();
+		final Long userId = 1L;
+		final Long seatId = 1L;
+
+		when(reservationCommandRepository.findById(any()))
+			.thenReturn(Reservation.createPendingReservation(userId, seatId, reservationAltId));
+
+		// when
+		final ConcertReservationCompletedInfo sut =
+			concertReservationService.completeReservation(reservationId);
+
+		// then
+		assertSoftly(softAssertions -> {
+			softAssertions.assertThat(sut.userId()).isEqualTo(userId);
+			softAssertions.assertThat(sut.seatId()).isEqualTo(seatId);
+		});
 	}
 }

@@ -45,4 +45,13 @@ public class ConcertReservationService {
 
 		return new ConcertReservationInfo(savedReservation.getId(), savedReservation.getAltId());
 	}
+
+	public ConcertReservationCompletedInfo completeReservation(final Long reservationId) {
+		final Reservation reservation = reservationCommandRepository.findById(reservationId);
+
+		reservation.complete();
+
+		return new ConcertReservationCompletedInfo(
+			reservation.getId(), reservation.getUserId(), reservation.getSeatId(), reservation.getAltId());
+	}
 }
