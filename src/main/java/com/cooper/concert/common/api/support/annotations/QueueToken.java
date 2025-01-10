@@ -1,4 +1,4 @@
-package com.cooper.concert.common.api.annotations;
+package com.cooper.concert.common.api.support.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -29,7 +29,7 @@ import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPoint
 import com.cooper.concert.domain.users.service.errors.exception.UserNotFoundException;
 import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
-import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
 import com.cooper.concert.interfaces.api.users.usecase.UserBalanceChargeUseCase;
 import com.cooper.concert.interfaces.api.users.usecase.UserBalanceReadUseCase;

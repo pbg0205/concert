@@ -29,7 +29,7 @@ import com.cooper.concert.domain.reservations.service.dto.response.ConcertSchedu
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
-import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleReadUseCase;
 
 @WebMvcTest(value = ConcertScheduleController.class, excludeFilters = {@ComponentScan.Filter(

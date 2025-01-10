@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.api.annotations.QueueToken;
+import com.cooper.concert.common.api.support.annotations.QueueToken;
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationResult;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;

@@ -1,4 +1,4 @@
-package com.cooper.concert.interfaces.api.queues.interceptor;
+package com.cooper.concert.common.api.components.interceptor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
