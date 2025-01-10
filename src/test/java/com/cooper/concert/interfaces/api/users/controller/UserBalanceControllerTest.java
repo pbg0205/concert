@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,12 +70,12 @@ class UserBalanceControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isBadRequest(),
-			jsonPath("$.result").value("ERROR"),
-			jsonPath("$.data").doesNotExist(),
-			jsonPath("$.error.code").value("ERROR_USER04"),
-			jsonPath("$.error.message").value("유저를 찾을 수 없습니다")
-		);
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_USER04"),
+				jsonPath("$.error.message").value("유저를 찾을 수 없습니다"))
+			.andDo(print());
 	}
 
 	@Test
@@ -97,12 +98,12 @@ class UserBalanceControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isBadRequest(),
-			jsonPath("$.result").value("ERROR"),
-			jsonPath("$.data").doesNotExist(),
-			jsonPath("$.error.code").value("ERROR_USER06"),
-			jsonPath("$.error.message").value("충전 포인트는 음수일 수 없습니다.")
-		);
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_USER06"),
+				jsonPath("$.error.message").value("충전 포인트는 음수일 수 없습니다."))
+			.andDo(print());
 	}
 
 	@Test
@@ -147,12 +148,12 @@ class UserBalanceControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isBadRequest(),
-			jsonPath("$.result").value("ERROR"),
-			jsonPath("$.data").doesNotExist(),
-			jsonPath("$.error.code").value("ERROR_USER04"),
-			jsonPath("$.error.message").value("유저를 찾을 수 없습니다")
-		);
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_USER04"),
+				jsonPath("$.error.message").value("유저를 찾을 수 없습니다"))
+			.andDo(print());
 	}
 
 	@Test
@@ -170,10 +171,10 @@ class UserBalanceControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isOk(),
-			jsonPath("$.result").value("SUCCESS"),
-			jsonPath("$.data.balance").value(2000),
-			jsonPath("$.error").doesNotExist()
-		);
+				status().isOk(),
+				jsonPath("$.result").value("SUCCESS"),
+				jsonPath("$.data.balance").value(2000),
+				jsonPath("$.error").doesNotExist())
+			.andDo(print());
 	}
 }
