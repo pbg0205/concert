@@ -30,7 +30,7 @@ import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
 import com.cooper.concert.domain.reservations.service.errors.ReservationErrorType;
 import com.cooper.concert.domain.reservations.service.errors.exception.ReservationUnavailableException;
-import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertReservationUseCase;
 

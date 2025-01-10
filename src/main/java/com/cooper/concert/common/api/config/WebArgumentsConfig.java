@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.api.resolver.QueueTokenArgumentResolver;
+import com.cooper.concert.common.api.components.resolver.QueueTokenArgumentResolver;
 
 @Configuration
 @RequiredArgsConstructor

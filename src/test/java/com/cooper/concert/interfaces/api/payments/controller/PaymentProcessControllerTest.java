@@ -33,7 +33,7 @@ import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPointException;
 import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequest;
 import com.cooper.concert.interfaces.api.payments.usecase.PaymentProcessUseCase;
-import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
 
 @WebMvcTest(value = PaymentProcessController.class, excludeFilters = {@ComponentScan.Filter(
 	type = FilterType.ASSIGNABLE_TYPE, classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class})})

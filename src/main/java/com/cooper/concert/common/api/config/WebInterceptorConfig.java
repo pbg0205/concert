@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
 
 @Configuration
 @RequiredArgsConstructor

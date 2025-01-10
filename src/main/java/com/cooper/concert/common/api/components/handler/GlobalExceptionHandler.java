@@ -1,4 +1,4 @@
-package com.cooper.concert.common.api.handler;
+package com.cooper.concert.common.api.components.handler;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

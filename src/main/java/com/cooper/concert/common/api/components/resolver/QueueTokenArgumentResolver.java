@@ -1,4 +1,4 @@
-package com.cooper.concert.common.api.resolver;
+package com.cooper.concert.common.api.components.resolver;
 
 import java.lang.annotation.Annotation;
 import java.util.Objects;
@@ -11,7 +11,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.cooper.concert.common.api.annotations.QueueToken;
+import com.cooper.concert.common.api.support.annotations.QueueToken;
 
 public class QueueTokenArgumentResolver implements HandlerMethodArgumentResolver {
 
