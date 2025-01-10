@@ -39,6 +39,7 @@ public class QueueTokenValidationInterceptor implements HandlerInterceptor {
 
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+			return false;
 		}
 
 		return HandlerInterceptor.super.preHandle(request, response, handler);
