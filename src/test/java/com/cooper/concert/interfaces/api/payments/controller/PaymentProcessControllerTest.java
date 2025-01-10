@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.cooper.concert.common.api.config.WebConfig;
+import com.cooper.concert.common.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentProcessResult;
 import com.cooper.concert.domain.payments.service.errors.PaymentErrorType;
 import com.cooper.concert.domain.payments.service.errors.exception.PaymentCompleteFailException;
@@ -36,7 +36,7 @@ import com.cooper.concert.interfaces.api.payments.usecase.PaymentProcessUseCase;
 import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
 
 @WebMvcTest(value = PaymentProcessController.class, excludeFilters = {@ComponentScan.Filter(
-	type = FilterType.ASSIGNABLE_TYPE, classes = {WebConfig.class, QueueTokenValidationInterceptor.class})})
+	type = FilterType.ASSIGNABLE_TYPE, classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class})})
 class PaymentProcessControllerTest {
 
 	@Autowired
