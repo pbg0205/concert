@@ -3,6 +3,7 @@ package com.cooper.concert.interfaces.api.payments.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +29,8 @@ import com.cooper.concert.domain.payments.service.errors.exception.PaymentComple
 import com.cooper.concert.domain.reservations.service.errors.ReservationErrorType;
 import com.cooper.concert.domain.reservations.service.errors.exception.ReservationCanceledException;
 import com.cooper.concert.domain.reservations.service.errors.exception.ReservationReservedException;
+import com.cooper.concert.domain.users.service.errors.UserErrorType;
+import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPointException;
 import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequest;
 import com.cooper.concert.interfaces.api.payments.usecase.PaymentProcessUseCase;
 import com.cooper.concert.interfaces.api.queues.interceptor.QueueTokenValidationInterceptor;
@@ -65,10 +68,11 @@ class PaymentProcessControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isOk(),
-			jsonPath("$.result").value("SUCCESS"),
-			jsonPath("$.data.reservationId").value(reservationId.toString()),
-			jsonPath("$.error").doesNotExist());
+				status().isOk(),
+				jsonPath("$.result").value("SUCCESS"),
+				jsonPath("$.data.reservationId").value(reservationId.toString()),
+				jsonPath("$.error").doesNotExist())
+			.andDo(print());
 	}
 
 	@Test
@@ -90,11 +94,12 @@ class PaymentProcessControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isBadRequest(),
-			jsonPath("$.result").value("ERROR"),
-			jsonPath("$.data").doesNotExist(),
-			jsonPath("$.error.code").value("ERROR_RESERVATION02"),
-			jsonPath("$.error.message").value("해당 예약은 취소 되었습니다."));
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_RESERVATION02"),
+				jsonPath("$.error.message").value("해당 예약은 취소 되었습니다."))
+			.andDo(print());
 	}
 
 	@Test
@@ -116,11 +121,12 @@ class PaymentProcessControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isBadRequest(),
-			jsonPath("$.result").value("ERROR"),
-			jsonPath("$.data").doesNotExist(),
-			jsonPath("$.error.code").value("ERROR_RESERVATION03"),
-			jsonPath("$.error.message").value("해당 예약은 이미 예약 되었습니다."));
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_RESERVATION03"),
+				jsonPath("$.error.message").value("해당 예약은 이미 예약 되었습니다."))
+			.andDo(print());
 	}
 
 	@Test
@@ -146,8 +152,10 @@ class PaymentProcessControllerTest {
 			jsonPath("$.result").value("ERROR"),
 			jsonPath("$.data").doesNotExist(),
 			jsonPath("$.error.code").value("ERROR_PAYMENT02"),
-			jsonPath("$.error.message").value("결제가 취소된 상태 입니다."));
+			jsonPath("$.error.message").value("결제가 취소된 상태 입니다."))
+			.andDo(print());
 	}
+
 	@Test
 	@DisplayName("결제 완료 상태에서 재요청하면 요청 실패")
 	void 결제_완료_상태에서_재요청하면_요청_실패() throws Exception {
@@ -167,10 +175,65 @@ class PaymentProcessControllerTest {
 
 		// then
 		sut.andExpectAll(
-			status().isBadRequest(),
-			jsonPath("$.result").value("ERROR"),
-			jsonPath("$.data").doesNotExist(),
-			jsonPath("$.error.code").value("ERROR_PAYMENT03"),
-			jsonPath("$.error.message").value("결제가 이미 완료된 상태입니다."));
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_PAYMENT03"),
+				jsonPath("$.error.message").value("결제가 이미 완료된 상태입니다."))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("결제키를 찾지 못하면 요청 실패")
+	void 결제키를_찾지_못하면_요청_실패() throws Exception {
+		// given
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
+
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
+		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
+
+		when(paymentProcessUseCase.processPayment(any()))
+			.thenThrow(new PaymentCompleteFailException(PaymentErrorType.PAYMENT_KEY_NOT_FOUND));
+
+		// when
+		final ResultActions sut = mockMvc.perform(post("/api/payments")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody));
+
+		// then
+		sut.andExpectAll(
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_PAYMENT01"),
+				jsonPath("$.error.message").value("결제 키를 찾을 수 없습니다"))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("유저 포인트 부족하면 요청 실패")
+	void 유저_포인트_부족하면_요청_실패() throws Exception {
+		// given
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
+
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
+		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
+
+		when(paymentProcessUseCase.processPayment(any()))
+			.thenThrow(new InvalidUserPointException(UserErrorType.INSUFFICIENT_BALANCE));
+
+		// when
+		final ResultActions sut = mockMvc.perform(post("/api/payments")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody));
+
+		// then
+		sut.andExpectAll(
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_USER07"),
+				jsonPath("$.error.message").value("유저 잔고가 부족합니다."))
+			.andDo(print());
 	}
 }
