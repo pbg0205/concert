@@ -81,7 +81,7 @@ class ConcertReservationControllerTest {
 		final String requestBody = objectMapper.writeValueAsString(concertReservationRequest);
 
 		when(concertReservationUseCase.reserveConcertSeat(any(), any()))
-			.thenThrow(new ConcertNotFoundException(ConcertErrorType.CONCERT_NOT_FOUND));
+			.thenThrow(new ConcertNotFoundException(ConcertErrorType.CONCERT_SEAT_NOT_FOUND));
 
 		// when
 		final ResultActions result = mockMvc.perform(post("/api/concert/seats/reservation")
@@ -94,8 +94,8 @@ class ConcertReservationControllerTest {
 				status().isBadRequest(),
 				jsonPath("$.result").value("ERROR"),
 				jsonPath("$.data").doesNotExist(),
-				jsonPath("$.error.code").value("ERROR_CONCERT03"),
-				jsonPath("$.error.message").value("콘서트를 조회할 수 없습니다."))
+				jsonPath("$.error.code").value("ERROR_CONCERT05"),
+				jsonPath("$.error.message").value("콘서트 좌석을 조회할 수 없습니다."))
 			.andDo(print());
 	}
 
