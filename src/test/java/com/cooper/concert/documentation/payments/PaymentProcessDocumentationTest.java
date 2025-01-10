@@ -37,7 +37,7 @@ class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 
 		// when
 		final ResultActions result = mockMvc.perform(post("/api/payments")
-			.header("QUEUE-TOKEN", "queue-token")
+			.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
 

@@ -16,6 +16,6 @@ public class WebInterceptorConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(final InterceptorRegistry registry) {
-		registry.addInterceptor(queueTokenValidationInterceptor).addPathPatterns("/api/concert/**");
+		registry.addInterceptor(queueTokenValidationInterceptor).addPathPatterns("/api/concert/**", "/api/payments/**");
 	}
 }
