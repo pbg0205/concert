@@ -20,7 +20,7 @@ public class QueueTokenExpiredService {
 
 	private final QueueTokenCommandRepository queueTokenCommandRepository;
 
-	public List<Long> updateToExpired(final LocalDateTime expiredAt) {
+	public List<Long> expireExpiredTokens(final LocalDateTime expiredAt) {
 		final List<QueueToken> expiringQueueTokens =
 			queueTokenCommandRepository.findAllByStatus(QueueTokenStatus.PROCESSING.name());
 

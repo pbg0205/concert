@@ -10,6 +10,7 @@ import com.cooper.concert.common.annotations.Facade;
 import com.cooper.concert.domain.payments.service.PaymentProcessingService;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentCompleteInfo;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentProcessResult;
+import com.cooper.concert.domain.queues.service.QueueTokenExpiredService;
 import com.cooper.concert.domain.reservations.service.ConcertReservationService;
 import com.cooper.concert.domain.reservations.service.ConcertSeatReadService;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationCompletedInfo;
@@ -25,8 +26,9 @@ public class PaymentProcessUseCase {
 	private final ConcertSeatReadService concertSeatReadService;
 	private final UserBalanceUseService userBalanceUseService;
 	private final PaymentProcessingService paymentProcessingService;
+	private final QueueTokenExpiredService queueTokenExpiredService;
 
-	public PaymentProcessResult processPayment(final UUID paymentAltId) {
+	public PaymentProcessResult processPayment(final UUID paymentAltId, final UUID tokenId) {
 		final PaymentCompleteInfo paymentCompleteInfo = paymentProcessingService.completePayment(paymentAltId);
 
 		final ConcertReservationCompletedInfo reservationCompletedInfo =
