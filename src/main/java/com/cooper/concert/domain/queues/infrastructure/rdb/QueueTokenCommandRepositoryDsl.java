@@ -3,6 +3,7 @@ package com.cooper.concert.domain.queues.infrastructure.rdb;
 import static com.cooper.concert.domain.queues.models.QQueueToken.queueToken;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,12 @@ public class QueueTokenCommandRepositoryDsl implements QueueTokenCommandReposito
 		return queryFactory.selectFrom(queueToken)
 			.where(queueToken.status.stringValue().eq(status))
 			.fetch();
+	}
+
+	@Override
+	public QueueToken findByTokenId(final UUID tokenId) {
+		return queryFactory.selectFrom(queueToken)
+			.where(queueToken.tokenId.eq(tokenId))
+			.fetchOne();
 	}
 }

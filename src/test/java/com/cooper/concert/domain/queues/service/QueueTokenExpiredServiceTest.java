@@ -1,6 +1,8 @@
 package com.cooper.concert.domain.queues.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,6 +22,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cooper.concert.domain.queues.models.QueueToken;
 import com.cooper.concert.domain.queues.models.QueueTokenStatus;
+import com.cooper.concert.domain.queues.service.errors.TokenErrorType;
+import com.cooper.concert.domain.queues.service.errors.exception.TokenNotFoundException;
 import com.cooper.concert.domain.queues.service.repository.QueueTokenCommandRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -85,4 +90,18 @@ class QueueTokenExpiredServiceTest {
 			))
 		);
 	}
+
+	@Test
+	@DisplayName("예약 완료 토큰을 찾지 못하는 경우 예외 반환")
+	void 예약_완료_토큰을_찾지_못하는_경우_예외_반환() {
+		// given
+		UUID tokenId = UUID.fromString("0194554a-2761-7cbb-9cff-98c75f32da08");
+
+		when(queueTokenCommandRepository.findByTokenId(any())).thenReturn(null);
+		// when. then
+		assertThatThrownBy(() -> queueTokenExpiredService.expireCompleteToken(tokenId))
+			.isInstanceOf(TokenNotFoundException.class)
+			.extracting("errorType").isEqualTo(TokenErrorType.TOKEN_NOT_FOUND);
+	}
+
 }

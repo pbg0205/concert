@@ -39,6 +39,7 @@ public class PaymentProcessUseCase {
 
 		userBalanceUseService.usePoint(reservationCompletedInfo.userId(), concertSeatPriceInfo.price());
 
+		queueTokenExpiredService.expireCompleteToken(tokenId);
 
 		return new PaymentProcessResult(reservationCompletedInfo.altId());
 	}
