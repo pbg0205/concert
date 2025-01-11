@@ -83,6 +83,13 @@ public class QueueToken {
 		return true;
 	}
 
+	public boolean complete(final LocalDateTime expiredAt) {
+		this.status = QueueTokenStatus.COMPLETED;
+		this.expiredAt = expiredAt;
+		return true;
+	}
+
+
 	private boolean isValidExpiredTime(final LocalDateTime expiredAt) {
 		return this.expiredAt.isAfter(expiredAt) || this.expiredAt.isEqual(expiredAt);
 	}

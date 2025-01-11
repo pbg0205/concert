@@ -74,7 +74,6 @@ class QueueTokenTest {
 		final LocalDateTime currentTime = LocalDateTime.now();
 
 		final QueueToken sut = QueueToken.createWaitingToken(tokenId, userId);
-		// sut.updateProcessing(currentTime, 5);
 
 		// when
 		final boolean expired = sut.expire(currentTime.plusMinutes(6));
@@ -173,4 +172,24 @@ class QueueTokenTest {
 		// then
 		assertThat(validProcessing).isTrue();
 	}
+
+	@Test
+	@DisplayName("예약 완료된 토큰 상태와 만료 시간 변경")
+	void 예약_완료된_토큰_상태와_만료_시간_변경 () {
+	    // given
+		final LocalDateTime expiredAt = LocalDateTime.now();
+		QueueToken sut = QueueToken.createWaitingToken(UUID.randomUUID(), 1L);
+		sut.updateProcessing(LocalDateTime.now().plusMinutes(5), 5);
+
+	    // when
+		final boolean completed = sut.complete(expiredAt);
+
+		// then
+		assertSoftly(softAssertions -> {
+			softAssertions.assertThat(completed).isTrue();
+			softAssertions.assertThat(sut).extracting("status").isEqualTo(QueueTokenStatus.COMPLETED);
+			softAssertions.assertThat(sut).extracting("expiredAt").isEqualTo(expiredAt);
+		});
+	}
+
 }
