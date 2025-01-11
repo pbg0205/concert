@@ -46,7 +46,7 @@ class QueueTokenExpiredServiceTest {
 			.thenReturn(queueTokens);
 
 		// when
-		final List<Long> sut = queueTokenExpiredService.updateToExpired(expiredAt);
+		final List<Long> sut = queueTokenExpiredService.expireExpiredTokens(expiredAt);
 
 		// then
 		assertThat(sut).hasSize(0);
@@ -68,7 +68,7 @@ class QueueTokenExpiredServiceTest {
 			.thenReturn(queueTokens);
 
 		// when
-		final List<Long> sut = queueTokenExpiredService.updateToExpired(expiredAt);
+		final List<Long> sut = queueTokenExpiredService.expireExpiredTokens(expiredAt);
 
 		// then
 		assertThat(sut).hasSize(5);

@@ -31,7 +31,7 @@ public class TokenSchedulerUseCase {
 	}
 
 	public Integer expireToken(final LocalDateTime expiredAt) {
-		final List<Long> expiredTokenUserIds = queueTokenExpiredService.updateToExpired(expiredAt);
+		final List<Long> expiredTokenUserIds = queueTokenExpiredService.expireExpiredTokens(expiredAt);
 		final List<ReservationCancelResult> reservationCancelResults =
 			reservationCancelService.cancelReservations(expiredTokenUserIds);
 
