@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: concert
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/concert_db
+    username: root
+    password: concert2025
+    driver-class-name: com.mysql.cj.jdbc.Driver
+processing:
+  queue:
+    capacity: 30
+  token:
+    valid:
+      minutes: 5
+concert:
+  schedules:
+    read:
+      limit: 10
+  seats:
+    read:
+      limit: 20
