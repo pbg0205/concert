@@ -34,6 +34,7 @@ repositories {
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
+    set('testcontainers.version', "1.19.8")
 }
 
 openapi3 {
@@ -82,6 +83,11 @@ dependencies {
 
     // Uuid v7
     implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
+
+    // Test Container
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mysql")
 }
 
 bootJar {

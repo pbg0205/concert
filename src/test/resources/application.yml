@@ -7,10 +7,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
   datasource:
-    url: jdbc:mysql://localhost:3306/concert_db
+    url: jdbc:tc:mysql:8://concert_db
     username: root
     password: concert2025
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
 queue:
   processing:
     capacity: 30
