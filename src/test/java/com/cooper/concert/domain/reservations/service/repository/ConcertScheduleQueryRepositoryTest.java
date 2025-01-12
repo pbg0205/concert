@@ -13,21 +13,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.jdbc.Sql;
 
-import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
+import com.cooper.concert.base.annotations.RdbRepositoryTest;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 
-@DataJpaTest
-@ComponentScan(basePackages = {"com.cooper.concert.domain.reservations.infrastructure.rdb",
+@RdbRepositoryTest(basePackages = {
+	"com.cooper.concert.domain.reservations.infrastructure.rdb",
 	"com.cooper.concert.common.jpa"})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestExecutionListeners(value = {
-	DataCleanUpExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 class ConcertScheduleQueryRepositoryTest {
 
 	@Autowired
@@ -68,7 +61,8 @@ class ConcertScheduleQueryRepositoryTest {
 		// then
 		assertSoftly(softAssertions -> {
 			softAssertions.assertThat(concertScheduleResult.concertScheduleId()).isEqualTo(scheduleId);
-			softAssertions.assertThat(concertScheduleResult.startDateTime()).isEqualTo(LocalDateTime.of(2025, 1, 13, 0, 0));
+			softAssertions.assertThat(concertScheduleResult.startDateTime())
+				.isEqualTo(LocalDateTime.of(2025, 1, 13, 0, 0));
 		});
 	}
 }
