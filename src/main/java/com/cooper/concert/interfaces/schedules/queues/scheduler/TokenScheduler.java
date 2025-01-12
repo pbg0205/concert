@@ -18,12 +18,12 @@ public class TokenScheduler {
 
 	private final TokenSchedulerUseCase tokenSchedulerUseCase;
 
-	@Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
+	@Scheduled(fixedRateString = "${queue.processing.rate.minutes}", timeUnit = TimeUnit.MINUTES)
 	public Integer updateTokenToProcessing() {
 		return tokenSchedulerUseCase.updateToProcessing(LocalDateTime.now());
 	}
 
-	@Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
+	@Scheduled(fixedRateString = "${token.expire.rate.minutes}", timeUnit = TimeUnit.MINUTES)
 	public Integer updateTokenToExpired() {
 		return tokenSchedulerUseCase.expireToken(LocalDateTime.now());
 	}

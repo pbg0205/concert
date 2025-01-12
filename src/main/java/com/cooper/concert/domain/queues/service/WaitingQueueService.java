@@ -24,10 +24,10 @@ import com.cooper.concert.domain.queues.service.repository.WaitingQueueQueryRepo
 @Transactional
 public class WaitingQueueService {
 
-	@Value("${processing.queue.capacity}")
+	@Value("${queue.processing.capacity}")
 	private Integer processingTokenCapacity;
 
-	@Value("${processing.token.valid.minutes}")
+	@Value("${token.processing.valid.minutes}")
 	private Integer processingTokenMinutes;
 
 	private final WaitingQueueQueryRepository waitingQueueQueryRepository;
