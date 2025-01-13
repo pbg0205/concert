@@ -5,17 +5,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.cooper.concert.common.api.components.filter.HttpRequestLoggingFilter;
+import com.cooper.concert.common.api.components.filter.HttpLoggingFilter;
 
 @Configuration
 public class WebFilterConfig implements WebMvcConfigurer {
 
 	@Bean
-	public FilterRegistrationBean<HttpRequestLoggingFilter> loggingFilter(){
-		FilterRegistrationBean<HttpRequestLoggingFilter> registrationBean
+	public FilterRegistrationBean<HttpLoggingFilter> loggingFilter(){
+		FilterRegistrationBean<HttpLoggingFilter> registrationBean
 			= new FilterRegistrationBean<>();
 
-		registrationBean.setFilter(new HttpRequestLoggingFilter());
+		registrationBean.setFilter(new HttpLoggingFilter());
 		registrationBean.addUrlPatterns("/api/*");
 		registrationBean.setOrder(1);
 
