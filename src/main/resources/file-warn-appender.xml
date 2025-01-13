@@ -1,0 +1,20 @@
+<included>
+    <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./log/warn/warn-${BY_DATE}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <withAnsi>false</withAnsi>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./backup/warn/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize> <!-- 한 파일당 최대 파일 용량 -->
+            <maxHistory>10</maxHistory> <!-- 최대 파일 생성 갯수 -->
+            <totalSizeCap>1GB</totalSizeCap> <!-- 저장소의 최대 크기 지정 -->
+        </rollingPolicy>
+    </appender>
+</included>
