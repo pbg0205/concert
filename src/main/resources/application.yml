@@ -11,16 +11,18 @@ spring:
     username: root
     password: concert2025
     driver-class-name: com.mysql.cj.jdbc.Driver
-  data:
-    redis:
-      host: localhost
-      port: 6379
-processing:
-  queue:
+queue:
+  processing:
     capacity: 30
-  token:
+    rate:
+      minutes: 1
+token:
+  processing:
     valid:
       minutes: 5
+  expire:
+    rate:
+      minutes: 1
 concert:
   schedules:
     read:
