@@ -11,6 +11,9 @@ spring:
     username: root
     password: concert2025
     driver-class-name: com.mysql.cj.jdbc.Driver
+  output:
+    ansi:
+      enabled: never
 queue:
   processing:
     capacity: 30
