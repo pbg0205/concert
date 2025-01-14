@@ -1,8 +1,6 @@
 package com.cooper.concert.common.api.components.resolver;
 
 import java.lang.annotation.Annotation;
-import java.util.Objects;
-import java.util.UUID;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -12,6 +10,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.cooper.concert.common.api.support.annotations.QueueToken;
+import com.cooper.concert.common.api.support.request.TokenHeaderData;
 
 public class QueueTokenArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -28,8 +27,7 @@ public class QueueTokenArgumentResolver implements HandlerMethodArgumentResolver
 		final NativeWebRequest webRequest,
 		final WebDataBinderFactory binderFactory) throws Exception {
 
-		String tokenId = webRequest.getHeader(QUEUE_TOKEN_HEADER_NAME);
-		return UUID.fromString(Objects.requireNonNull(tokenId));
+		return new TokenHeaderData(webRequest.getHeader(QUEUE_TOKEN_HEADER_NAME));
 	}
 
 	private <T extends Annotation> T findMethodAnnotation(Class<T> annotationClass, MethodParameter parameter) {
