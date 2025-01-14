@@ -6,6 +6,7 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
   datasource:
     url: jdbc:mysql://localhost:3306/concert_db
     username: root
@@ -14,6 +15,9 @@ spring:
   output:
     ansi:
       enabled: never
+  sql:
+    init:
+      mode: always
 server:
   servlet:
     encoding:
