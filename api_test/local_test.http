@@ -1,0 +1,65 @@
+### (1) 토큰 발급
+POST http://localhost:8080/api/queue/token/issue
+Content-Type: application/json
+
+{
+  "userId": "01943b62-8fed-7ea1-9d56-085529e28b11"
+}
+
+> {%
+  const body = (typeof response.body === "string") ? JSON.parse(response.body) : response.body;
+  client.global.set("queueToken", body.data.token);
+  console.log(client.global.get("queueToken"));
+%}
+
+### (2) 콘서트 조회
+GET http://localhost:8080/api/concert/1/available-dates?page=1
+Content-Type: application/json
+QUEUE-TOKEN: {{queueToken}}
+
+
+### (3) 콘서트 잔여 좌석 조회
+GET http://localhost:8080/api/concert/1/seats?page=1
+Content-Type: application/json
+QUEUE-TOKEN: {{queueToken}}
+
+
+### (4) 예약 요청
+POST http://localhost:8080/api/concert/seats/reservation
+Content-Type: application/json
+QUEUE-TOKEN: {{queueToken}}
+
+{
+  "seatId": 1
+}
+
+> {%
+  const body = (typeof response.body === "string") ? JSON.parse(response.body) : response.body;
+  client.global.set("paymentId", body.data.paymentId);
+  console.log(client.global.get("paymentId"));
+%}
+
+
+### (5) 결제
+POST http://localhost:8080/api/payments
+Content-Type: application/json
+QUEUE-TOKEN: {{queueToken}}
+
+{
+  "paymentId": "{{paymentId}}"
+}
+
+
+### (6) 사용자 포인트 조회
+GET http://localhost:8080/api/users/01943b62-8fed-7ea1-9d56-085529e28b11/balance
+Content-Type: application/json
+
+
+### (7) 사용자 포인트 충전
+POST http://localhost:8080/api/users/balance/recharge
+Content-Type: application/json
+
+{
+  "userId" : "01943b62-8fed-7ea1-9d56-085529e28b11",
+  "point" : 1000
+}
