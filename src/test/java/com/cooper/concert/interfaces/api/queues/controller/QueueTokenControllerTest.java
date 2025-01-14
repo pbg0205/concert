@@ -69,6 +69,27 @@ class QueueTokenControllerTest {
 	}
 
 	@Test
+	@DisplayName("잘못된 포맷 유저 아이디인 경우, 토큰 발급 실패")
+	void 잘못된_포맷_유저_아이디인_경우_토큰_발급_실패() throws Exception {
+		// given
+		final String requestBody ="{\"userId\": \"3fa85f64-5717-4562-b3fc\"}";
+
+		// when
+		final ResultActions sut = mockMvc.perform(post("/api/queue/token/issue")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody));
+
+		// then
+		sut.andExpectAll(
+			status().isBadRequest(),
+			jsonPath("$.result").value("ERROR"),
+			jsonPath("$.data").doesNotExist(),
+			jsonPath("$.error.code").value("ERROR_COMMON02"),
+			jsonPath("$.error.message").value("읽을 수 없는 HTTP 메시지 입니다.")
+		);
+	}
+
+	@Test
 	@DisplayName("유저가 존재하면 토큰 발급 성공")
 	void 유저가_존재하면_토큰_발급_성공() throws Exception {
 		// given
