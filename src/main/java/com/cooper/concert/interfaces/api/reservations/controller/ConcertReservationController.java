@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.common.api.support.annotations.QueueToken;
+import com.cooper.concert.common.api.support.request.TokenHeaderData;
 import com.cooper.concert.common.api.support.response.ApiResponse;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationResult;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
@@ -26,11 +27,11 @@ public class ConcertReservationController {
 
 	@PostMapping("/seats/reservation")
 	public ResponseEntity<ApiResponse<ConcertReservationResponse>> reserveConcertSeats(
-		@QueueToken UUID tokenId,
+		@QueueToken TokenHeaderData tokenHeader,
 		@RequestBody final ConcertReservationRequest concertReservationRequest
 	) {
 		final ConcertReservationResult concertReservationResult =
-			concertReservationUseCase.reserveConcertSeat(tokenId, concertReservationRequest.getSeatId());
+			concertReservationUseCase.reserveConcertSeat(tokenHeader.getTokenId(), concertReservationRequest.getSeatId());
 
 		final ConcertReservationResponse concertReservationResponse = new ConcertReservationResponse(
 			concertReservationResult.reservationAltId(),
