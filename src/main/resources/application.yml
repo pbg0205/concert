@@ -14,6 +14,11 @@ spring:
   output:
     ansi:
       enabled: never
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
 queue:
   processing:
     capacity: 30

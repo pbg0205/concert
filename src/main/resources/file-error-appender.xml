@@ -7,6 +7,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <encoder>
+            <charset>UTF-8</charset>
             <pattern>${LOG_PATTERN}</pattern>
             <withAnsi>false</withAnsi>
         </encoder>
