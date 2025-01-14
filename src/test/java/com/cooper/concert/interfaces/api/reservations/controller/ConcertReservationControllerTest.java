@@ -48,6 +48,49 @@ class ConcertReservationControllerTest {
 	private ConcertReservationUseCase concertReservationUseCase;
 
 	@Test
+	@DisplayName("토큰 헤더가 없으면 요청 실패")
+	void 토큰_헤더가_없으면_요청_실패() throws Exception {
+		// given
+		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(1L);
+		final String requestBody = objectMapper.writeValueAsString(concertReservationRequest);
+		// when
+		final ResultActions result = mockMvc.perform(post("/api/concert/seats/reservation")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody));
+
+		// then
+		result.andExpectAll(
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_TOKEN04"),
+				jsonPath("$.error.message").value("토큰이 비어 있습니다."))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("잘못된 포맷의 토큰 헤더인 경우 요청 실패")
+	void 잘못된_포맷의_토큰_헤더인_경우_요청_실패() throws Exception {
+		// given
+		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(1L);
+		final String requestBody = objectMapper.writeValueAsString(concertReservationRequest);
+		// when
+		final ResultActions result = mockMvc.perform(post("/api/concert/seats/reservation")
+			.header("QUEUE-TOKEN", "01944aad-f067-7eef-b2cf")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody));
+
+		// then
+		result.andExpectAll(
+				status().isBadRequest(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_TOKEN03"),
+				jsonPath("$.error.message").value("토큰 형식이 올바르지 않습니다."))
+			.andDo(print());
+	}
+
+	@Test
 	@DisplayName("토큰이 존재하지 않을 경우 요청 실패")
 	void 토큰이_존재하지_않을_경우_요청_실패() throws Exception {
 		// given
