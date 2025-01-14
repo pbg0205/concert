@@ -18,15 +18,13 @@ logging:
 queue:
   processing:
     capacity: 30
-    rate:
-      minutes: 1
+    rate: 10
 token:
   processing:
     valid:
       minutes: 5
   expire:
-    rate:
-      minutes: 1
+    rate: 10
 concert:
   schedules:
     read:
