@@ -38,7 +38,7 @@ class ReservationCommandRepositoryTest {
 
 	@Test
 	@DisplayName("대체키 기반 예약 조회 성공")
-	@Sql("classpath:sql/reservation_repository.sql")
+	@Sql("classpath:sql/repository/reservation_repository.sql")
 	void 대체키_기반_예약_조회_성공() {
 		// given
 		final Long reservationId = 1L;
@@ -55,7 +55,7 @@ class ReservationCommandRepositoryTest {
 
 	@Test
 	@DisplayName("사용자 예약 취소 성공")
-	@Sql("classpath:sql/reservation_cancel_repository.sql")
+	@Sql("classpath:sql/repository/reservation_cancel_repository.sql")
 	void 사용자_예약_취소_성공() {
 		// given
 		final List<Long> userIds = List.of(1L, 2L, 3L, 4L);

@@ -24,7 +24,7 @@ class WaitingQueueCommandRepositoryTest {
 
 	@Test
 	@DisplayName("유저 식별자와 상태를 입력하면 유저 토큰을 반환 성공")
-	@Sql("classpath:/sql/waiting_queue_position.sql")
+	@Sql("classpath:/sql/repository/waiting_queue_position_repository.sql")
 	void 유저_식별자와_상태를_입력하면_유저_토큰_반환_성공() {
 		// given
 		final Long userId = 1007L;
@@ -42,7 +42,7 @@ class WaitingQueueCommandRepositoryTest {
 
 	@Test
 	@DisplayName("유저 식별자 목록를 입력하면 유저 토큰 목록 조회 성공")
-	@Sql("classpath:/sql/accessible_token_list.sql")
+	@Sql("classpath:/sql/repository/accessible_token_list_repository.sql")
 	void 유저_식별자_목록를_입력하면_유저_토큰_목록_조회_성공() {
 		// given
 		final List<Long> ids = List.of(1007L, 1008L, 1009L);

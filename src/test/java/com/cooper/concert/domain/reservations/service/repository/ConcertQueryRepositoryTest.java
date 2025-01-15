@@ -19,7 +19,7 @@ class ConcertQueryRepositoryTest {
 
 	@Test
 	@DisplayName("콘서트 존재여부 조회 실패")
-	@Sql("classpath:sql/concert.sql")
+	@Sql("classpath:sql/repository/concert_repository.sql")
 	void 콘서트_존재여부_조회_실패() {
 		// given
 		final Long concertId = 4L;
@@ -34,7 +34,7 @@ class ConcertQueryRepositoryTest {
 
 	@Test
 	@DisplayName("콘서트 존재여부 조회 성공")
-	@Sql("classpath:sql/concert.sql")
+	@Sql("classpath:sql/repository/concert_repository.sql")
 	void 콘서트_존재여부_조회_성공() {
 		// given
 		final Long concertId = 1L;

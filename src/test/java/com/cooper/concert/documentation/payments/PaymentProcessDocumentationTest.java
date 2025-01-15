@@ -27,7 +27,7 @@ import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequ
 class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
-	@Sql("classpath:sql/payment_process_integration.sql")
+	@Sql("classpath:sql/integration/payment_process_integration.sql")
 	void 결제_성공() throws Exception {
 		// given
 		UUID paymentId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
