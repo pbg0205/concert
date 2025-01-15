@@ -23,7 +23,7 @@ class ConcertSeatQueryRepositoryTest {
 
 	@Test
 	@DisplayName("좌석 상태와 콘서트 스케줄 식별자를 통해 좌석 조회 성공")
-	@Sql("classpath:sql/concert_seats_repository.sql")
+	@Sql("classpath:sql/repository/concert_seats_repository.sql")
 	void 예약_가능_좌석_조회_성공() {
 		// given
 		final Long scheduleId = 1L; // 2025.01.30T19:00
@@ -41,7 +41,7 @@ class ConcertSeatQueryRepositoryTest {
 
 	@Test
 	@DisplayName("예약 가능 좌석 조회 페이지네이션 성공")
-	@Sql("classpath:sql/concert_seats_repository.sql")
+	@Sql("classpath:sql/repository/concert_seats_repository.sql")
 	void 예약_가능_좌석_조회_페이지네이션_성공() {
 		// given
 		final Long scheduleId = 1L;
@@ -59,7 +59,7 @@ class ConcertSeatQueryRepositoryTest {
 
 	@Test
 	@DisplayName("좌석 상태와 콘서트 스케줄 식별자를 통해 좌석 조회 성공")
-	@Sql("classpath:sql/concert_seats_repository.sql")
+	@Sql("classpath:sql/repository/concert_seats_repository.sql")
 	void 예약_가능_좌석_가격_조회() {
 		// given
 		final Long seatId = 1L;

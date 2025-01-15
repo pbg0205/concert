@@ -26,7 +26,7 @@ class WaitingQueueQueryRepositoryTest {
 
 	@Test
 	@DisplayName("대기열 순서 조회 성공")
-	@Sql("classpath:sql/waiting_queue_position.sql")
+	@Sql("classpath:sql/repository/waiting_queue_position_repository.sql")
 	void 대기열_순서_조회_성공() {
 		// given
 		final UUID tokenId = UUID.fromString("01b8f8a1-6f8c-7b6e-87c3-234a3c15f804");
@@ -40,7 +40,7 @@ class WaitingQueueQueryRepositoryTest {
 
 	@Test
 	@DisplayName("사용 가능한 대기 토큰 존재여부 성공")
-	@Sql("classpath:sql/waiting_queue_position.sql")
+	@Sql("classpath:sql/repository/waiting_queue_position_repository.sql")
 	void 사용_가능한_대기_토큰_존재여부_성공() {
 		// given
 		final Long userId = 1007L; // WAITING 대기열 토믄
@@ -55,7 +55,7 @@ class WaitingQueueQueryRepositoryTest {
 
 	@Test
 	@DisplayName("대기열 토큰 활성화 상태 사용자 수 조회 성공")
-	@Sql("classpath:/sql/processing_token_counts_sample.sql")
+	@Sql("classpath:/sql/repository/processing_token_counts_repository.sql")
 	void 대기열_토큰_활성화_상태_사용자_수_조회_성공() {
 		// given
 		final LocalDateTime expiredAt = Instant.ofEpochMilli(1736251200000L)
@@ -72,7 +72,7 @@ class WaitingQueueQueryRepositoryTest {
 
 	@Test
 	@DisplayName("일정 수, 특정 토큰 상태 아이디 목록 조회 성공")
-	@Sql("classpath:sql/waiting_queue_ids_limit_position.sql")
+	@Sql("classpath:sql/repository/waiting_queue_ids_limit_position_repository.sql")
 	void 일정_수_특정_토큰_상태_아이디_목록_조회_성공() {
 		// given, when
 		final List<Long> sut = waitingQueueQueryRepository.findAccessibleIdsByStatusOrderByIdAsc(

@@ -20,7 +20,7 @@ class UserBalanceCommandRepositoryTest {
 
 	@Test
 	@DisplayName("유저 존재하지 않을 경우, null 반환")
-	@Sql("classpath:sql/user_balance_repository.sql")
+	@Sql("classpath:sql/repository/user_balance_repository.sql")
 	void 유저_미존재_하면_유저_포인트_조회_실패() {
 		// given
 		final Long userId = 1000L;
@@ -34,7 +34,7 @@ class UserBalanceCommandRepositoryTest {
 
 	@Test
 	@DisplayName("유저 포인트 조회 성공")
-	@Sql("classpath:sql/user_balance_repository.sql")
+	@Sql("classpath:sql/repository/user_balance_repository.sql")
 	void 유저_포인트_조회_성공() {
 		// given
 		final Long userId = 1L;

@@ -22,7 +22,7 @@ class QueueTokenQueryRepositoryTest {
 
 	@Test
 	@DisplayName("토큰 아이디로 대기열 토큰 조회 실패")
-	@Sql("classpath:sql/token_read_repository.sql")
+	@Sql("classpath:sql/repository/token_read_repository.sql")
 	void 토큰_아이디로_대기열_토큰_조회_실패() {
 		// given
 		final UUID tokenId = UUID.fromString("0194467c-fb8e-7706-af9e-b855b7860fea");
@@ -36,7 +36,7 @@ class QueueTokenQueryRepositoryTest {
 
 	@Test
 	@DisplayName("토큰 아이디로 대기열 토큰 조회 성공")
-	@Sql("classpath:sql/token_read_repository.sql")
+	@Sql("classpath:sql/repository/token_read_repository.sql")
 	void 토큰_아이디로_대기열_토큰_조회_성공() {
 		// given
 		final UUID tokenId = UUID.fromString("01b8f8a1-6f8c-7b6e-87c3-234a3c15f78f");
@@ -50,7 +50,7 @@ class QueueTokenQueryRepositoryTest {
 
 	@Test
 	@DisplayName("토큰 아이디로 대기열 토큰 조회 성공")
-	@Sql("classpath:sql/token_read_repository.sql")
+	@Sql("classpath:sql/repository/token_read_repository.sql")
 	void 토큰_아이디로_유저_아이디_조회_성공() {
 		// given
 		final UUID tokenId = UUID.fromString("01b8f8a1-6f8c-7b6e-87c3-234a3c15f78f");

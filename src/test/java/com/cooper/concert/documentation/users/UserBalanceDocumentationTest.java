@@ -29,7 +29,7 @@ import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRe
 public class UserBalanceDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
-	@Sql("classpath:sql/user_balance_integration.sql")
+	@Sql("classpath:sql/integration/user_balance_integration.sql")
 	void 유저_잔액_조회_성공() throws Exception {
 		// given
 		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");
@@ -66,7 +66,7 @@ public class UserBalanceDocumentationTest extends RestDocsDocumentationTest {
 	}
 
 	@Test
-	@Sql("classpath:sql/user_balance_integration.sql")
+	@Sql("classpath:sql/integration/user_balance_integration.sql")
 	void 유저_잔액_충전_성공() throws Exception {
 		// given
 		final UserBalanceReChargeRequest userBalanceReChargeRequest =
