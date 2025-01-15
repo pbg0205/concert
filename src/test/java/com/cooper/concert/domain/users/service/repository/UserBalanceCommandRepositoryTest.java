@@ -26,7 +26,7 @@ class UserBalanceCommandRepositoryTest {
 		final Long userId = 1000L;
 
 		// when
-		final UserBalance sut = userBalanceCommandRepository.findByUserId(userId);
+		final UserBalance sut = userBalanceCommandRepository.findByUserIdForUpdate(userId);
 
 		// then
 		assertThat(sut).isNull();
@@ -40,7 +40,7 @@ class UserBalanceCommandRepositoryTest {
 		final Long userId = 1L;
 
 		// when
-		final UserBalance sut = userBalanceCommandRepository.findByUserId(userId);
+		final UserBalance sut = userBalanceCommandRepository.findByUserIdForUpdate(userId);
 
 		// then
 		assertThat(sut.getUserId()).isEqualTo(userId);
