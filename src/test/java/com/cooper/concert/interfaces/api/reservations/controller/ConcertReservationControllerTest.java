@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.cooper.concert.common.api.config.WebInterceptorConfig;
+import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.queues.service.errors.TokenErrorType;
 import com.cooper.concert.domain.queues.service.errors.exception.TokenNotFoundException;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationResult;
@@ -30,7 +30,7 @@ import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
 import com.cooper.concert.domain.reservations.service.errors.ReservationErrorType;
 import com.cooper.concert.domain.reservations.service.errors.exception.ReservationUnavailableException;
-import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertReservationUseCase;
 

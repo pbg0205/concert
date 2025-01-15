@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
-import com.cooper.concert.common.api.support.response.ApiResponse;
+import com.cooper.concert.api.support.response.ApiResponse;
 import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
 import com.cooper.concert.interfaces.api.users.dto.response.UserBalanceCheckResponse;
 import com.cooper.concert.interfaces.api.users.dto.response.UserBalanceRechargeResponse;

@@ -1,7 +1,5 @@
 package com.cooper.concert.interfaces.api.reservations.controller;
 
-import java.util.UUID;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.api.support.annotations.QueueToken;
-import com.cooper.concert.common.api.support.request.TokenHeaderData;
-import com.cooper.concert.common.api.support.response.ApiResponse;
+import com.cooper.concert.api.components.annotations.QueueToken;
+import com.cooper.concert.api.components.dto.TokenHeaderData;
+import com.cooper.concert.api.support.response.ApiResponse;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationResult;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
 import com.cooper.concert.interfaces.api.reservations.dto.response.ConcertReservationResponse;
