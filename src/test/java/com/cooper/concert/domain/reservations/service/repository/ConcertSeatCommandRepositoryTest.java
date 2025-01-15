@@ -28,7 +28,7 @@ class ConcertSeatCommandRepositoryTest {
 		final Long id = 1L;
 
 		// when
-		final ConcertSeat sut = concertSeatCommandRepository.findById(id);
+		final ConcertSeat sut = concertSeatCommandRepository.findByIdForUpdate(id);
 
 		// then
 		assertThat(sut.getId()).isEqualTo(id);
