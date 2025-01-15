@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.schedule.components.annotations.Scheduler;
@@ -21,12 +23,14 @@ public class TokenScheduler {
 
 	@SchedulerLog
 	@Scheduled(fixedRateString = "${queue.processing.rate}", timeUnit = TimeUnit.SECONDS)
+	@SchedulerLock(name = "tokenActiveScheduler", lockAtLeastFor = "PT5S", lockAtMostFor = "PT8S")
 	public Integer tokenActiveScheduler() {
 		return tokenSchedulerUseCase.updateToProcessing(LocalDateTime.now());
 	}
 
 	@SchedulerLog
 	@Scheduled(fixedRateString = "${token.expire.rate}", timeUnit = TimeUnit.SECONDS)
+	@SchedulerLock(name = "tokenExpireScheduler", lockAtLeastFor = "PT5S", lockAtMostFor = "PT8S")
 	public Integer tokenExpireScheduler() {
 		return tokenSchedulerUseCase.expireToken(LocalDateTime.now());
 	}
