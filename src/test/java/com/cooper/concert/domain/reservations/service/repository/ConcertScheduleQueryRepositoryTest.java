@@ -20,7 +20,7 @@ import com.cooper.concert.domain.reservations.service.dto.response.ConcertSchedu
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.reservations.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class ConcertScheduleQueryRepositoryTest {
 
 	@Autowired

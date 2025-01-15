@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.annotations.Facade;
+import com.cooper.concert.interfaces.components.annotations.Facade;
 import com.cooper.concert.domain.payments.service.PaymentProcessingService;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentCompleteInfo;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentProcessResult;

@@ -14,7 +14,7 @@ import com.cooper.concert.domain.users.service.response.UserReadResult;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.users.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class UserQueryRepositoryTest {
 
 	@Autowired

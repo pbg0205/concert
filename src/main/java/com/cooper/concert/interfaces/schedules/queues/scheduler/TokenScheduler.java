@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.annotations.Scheduler;
-import com.cooper.concert.common.logging.annotations.SchedulerLog;
+import com.cooper.concert.schedule.components.annotations.Scheduler;
+import com.cooper.concert.support.logging.annotations.SchedulerLog;
 import com.cooper.concert.interfaces.schedules.queues.usecase.TokenSchedulerUseCase;
 
 @Scheduler

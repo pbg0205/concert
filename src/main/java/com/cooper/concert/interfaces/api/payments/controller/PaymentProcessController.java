@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.api.support.annotations.QueueToken;
-import com.cooper.concert.common.api.support.request.TokenHeaderData;
-import com.cooper.concert.common.api.support.response.ApiResponse;
+import com.cooper.concert.api.components.annotations.QueueToken;
+import com.cooper.concert.api.components.dto.TokenHeaderData;
+import com.cooper.concert.api.support.response.ApiResponse;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentProcessResult;
 import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequest;
 import com.cooper.concert.interfaces.api.payments.dto.response.PaymentProcessResponse;

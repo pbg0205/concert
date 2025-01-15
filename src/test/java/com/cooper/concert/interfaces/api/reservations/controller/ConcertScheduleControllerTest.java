@@ -23,13 +23,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.cooper.concert.common.api.config.WebInterceptorConfig;
+import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
-import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleReadUseCase;
 
 @WebMvcTest(value = ConcertScheduleController.class, excludeFilters = {@ComponentScan.Filter(
