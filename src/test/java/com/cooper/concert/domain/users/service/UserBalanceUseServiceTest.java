@@ -30,7 +30,7 @@ class UserBalanceUseServiceTest {
 	@DisplayName("일치하는 유저 키가 없으면 유저 잔고 조회 실패")
 	void 일치하는_유저_키가_없으면_유저_잔고_조회_실패() {
 		// given
-		when(userBalanceCommandRepository.findByUserId(any())).thenReturn(null);
+		when(userBalanceCommandRepository.findByUserIdForUpdate(any())).thenReturn(null);
 
 		// when, then
 		assertThatThrownBy(() -> userBalanceUseService.usePoint(1L, 1000L))
@@ -45,7 +45,7 @@ class UserBalanceUseServiceTest {
 		// given
 		final Long userId = 1L;
 
-		when(userBalanceCommandRepository.findByUserId(any())).thenReturn(UserBalance.create(userId, 1000L));
+		when(userBalanceCommandRepository.findByUserIdForUpdate(any())).thenReturn(UserBalance.create(userId, 1000L));
 
 		// when
 		final Long balance = userBalanceUseService.usePoint(userId, 1000L);

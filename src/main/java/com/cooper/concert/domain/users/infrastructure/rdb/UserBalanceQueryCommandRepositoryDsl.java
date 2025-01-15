@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.users.models.UserBalance;
@@ -20,9 +21,10 @@ public class UserBalanceQueryCommandRepositoryDsl implements UserBalanceCommandR
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public UserBalance findByUserId(final Long userId) {
+	public UserBalance findByUserIdForUpdate(final Long userId) {
 		return queryFactory.selectFrom(userBalance)
 			.where(userBalance.userId.eq(userId))
+			.setLockMode(LockModeType.PESSIMISTIC_WRITE)
 			.fetchFirst();
 	}
 }
