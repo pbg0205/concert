@@ -20,14 +20,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
-import com.cooper.concert.common.api.support.response.ResultType;
+import com.cooper.concert.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
 import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequest;
 
 class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
-	@Sql("classpath:sql/payment_process_integration.sql")
+	@Sql("classpath:sql/integration/payment_process_integration.sql")
 	void 결제_성공() throws Exception {
 		// given
 		UUID paymentId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");

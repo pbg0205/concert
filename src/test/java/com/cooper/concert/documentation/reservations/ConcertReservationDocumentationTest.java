@@ -18,11 +18,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
-import com.cooper.concert.common.api.support.response.ResultType;
+import com.cooper.concert.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
 import com.cooper.concert.interfaces.api.reservations.dto.request.ConcertReservationRequest;
 
-@Sql("classpath:sql/concert_reservation_sample_integration.sql")
+@Sql("classpath:sql/integration/concert_reservation_sample_integration.sql")
 class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test

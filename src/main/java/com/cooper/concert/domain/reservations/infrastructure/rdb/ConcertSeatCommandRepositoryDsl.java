@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.reservations.models.ConcertSeat;
@@ -20,9 +21,10 @@ public class ConcertSeatCommandRepositoryDsl implements ConcertSeatCommandReposi
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public ConcertSeat findById(final Long id) {
+	public ConcertSeat findByIdForUpdate(final Long id) {
 		return queryFactory.selectFrom(concertSeat)
 			.where(concertSeat.id.eq(id))
+			.setLockMode(LockModeType.PESSIMISTIC_WRITE)
 			.fetchOne();
 	}
 

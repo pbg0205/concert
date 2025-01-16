@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.api.support.response.ApiResponse;
+import com.cooper.concert.api.support.response.ApiResponse;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
 import com.cooper.concert.interfaces.api.reservations.controller.dto.response.ConcertSeatResponse;

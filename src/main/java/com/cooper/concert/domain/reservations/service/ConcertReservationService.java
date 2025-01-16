@@ -30,7 +30,7 @@ public class ConcertReservationService {
 	private final ReservationCommandRepository reservationCommandRepository;
 
 	public ConcertReservationInfo reserveSeat(final Long userId, final Long seatId) {
-		final ConcertSeat concertSeat = Optional.ofNullable(concertSeatCommandRepository.findById(seatId))
+		final ConcertSeat concertSeat = Optional.ofNullable(concertSeatCommandRepository.findByIdForUpdate(seatId))
 			.orElseThrow(() -> new ConcertSeatNotFoundException(ConcertErrorType.CONCERT_SEAT_NOT_FOUND));
 
 		if (concertSeat.isUnavailable()) {
@@ -41,7 +41,7 @@ public class ConcertReservationService {
 
 		final UUID reservationAltId = reservationAltIdGenerator.generateAltId();
 		final Reservation savedReservation = reservationCommandRepository.save(
-			Reservation.createPendingReservation(concertSeat.getId(), userId, reservationAltId));
+			Reservation.createPendingReservation(userId, concertSeat.getId(), reservationAltId));
 
 		return new ConcertReservationInfo(savedReservation.getId(), savedReservation.getAltId());
 	}

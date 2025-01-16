@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.UserException;
-import com.cooper.concert.common.api.support.response.ApiResponse;
+import com.cooper.concert.api.support.response.ApiResponse;
 
 @Order(Ordered.LOWEST_PRECEDENCE - 1)
 @RestControllerAdvice

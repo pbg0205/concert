@@ -20,14 +20,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
-import com.cooper.concert.common.api.support.response.ResultType;
+import com.cooper.concert.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
 import com.cooper.concert.interfaces.api.queues.dto.request.QueueTokenIssueRequest;
 
 class QueueTokenDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
-	@Sql("classpath:sql/queue_token_issue_integration.sql")
+	@Sql("classpath:sql/integration/queue_token_issue_integration.sql")
 	void 대기열_토큰_발급_성공() throws Exception {
 		// given
 		final UUID userId = UUID.fromString("01943b62-8fed-7ea1-9d56-085529e28b11");

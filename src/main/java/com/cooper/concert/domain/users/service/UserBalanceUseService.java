@@ -20,7 +20,7 @@ public class UserBalanceUseService {
 	private final UserBalanceCommandRepository userBalanceCommandRepository;
 
 	public Long usePoint (final Long userId, final Long point) {
-		final UserBalance userBalance = Optional.ofNullable(userBalanceCommandRepository.findByUserId(userId))
+		final UserBalance userBalance = Optional.ofNullable(userBalanceCommandRepository.findByUserIdForUpdate(userId))
 			.orElseThrow(() -> new UserBalanceNotFoundException(UserErrorType.USER_BALANCE_NOT_FOUND));
 		return userBalance.usePoint(point);
 	}

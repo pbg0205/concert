@@ -15,7 +15,7 @@ import com.cooper.concert.domain.queues.models.QueueTokenStatus;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.queues.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class QueueTokenCommandRepositoryTest {
 
 	@Autowired
@@ -23,7 +23,7 @@ class QueueTokenCommandRepositoryTest {
 
 	@Test
 	@DisplayName("활성화 토큰 목록 조회 성공")
-	@Sql("classpath:sql/processing_token_repository.sql")
+	@Sql("classpath:sql/repository/processing_token_repository.sql")
 	void 활성화_토큰_목록_조회_성공() {
 		// given
 		QueueTokenStatus status = QueueTokenStatus.PROCESSING;
