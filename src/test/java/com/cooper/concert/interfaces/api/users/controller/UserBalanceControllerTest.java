@@ -23,13 +23,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.cooper.concert.common.api.config.WebInterceptorConfig;
+import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPointException;
 import com.cooper.concert.domain.users.service.errors.exception.UserNotFoundException;
 import com.cooper.concert.domain.users.service.response.UserBalanceChargeResult;
 import com.cooper.concert.domain.users.service.response.UserBalanceReadResult;
-import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.users.dto.request.UserBalanceReChargeRequest;
 import com.cooper.concert.interfaces.api.users.usecase.UserBalanceChargeUseCase;
 import com.cooper.concert.interfaces.api.users.usecase.UserBalanceReadUseCase;

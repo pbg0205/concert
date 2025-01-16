@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.annotations.Facade;
+import com.cooper.concert.interfaces.components.annotations.Facade;
 import com.cooper.concert.domain.reservations.service.ConcertScheduleReadService;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;

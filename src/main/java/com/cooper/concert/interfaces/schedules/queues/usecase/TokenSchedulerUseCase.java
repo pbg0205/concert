@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.common.annotations.Facade;
+import com.cooper.concert.interfaces.components.annotations.Facade;
 import com.cooper.concert.domain.payments.service.PaymentCancelService;
 import com.cooper.concert.domain.queues.service.QueueTokenExpiredService;
 import com.cooper.concert.domain.queues.service.WaitingQueueService;

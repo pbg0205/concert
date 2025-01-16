@@ -41,7 +41,7 @@ public class ConcertReservationService {
 
 		final UUID reservationAltId = reservationAltIdGenerator.generateAltId();
 		final Reservation savedReservation = reservationCommandRepository.save(
-			Reservation.createPendingReservation(concertSeat.getId(), userId, reservationAltId));
+			Reservation.createPendingReservation(userId, concertSeat.getId(), reservationAltId));
 
 		return new ConcertReservationInfo(savedReservation.getId(), savedReservation.getAltId());
 	}

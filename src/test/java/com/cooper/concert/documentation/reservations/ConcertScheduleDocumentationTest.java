@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 
-import com.cooper.concert.common.api.support.response.ResultType;
+import com.cooper.concert.api.support.response.ResultType;
 import com.cooper.concert.documentation.RestDocsDocumentationTest;
 
 class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {

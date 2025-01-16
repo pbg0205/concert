@@ -11,7 +11,7 @@ import com.cooper.concert.base.annotations.RdbRepositoryTest;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.reservations.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class ConcertQueryRepositoryTest {
 
 	@Autowired

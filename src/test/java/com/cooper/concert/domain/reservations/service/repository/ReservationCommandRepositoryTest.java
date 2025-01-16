@@ -16,7 +16,7 @@ import com.cooper.concert.domain.reservations.models.Reservation;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.reservations.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class ReservationCommandRepositoryTest {
 
 	@Autowired

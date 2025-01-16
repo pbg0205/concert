@@ -6,23 +6,33 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
   datasource:
     url: jdbc:mysql://localhost:3306/concert_db
     username: root
     password: concert2025
     driver-class-name: com.mysql.cj.jdbc.Driver
+  output:
+    ansi:
+      enabled: never
+  sql:
+    init:
+      mode: always
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
 queue:
   processing:
     capacity: 30
-    rate:
-      minutes: 1
+    rate: 10
 token:
   processing:
     valid:
       minutes: 5
   expire:
-    rate:
-      minutes: 1
+    rate: 10
 concert:
   schedules:
     read:

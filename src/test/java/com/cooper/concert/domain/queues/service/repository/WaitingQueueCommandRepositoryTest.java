@@ -16,7 +16,7 @@ import com.cooper.concert.domain.queues.models.QueueTokenStatus;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.queues.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class WaitingQueueCommandRepositoryTest {
 
 	@Autowired

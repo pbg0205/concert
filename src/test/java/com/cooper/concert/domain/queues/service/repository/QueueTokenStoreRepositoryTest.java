@@ -13,7 +13,7 @@ import com.cooper.concert.domain.queues.models.QueueToken;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.queues.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class QueueTokenStoreRepositoryTest {
 
 	@Autowired

@@ -16,7 +16,7 @@ import com.cooper.concert.domain.payments.models.Payment;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.payments.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class PaymentCommandRepositoryTest {
 
 	@Autowired

@@ -37,7 +37,7 @@ public class QueueToken {
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private QueueTokenStatus status;
 
-	@Column
+	@Column(nullable = false)
 	@ColumnDefault("0")
 	private LocalDateTime expiredAt;
 
@@ -45,6 +45,7 @@ public class QueueToken {
 		this.tokenId = tokenId;
 		this.userId = userId;
 		this.status = status;
+		this.expiredAt = LocalDateTime.of(1970, 1, 1, 0, 0);
 	}
 
 	public static QueueToken createWaitingToken(final UUID tokenId, final Long userId) {

@@ -12,7 +12,7 @@ import com.cooper.concert.domain.users.models.UserBalance;
 
 @RdbRepositoryTest(basePackages = {
 	"com.cooper.concert.domain.users.infrastructure.rdb",
-	"com.cooper.concert.common.jpa"})
+	"com.cooper.concert.storage.rdb.jpa"})
 class UserBalanceCommandRepositoryTest {
 
 	@Autowired

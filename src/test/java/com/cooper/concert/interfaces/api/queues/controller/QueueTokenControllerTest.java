@@ -21,12 +21,12 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.cooper.concert.common.api.config.WebInterceptorConfig;
+import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.queues.service.dto.QueueTokenIssueResult;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
 import com.cooper.concert.domain.users.service.errors.exception.UserNotFoundException;
 import com.cooper.concert.interfaces.api.queues.dto.request.QueueTokenIssueRequest;
-import com.cooper.concert.common.api.components.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.queues.usecase.QueueTokenIssueUseCase;
 
 @WebMvcTest(value = QueueTokenController.class, excludeFilters = {@ComponentScan.Filter(
@@ -65,6 +65,27 @@ class QueueTokenControllerTest {
 			jsonPath("$.data").doesNotExist(),
 			jsonPath("$.error.code").value("ERROR_USER04"),
 			jsonPath("$.error.message").value("유저를 찾을 수 없습니다")
+		);
+	}
+
+	@Test
+	@DisplayName("잘못된 포맷 유저 아이디인 경우, 토큰 발급 실패")
+	void 잘못된_포맷_유저_아이디인_경우_토큰_발급_실패() throws Exception {
+		// given
+		final String requestBody ="{\"userId\": \"3fa85f64-5717-4562-b3fc\"}";
+
+		// when
+		final ResultActions sut = mockMvc.perform(post("/api/queue/token/issue")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody));
+
+		// then
+		sut.andExpectAll(
+			status().isBadRequest(),
+			jsonPath("$.result").value("ERROR"),
+			jsonPath("$.data").doesNotExist(),
+			jsonPath("$.error.code").value("ERROR_COMMON02"),
+			jsonPath("$.error.message").value("읽을 수 없는 HTTP 메시지 입니다.")
 		);
 	}
 
