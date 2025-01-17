@@ -6,9 +6,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.cooper.concert.api.components.filter.HttpLoggingFilter;
+import com.cooper.concert.api.components.filter.RequestTrackingIdFilter;
 
 @Configuration
 public class WebFilterConfig implements WebMvcConfigurer {
+
+	@Bean
+	public FilterRegistrationBean<RequestTrackingIdFilter> requestTrackingIdFilter(){
+		FilterRegistrationBean<RequestTrackingIdFilter> registrationBean
+			= new FilterRegistrationBean<>();
+
+		registrationBean.setFilter(new RequestTrackingIdFilter());
+		registrationBean.addUrlPatterns("/api/*");
+		registrationBean.setOrder(1);
+
+		return registrationBean;
+	}
 
 	@Bean
 	public FilterRegistrationBean<HttpLoggingFilter> loggingFilter(){
@@ -17,7 +30,7 @@ public class WebFilterConfig implements WebMvcConfigurer {
 
 		registrationBean.setFilter(new HttpLoggingFilter());
 		registrationBean.addUrlPatterns("/api/*");
-		registrationBean.setOrder(1);
+		registrationBean.setOrder(2);
 
 		return registrationBean;
 	}

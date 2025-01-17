@@ -22,28 +22,21 @@ import com.cooper.concert.api.components.filter.response.HttpResponseBodyCachedW
 @Slf4j
 public class HttpLoggingFilter implements Filter {
 
-	private static final String REQUEST_ID = "request-id";
-
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
-		MDC.put(REQUEST_ID, UUID.randomUUID().toString());
 
 		HttpRequestBodyCachedWrapper requestWrapper =
 			new HttpRequestBodyCachedWrapper((HttpServletRequest)request);
 		HttpResponseBodyCachedWrapper responseWrapper =
 			new HttpResponseBodyCachedWrapper((HttpServletResponse)response);
 
-		try {
-			logRequest(requestWrapper);
-			
-			chain.doFilter(requestWrapper, responseWrapper);
+		logRequest(requestWrapper);
 
-			logResponse(responseWrapper);
-			writeResponseBody(responseWrapper, response);
-		} finally {
-			MDC.remove(REQUEST_ID);
-		}
+		chain.doFilter(requestWrapper, responseWrapper);
+
+		logResponse(responseWrapper);
+		writeResponseBody(responseWrapper, response);
 	}
 
 	private void logRequest(HttpRequestBodyCachedWrapper request) throws IOException {
@@ -84,7 +77,7 @@ public class HttpLoggingFilter implements Filter {
 	private String getResponseHeadersAsString(HttpServletResponse response) {
 		final StringBuilder headers = new StringBuilder();
 		final Collection<String> headerNames = response.getHeaderNames();
-		
+
 		for (String headerName : headerNames) {
 			String headerValue = response.getHeader(headerName);
 			headers.append(headerName).append(": ").append(headerValue).append("; ");
@@ -93,7 +86,7 @@ public class HttpLoggingFilter implements Filter {
 	}
 
 	// 우회한 response body byte 코드 주입해야 하므로 제거 금지!!
-	private void writeResponseBody(HttpResponseBodyCachedWrapper cachedResponse, ServletResponse response) 
+	private void writeResponseBody(HttpResponseBodyCachedWrapper cachedResponse, ServletResponse response)
 		throws IOException {
 		final byte[] responseBody = cachedResponse.getCachedBody();
 		response.getOutputStream().write(responseBody);
