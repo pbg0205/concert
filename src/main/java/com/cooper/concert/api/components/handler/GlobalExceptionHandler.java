@@ -19,11 +19,25 @@ import com.cooper.concert.api.support.response.ApiResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+	@ExceptionHandler(value = Exception.class)
+	public ResponseEntity<ApiResponse<?>> handleException(Exception exception) {
+		final CommonErrorType errorType = CommonErrorType.ERROR_UNKNOWN;
+
+		log.error("exception : {}, message : {}\n stackTraces: {}",
+			exception.getClass().getSimpleName(),
+			exception.getMessage(),
+			String.join("\n", getStackTraces(exception)));
+
+		return ResponseEntity.internalServerError()
+			.body(ApiResponse.error(errorType.getErrorCode().name(), errorType.getMessage()));
+	}
+
 	@ExceptionHandler(value = RuntimeException.class)
 	public ResponseEntity<ApiResponse<?>> handleRuntimeException(RuntimeException exception) {
-		logError(exception);
-
 		final CommonErrorType errorType = CommonErrorType.ERROR_UNKNOWN;
+
+		logWarn(exception);
+
 		return ResponseEntity.internalServerError()
 			.body(ApiResponse.error(errorType.getErrorCode().name(), errorType.getMessage()));
 	}
@@ -31,21 +45,25 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = HttpMessageNotReadableException.class)
 	public ResponseEntity<ApiResponse<?>> handleHttpMessageNotReadableException(
 		HttpMessageNotReadableException exception) {
-		logError(exception);
+
+		logWarn(exception);
 
 		final CommonErrorType errorType = CommonErrorType.ERROR_MESSAGE_UNREADABLE;
 		return ResponseEntity.badRequest()
 			.body(ApiResponse.error(errorType.getErrorCode().name(), errorType.getMessage()));
 	}
 
-	private void logError(final RuntimeException exception) {
-		final List<String> stackTraces = Arrays.stream(exception.getStackTrace())
-			.map(StackTraceElement::toString)
-			.toList();
-
-		log.error("exception : {}, message : {}\n stackTraces: {}",
+	private void logWarn(final RuntimeException exception) {
+		log.warn("exception : {}, message : {}\n stackTraces: {}",
 			exception.getClass().getSimpleName(),
 			exception.getMessage(),
-			String.join("\n", stackTraces));
+			String.join("\n", getStackTraces(exception)));
 	}
+
+	private List<String> getStackTraces(final Exception exception) {
+		return Arrays.stream(exception.getStackTrace())
+			.map(StackTraceElement::toString)
+			.toList();
+	}
+
 }
