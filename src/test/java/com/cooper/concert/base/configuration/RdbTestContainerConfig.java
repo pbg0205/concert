@@ -12,7 +12,7 @@ import jakarta.annotation.PreDestroy;
 
 @Testcontainers
 @Configuration
-public class TestContainerConfiguration {
+public class RdbTestContainerConfig {
 
 	@Container
 	static MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>(DockerImageName.parse("mysql:8.0"));
