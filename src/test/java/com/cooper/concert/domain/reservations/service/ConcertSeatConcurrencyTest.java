@@ -25,9 +25,6 @@ public class ConcertSeatConcurrencyTest {
 	private ConcertReservationService concertReservationService;
 
 	@Autowired
-	private ConcertSeatOccupiedCancelService concertSeatOccupiedCancelService;
-
-	@Autowired
 	private ReservationTestRepository reservationTestRepository;
 
 	@Test
@@ -39,7 +36,7 @@ public class ConcertSeatConcurrencyTest {
 		final Long seatId = 1L;
 
 		List<CompletableFuture<Void>> futures = new ArrayList<>();
-		ExecutorService executorService = Executors.newFixedThreadPool(20);
+		ExecutorService executorService = Executors.newFixedThreadPool(30);
 
 		// when
 		for (int i = 0; i < 50; i++) {

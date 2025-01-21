@@ -19,16 +19,17 @@ import com.cooper.concert.domain.reservations.service.errors.exception.Reservati
 import com.cooper.concert.domain.reservations.service.generator.ReservationAltIdGenerator;
 import com.cooper.concert.domain.reservations.service.repository.ConcertSeatCommandRepository;
 import com.cooper.concert.domain.reservations.service.repository.ReservationCommandRepository;
+import com.cooper.concert.storage.redis.redisson.components.annotations.DistributedLock;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ConcertReservationService {
 
 	private final ReservationAltIdGenerator reservationAltIdGenerator;
 	private final ConcertSeatCommandRepository concertSeatCommandRepository;
 	private final ReservationCommandRepository reservationCommandRepository;
 
+	@DistributedLock(key = "'SEAT:' + #seatId")
 	public ConcertReservationInfo reserveSeat(final Long userId, final Long seatId) {
 		final ConcertSeat concertSeat = Optional.ofNullable(concertSeatCommandRepository.findByIdForUpdate(seatId))
 			.orElseThrow(() -> new ConcertSeatNotFoundException(ConcertErrorType.CONCERT_SEAT_NOT_FOUND));
@@ -46,6 +47,7 @@ public class ConcertReservationService {
 		return new ConcertReservationInfo(savedReservation.getId(), savedReservation.getAltId());
 	}
 
+	@Transactional
 	public ConcertReservationCompletedInfo completeReservation(final Long reservationId) {
 		final Reservation reservation = reservationCommandRepository.findById(reservationId);
 
