@@ -18,6 +18,10 @@ spring:
   sql:
     init:
       mode: always
+  data:
+    redis:
+      host: localhost
+      port: 6379
 server:
   servlet:
     encoding:
