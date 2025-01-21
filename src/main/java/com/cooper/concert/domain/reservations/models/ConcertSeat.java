@@ -14,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,11 @@ public class ConcertSeat {
 	@Column(nullable = false)
 	@ColumnDefault("0")
 	private LocalDateTime modifiedAt;
+
+	@Version
+	@Column(nullable = false)
+	@ColumnDefault("0")
+	private Integer version;
 
 	private ConcertSeat(final Long scheduleId, final Long seatNumber, final ConcertSeatStatus status) {
 		this.scheduleId = scheduleId;

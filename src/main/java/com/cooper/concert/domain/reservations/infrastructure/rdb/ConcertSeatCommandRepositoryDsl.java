@@ -5,6 +5,7 @@ import static com.cooper.concert.domain.reservations.models.QConcertSeat.concert
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -16,15 +17,16 @@ import com.cooper.concert.domain.reservations.service.repository.ConcertSeatComm
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class ConcertSeatCommandRepositoryDsl implements ConcertSeatCommandRepository {
 
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public ConcertSeat findByIdForUpdate(final Long id) {
+	public ConcertSeat findByIdWithOptimisticLock(final Long id) {
 		return queryFactory.selectFrom(concertSeat)
 			.where(concertSeat.id.eq(id))
-			.setLockMode(LockModeType.PESSIMISTIC_WRITE)
+			.setLockMode(LockModeType.OPTIMISTIC)
 			.fetchOne();
 	}
 

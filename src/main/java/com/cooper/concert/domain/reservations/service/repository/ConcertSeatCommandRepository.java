@@ -5,6 +5,6 @@ import java.util.List;
 import com.cooper.concert.domain.reservations.models.ConcertSeat;
 
 public interface ConcertSeatCommandRepository {
-	ConcertSeat findByIdForUpdate(Long id);
+	ConcertSeat findByIdWithOptimisticLock(Long id);
 	List<ConcertSeat> findAllByIdsAndSeatStatus(List<Long> concertSeatIds, String seatStatus);
 }

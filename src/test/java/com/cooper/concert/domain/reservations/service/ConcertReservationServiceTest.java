@@ -51,7 +51,7 @@ class ConcertReservationServiceTest {
 	@DisplayName("콘서트 좌석 조회를 실패하면 ConcertSeatNotFoundException 반환")
 	void 콘서트_좌석_조회를_실패하면_ReservationUnavailableException_반환() {
 		// given
-		when(concertSeatCommandRepository.findByIdForUpdate(any())).thenReturn(null);
+		when(concertSeatCommandRepository.findByIdWithOptimisticLock(any())).thenReturn(null);
 
 		// when, then
 		assertThatThrownBy(() -> concertReservationService.reserveSeat(1L, 1L))
@@ -68,7 +68,7 @@ class ConcertReservationServiceTest {
 		final ConcertSeat seat = ConcertSeat.createAvailableSeat(1L, 1L);
 		seat.updateUnavailable();
 
-		when(concertSeatCommandRepository.findByIdForUpdate(any())).thenReturn(seat);
+		when(concertSeatCommandRepository.findByIdWithOptimisticLock(any())).thenReturn(seat);
 
 		// when, then
 		assertThatThrownBy(() -> concertReservationService.reserveSeat(1L, 1L))
@@ -87,7 +87,7 @@ class ConcertReservationServiceTest {
 		final Long userId = 1L;
 		final Long seatId = 1L;
 
-		when(concertSeatCommandRepository.findByIdForUpdate(any())).thenReturn(concertSeat);
+		when(concertSeatCommandRepository.findByIdWithOptimisticLock(any())).thenReturn(concertSeat);
 		when(reservationCommandRepository.save(any()))
 			.thenReturn(Reservation.createPendingReservation(userId, seatId, reservationAltId));
 
