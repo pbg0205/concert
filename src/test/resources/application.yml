@@ -11,10 +11,13 @@ spring:
     username: root
     password: concert2025
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  data:
+    redis:
+      host: localhost
+      port: 6379
 logging:
   level:
-    com.cooper.concert: info
-
+    com.cooper.concert: debug
 queue:
   processing:
     capacity: 30
