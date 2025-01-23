@@ -1,4 +1,4 @@
-package com.cooper.concert.domain.users.service;
+package com.cooper.concert.concurrency;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,6 +16,8 @@ import org.springframework.test.context.jdbc.Sql;
 import com.cooper.concert.base.annotations.ConcurrencyTest;
 import com.cooper.concert.base.repository.UserBalanceTestRepository;
 import com.cooper.concert.domain.users.models.UserBalance;
+import com.cooper.concert.domain.users.service.UserBalanceChargeService;
+import com.cooper.concert.domain.users.service.UserBalanceUseService;
 
 @ConcurrencyTest
 public class UserBalanceConcurrencyTest {
@@ -31,7 +33,7 @@ public class UserBalanceConcurrencyTest {
 
 	@Test
 	@DisplayName("포인트 충전에 대한 동시성 제어")
-	@Sql("classpath:sql/service/user_balance_charge_concurrency_service.sql")
+	@Sql("classpath:sql/concurrency/user_balance_charge_concurrency_service.sql")
 	void 포인트_충전에_대한_동시성_제어 () throws InterruptedException {
 	    // given
 		final Long userId = 1L;
@@ -55,7 +57,7 @@ public class UserBalanceConcurrencyTest {
 
 	@Test
 	@DisplayName("포인트 사용에 대한 동시성 제어")
-	@Sql("classpath:sql/service/user_balance_charge_concurrency_service.sql")
+	@Sql("classpath:sql/concurrency/user_balance_charge_concurrency_service.sql")
 	void 포인트_사용에_대한_동시성_제어_보장 () throws InterruptedException {
 	    // given
 		final Long userId = 2L;
@@ -79,7 +81,7 @@ public class UserBalanceConcurrencyTest {
 
 	@Test
 	@DisplayName("포인트 사용과 충전 대한 동시성 제어 보장")
-	@Sql("classpath:sql/service/user_balance_charge_concurrency_service.sql")
+	@Sql("classpath:sql/concurrency/user_balance_charge_concurrency_service.sql")
 	void 포인트_사용과_충전_대한_동시성_제어 () throws InterruptedException {
 		// given
 		final Long userId = 3L;
