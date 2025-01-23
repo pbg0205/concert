@@ -116,6 +116,7 @@ clean {
     delete file(querydslSrcDir)
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.generatedSourceOutputDirectory = file(querydslSrcDir)
+    options.compilerArgs << "-parameters"
 }
