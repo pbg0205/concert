@@ -30,7 +30,7 @@ public class ConcertReservationService {
 	private final ReservationCommandRepository reservationCommandRepository;
 
 	public ConcertReservationInfo reserveSeat(final Long userId, final Long seatId) {
-		final ConcertSeat concertSeat = Optional.ofNullable(concertSeatCommandRepository.findByIdForUpdate(seatId))
+		final ConcertSeat concertSeat = Optional.ofNullable(concertSeatCommandRepository.findByIdWithOptimisticLock(seatId))
 			.orElseThrow(() -> new ConcertSeatNotFoundException(ConcertErrorType.CONCERT_SEAT_NOT_FOUND));
 
 		if (concertSeat.isUnavailable()) {
