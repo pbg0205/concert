@@ -16,6 +16,7 @@ import com.cooper.concert.domain.reservations.service.repository.ConcertSeatComm
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class ConcertSeatCommandRepositoryDsl implements ConcertSeatCommandRepository {
 
 	private final JPAQueryFactory queryFactory;
