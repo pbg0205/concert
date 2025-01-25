@@ -1,0 +1,81 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../concert_mysql:/var/lib/mysql
+      - ./rdb/initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: 'concert2025'
+      MYSQL_DATABASE: concert_db
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.2
+  redis:
+    image: redis:7.4.2
+    ports:
+      - "6379:6379"
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.3
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.4
+    depends_on:
+      - prometheus
+  mysqld-exporter:
+    image: prom/mysqld-exporter:latest
+    ports:
+      - "9104:9104"
+    volumes:
+      - ./mysqld-exporter/.my.cnf:/cfg/.my.cnf
+    command:
+      - --config.my-cnf=/cfg/.my.cnf
+      - --mysqld.address=172.10.0.2:3306
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.5
+    depends_on:
+      - mysql
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../grafana-data:/var/lib/grafana
+    command:
+      - '--web.enable-lifecycle'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.6
+    depends_on:
+      - mysqld-exporter
+      - redis
+volumes:
+  grafana-data:
+  mysql-data:
+networks:
+  concert-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.10.0.0/16
+          gateway: 172.10.0.1

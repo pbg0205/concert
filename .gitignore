@@ -37,3 +37,6 @@ out/
 .vscode/
 
 **/generated/
+
+/concert_mysql/
+/grafana-data/
