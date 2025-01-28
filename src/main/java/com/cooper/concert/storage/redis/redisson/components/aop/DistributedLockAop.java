@@ -8,6 +8,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,12 @@ import com.cooper.concert.storage.redis.redisson.components.parser.CustomSpringE
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class DistributedLockAop {
 
 	private static final String REDISSON_LOCK_PREFIX = "LOCK:";
 
 	private final RedissonClient redissonClient;
-	private final AopForTransaction aopForTransaction;
 
 	@Around("@annotation(com.cooper.concert.storage.redis.redisson.components.annotations.DistributedLock)")
 	public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
@@ -50,7 +52,7 @@ public class DistributedLockAop {
 			log.debug("lock acquired key= {}, tokenId={}, seatId={}", key, joinPoint.getArgs()[0],
 				joinPoint.getArgs()[1]);
 
-			return aopForTransaction.proceed(joinPoint);
+			return joinPoint.proceed();
 		} catch (InterruptedException e) {
 			throw new InterruptedException();
 		} finally {

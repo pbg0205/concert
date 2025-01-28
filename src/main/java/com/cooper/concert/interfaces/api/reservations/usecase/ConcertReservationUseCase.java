@@ -2,6 +2,8 @@ package com.cooper.concert.interfaces.api.reservations.usecase;
 
 import java.util.UUID;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.payments.service.PaymentProcessingService;
@@ -15,6 +17,7 @@ import com.cooper.concert.storage.redis.redisson.components.annotations.Distribu
 
 @Facade
 @RequiredArgsConstructor
+@Transactional
 public class ConcertReservationUseCase {
 
 	private final QueueTokenReadService queueTokenReadService;
