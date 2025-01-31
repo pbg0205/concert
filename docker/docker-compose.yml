@@ -52,6 +52,17 @@ services:
         ipv4_address: 172.10.0.5
     depends_on:
       - mysql
+  influxdb:
+    image: bitnami/influxdb:1.8.5
+    container_name: cafe_influx
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=concert_k6
+      - INFLUXDB_ADMIN_USER_PASSWORD=concert0205
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.6
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -65,7 +76,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
       concert-network:
-        ipv4_address: 172.10.0.6
+        ipv4_address: 172.10.0.7
     depends_on:
       - mysqld-exporter
       - redis
