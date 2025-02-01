@@ -24,3 +24,7 @@ scrape_configs:
     static_configs:
       - targets:
           - 172.10.0.5:9104
+  - job_name: redis-exporter
+    static_configs:
+      - targets:
+        - 172.10.0.8:9121

@@ -80,6 +80,18 @@ services:
     depends_on:
       - mysqld-exporter
       - redis
+  redis-exporter:
+    image: "bitnami/redis-exporter:latest"
+    container_name: "redis-exporter"
+    environment:
+      - REDIS_ADDR=redis:6379
+    ports:
+      - "9121:9121"
+    depends_on:
+      - redis
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.8
 volumes:
   grafana-data:
   mysql-data:
