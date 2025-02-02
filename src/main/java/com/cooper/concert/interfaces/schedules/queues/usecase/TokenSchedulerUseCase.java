@@ -44,7 +44,9 @@ public class TokenSchedulerUseCase {
 			.map(ReservationCancelResult::seatId)
 			.toList();
 
-		return concertSeatOccupiedCancelService.cancelOccupied(concertSeatIds);
+		concertSeatOccupiedCancelService.cancelOccupied(concertSeatIds);
+
+		return expiredTokenUserIds.size();
 	}
 
 }
