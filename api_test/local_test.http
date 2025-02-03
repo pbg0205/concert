@@ -19,7 +19,7 @@ QUEUE-TOKEN: {{queueToken}}
 
 
 ### (3) 콘서트 잔여 좌석 조회
-GET http://localhost:8080/api/concert/1/seats?page=1
+GET http://localhost:8080/api/concert/1/seats
 Content-Type: application/json
 QUEUE-TOKEN: {{queueToken}}
 
