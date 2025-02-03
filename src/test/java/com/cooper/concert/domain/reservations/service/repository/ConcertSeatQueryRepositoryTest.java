@@ -28,33 +28,13 @@ class ConcertSeatQueryRepositoryTest {
 		// given
 		final Long scheduleId = 1L; // 2025.01.30T19:00
 		final String status = "AVAILABLE";
-		final Integer limit = 20;
-		final Integer offset = 0;
 
 		// when
 		final List<ConcertSeatResult> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
-			scheduleId, status, offset, limit);
+			scheduleId, status);
 
 		// then
-		assertThat(sut).hasSize(20);
-	}
-
-	@Test
-	@DisplayName("예약 가능 좌석 조회 페이지네이션 성공")
-	@Sql("classpath:sql/repository/concert_seats_repository.sql")
-	void 예약_가능_좌석_조회_페이지네이션_성공() {
-		// given
-		final Long scheduleId = 1L;
-		final String status = "AVAILABLE";
-		final Integer limit = 20;
-		final Integer offset = 20;
-
-		// when
-		final List<ConcertSeatResult> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
-			scheduleId, status, offset, limit);
-
-		// then
-		assertThat(sut).hasSize(5);
+		assertThat(sut).hasSize(25);
 	}
 
 	@Test

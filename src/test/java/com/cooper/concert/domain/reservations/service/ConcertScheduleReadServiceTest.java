@@ -94,15 +94,13 @@ class ConcertScheduleReadServiceTest {
 	void 콘서트_일정_없으면_좌석_조회_실패() {
 		// given
 		final Long scheduleId = 1L;
-		final Integer offset = 0;
-		final Integer limit = 10;
 
 		when(concertScheduleQueryRepository.findConcertScheduleResultById(any()))
 			.thenThrow(new ConcertScheduleNotFoundException(ConcertErrorType.CONCERT_SCHEDULE_NOT_FOUND));
 
 		// when, then
 		assertThatThrownBy(
-			() -> concertScheduleReadService.findAvailableSeatsByScheduleIdAndPaging(scheduleId, offset, limit))
+			() -> concertScheduleReadService.findAvailableSeatsByScheduleIdAndPaging(scheduleId))
 			.isInstanceOf(ConcertScheduleNotFoundException.class)
 			.extracting("errorType")
 			.satisfies(errorType ->
@@ -117,6 +115,7 @@ class ConcertScheduleReadServiceTest {
 		final Long scheduleId = 1L;
 		final Integer offset = 0;
 		final Integer limit = 10;
+
 		final List<ConcertSeatResult> availableSeats = List.of(
 			new ConcertSeatResult(1L, 1L),
 			new ConcertSeatResult(3L, 3L),
@@ -126,12 +125,12 @@ class ConcertScheduleReadServiceTest {
 		when(concertScheduleQueryRepository.findConcertScheduleResultById(any()))
 			.thenReturn(new ConcertScheduleResult(1L, LocalDateTime.of(2025, 1, 9, 2, 30)));
 		when(
-			concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(any(), any(), anyInt(), anyInt()))
+			concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(any(), any()))
 			.thenReturn(availableSeats);
 
 		// when
 		final ConcertScheduleSeatsResult sut =
-			concertScheduleReadService.findAvailableSeatsByScheduleIdAndPaging(scheduleId, offset, limit);
+			concertScheduleReadService.findAvailableSeatsByScheduleIdAndPaging(scheduleId);
 
 		// then
 		assertSoftly(softAssertions -> {

@@ -56,13 +56,10 @@ public class ConcertScheduleController {
 
 	@GetMapping("/{concertScheduleId}/seats")
 	public ResponseEntity<ApiResponse<ConcertAvailableSeatsResponse>> findAvailableSeats(
-		@PathVariable(name = "concertScheduleId") final Long concertScheduleId,
-		@RequestParam(name = "page") final Integer page) {
-
-		final Integer offset = (page - 1) * seatSize;
+		@PathVariable(name = "concertScheduleId") final Long concertScheduleId) {
 
 		final ConcertScheduleSeatsResult concertScheduleSeatsResult =
-			concertScheduleReadUseCase.readAvailableSeatsByScheduleId(concertScheduleId, offset, seatSize);
+			concertScheduleReadUseCase.readAvailableSeatsByScheduleId(concertScheduleId);
 
 		final LocalDate concertDate = concertScheduleSeatsResult.date();
 		final List<ConcertSeatResponse> availableSeats =

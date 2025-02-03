@@ -37,15 +37,14 @@ public class ConcertScheduleReadService {
 		return concertScheduleQueryRepository.findByAllByConcertIdAndPaging(concertId, offset, limit);
 	}
 
-	public ConcertScheduleSeatsResult findAvailableSeatsByScheduleIdAndPaging(
-		final Long scheduleId, final Integer offset, final Integer limit) {
+	public ConcertScheduleSeatsResult findAvailableSeatsByScheduleIdAndPaging(final Long scheduleId) {
 
 		final ConcertScheduleResult concertScheduleResult =
 			Optional.ofNullable(concertScheduleQueryRepository.findConcertScheduleResultById(scheduleId))
 				.orElseThrow(() -> new ConcertScheduleNotFoundException(ConcertErrorType.CONCERT_SCHEDULE_NOT_FOUND));
 
 		final List<ConcertSeatResult> availableSeats = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
-			scheduleId, ConcertSeatStatus.AVAILABLE.name(), offset, limit);
+			scheduleId, ConcertSeatStatus.AVAILABLE.name());
 
 		return new ConcertScheduleSeatsResult(concertScheduleResult.startDateTime().toLocalDate(), availableSeats);
 	}

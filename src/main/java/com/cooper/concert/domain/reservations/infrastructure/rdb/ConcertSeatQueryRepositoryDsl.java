@@ -23,13 +23,11 @@ public class ConcertSeatQueryRepositoryDsl implements ConcertSeatQueryRepository
 
 	@Override
 	public List<ConcertSeatResult> findConcertSeatsByScheduleIdAndStatusAndPaging(
-		final Long scheduleId, final String status, final Integer offset, final Integer limit) {
+		final Long scheduleId, final String status) {
 		return queryFactory.select(
 				Projections.constructor(ConcertSeatResult.class, concertSeat.id, concertSeat.seatNumber))
 			.from(concertSeat)
 			.where(concertSeat.scheduleId.eq(scheduleId).and(concertSeat.status.stringValue().eq(status)))
-			.limit(limit)
-			.offset(offset)
 			.fetch();
 	}
 
