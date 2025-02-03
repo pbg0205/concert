@@ -54,12 +54,12 @@ services:
       - mysql
   influxdb:
     image: bitnami/influxdb:1.8.5
-    container_name: cafe_influx
+    container_name: concert_influx
     ports:
       - "8086:8086"
     environment:
       - INFLUXDB_DB=concert_k6
-      - INFLUXDB_ADMIN_USER_PASSWORD=concert0205
+      - INFLUXDB_ADMIN_USER_PASSWORD=concert2025
     networks:
       concert-network:
         ipv4_address: 172.10.0.6
