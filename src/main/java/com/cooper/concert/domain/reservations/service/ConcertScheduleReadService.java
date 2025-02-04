@@ -30,7 +30,7 @@ public class ConcertScheduleReadService {
 	private final ConcertSeatQueryRepository concertSeatQueryRepository;
 
 	@Cacheable(
-		cacheManager = "caffeineCacheManager",
+		cacheManager = "cacheManager",
 		value = "concertSchedules",
 		key = "'concertSchedules:' + #concertId + ':' + #offset",
 		condition = "#result != null",
@@ -44,6 +44,11 @@ public class ConcertScheduleReadService {
 		return concertScheduleQueryRepository.findByAllByConcertIdAndPaging(concertId, offset, limit);
 	}
 
+	@Cacheable(
+		cacheManager = "cacheManager",
+		value = "concertScheduleSeat",
+		key = "'concertScheduleSeat:' + #scheduleId",
+		sync = true)
 	public ConcertScheduleSeatsResult findAvailableSeatsByScheduleIdAndPaging(final Long scheduleId) {
 
 		final ConcertScheduleResult concertScheduleResult =
