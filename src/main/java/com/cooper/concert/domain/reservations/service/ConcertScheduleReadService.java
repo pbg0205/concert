@@ -46,8 +46,8 @@ public class ConcertScheduleReadService {
 
 	@Cacheable(
 		cacheManager = "cacheManager",
-		value = "concertScheduleSeat",
-		key = "'concertScheduleSeat:' + #scheduleId",
+		value = "concertAvailableSeats",
+		key = "'scheduleId:' + #scheduleId",
 		sync = true)
 	public ConcertScheduleSeatsResult findAvailableSeatsByScheduleIdAndPaging(final Long scheduleId) {
 
