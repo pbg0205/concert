@@ -51,7 +51,7 @@ QUEUE-TOKEN: {{queueToken}}
 
 
 ### (6) 사용자 포인트 조회
-GET http://localhost:8080/api/users/01943b62-8fed-7ea1-9d56-085529e28b11/balance
+GET http://localhost:8080/api/users/0194c534-f4b5-7c63-bfd5-ae9f34f04d01/balance
 Content-Type: application/json
 
 
@@ -60,6 +60,6 @@ POST http://localhost:8080/api/users/balance/recharge
 Content-Type: application/json
 
 {
-  "userId" : "01943b62-8fed-7ea1-9d56-085529e28b11",
+  "userId" : "0194c534-f4b5-7c63-bfd5-ae9f34f04d01",
   "point" : 1000
 }
