@@ -97,7 +97,9 @@ dependencies {
     implementation 'org.redisson:redisson-spring-boot-starter:3.43.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 }
 
 bootJar {
