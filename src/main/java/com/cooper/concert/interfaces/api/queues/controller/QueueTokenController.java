@@ -29,7 +29,7 @@ public class QueueTokenController {
 			queueTokenIssueUseCase.issueQueueToken(queueTokenIssueRequest.getUserId());
 
 		final QueueTokenIssueResponse queueTokenIssueResponse = new QueueTokenIssueResponse(
-			queueTokenIssueResult.tokenId(),
+			queueTokenIssueResult.token(),
 			queueTokenIssueResult.waitingPosition());
 
 		return ResponseEntity.ok(ApiResponse.success(queueTokenIssueResponse));

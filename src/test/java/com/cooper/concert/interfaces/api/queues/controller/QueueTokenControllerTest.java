@@ -94,14 +94,14 @@ class QueueTokenControllerTest {
 	void 유저가_존재하면_토큰_발급_성공() throws Exception {
 		// given
 		final UUID userId = UUID.fromString("0194411f-8b49-7d07-8154-2db648d82990");
-		final UUID tokenId = UUID.fromString("01944127-f6ce-7130-9de8-1b39b67c24ce");
+		final String token = "issued token";
 		final Long waitingPosition = 3L;
 
 		final QueueTokenIssueRequest queueTokenIssueRequest = new QueueTokenIssueRequest(userId);
 		final String requestBody = objectMapper.writeValueAsString(queueTokenIssueRequest);
 
 		when(queueTokenIssueUseCase.issueQueueToken(any()))
-			.thenReturn(new QueueTokenIssueResult(tokenId, waitingPosition));
+			.thenReturn(new QueueTokenIssueResult(token, waitingPosition));
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/queue/token/issue")
@@ -112,7 +112,7 @@ class QueueTokenControllerTest {
 		sut.andExpectAll(
 			status().isOk(),
 			jsonPath("$.result").value("SUCCESS"),
-			jsonPath("$.data.token").value(tokenId.toString()),
+			jsonPath("$.data.token").value(token),
 			jsonPath("$.data.position").value(3)
 		);
 	}

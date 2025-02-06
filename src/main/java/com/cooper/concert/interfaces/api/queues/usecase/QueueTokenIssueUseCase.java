@@ -6,14 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import com.cooper.concert.interfaces.components.annotations.Facade;
 import com.cooper.concert.domain.queues.service.QueueTokenIssueService;
 import com.cooper.concert.domain.queues.service.WaitingQueueService;
 import com.cooper.concert.domain.queues.service.dto.QueueTokenIssueResult;
-import com.cooper.concert.domain.queues.service.dto.response.QueueTokenIssueInfo;
-import com.cooper.concert.domain.queues.service.dto.response.WaitingTokenPositionInfo;
 import com.cooper.concert.domain.users.service.UserReadService;
 import com.cooper.concert.domain.users.service.response.UserReadResult;
+import com.cooper.concert.interfaces.components.annotations.Facade;
 
 @Facade
 @RequiredArgsConstructor
@@ -29,13 +27,12 @@ public class QueueTokenIssueUseCase {
 		final Long userId = userReadResult.userId();
 
 		if (waitingQueueService.existQueueToken(userId)) {
-			waitingQueueService.updateWaitingToCanceled(userId);
+			waitingQueueService.removeFromWaitingQueue(userId);
 		}
 
-		final QueueTokenIssueInfo queueTokenIssueInfo = queueTokenIssueService.issueQueueToken(userId);
-		final WaitingTokenPositionInfo waitingTokenPositionInfo =
-			waitingQueueService.getWaitingTokenPosition(queueTokenIssueInfo.tokenId());
+		final String token = queueTokenIssueService.issueQueueToken(userId);
+		final Long position = waitingQueueService.enqueueUserId(userId);
 
-		return new QueueTokenIssueResult(queueTokenIssueInfo.tokenId(), waitingTokenPositionInfo.position());
+		return new QueueTokenIssueResult(token, position);
 	}
 }

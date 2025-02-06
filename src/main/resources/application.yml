@@ -31,6 +31,8 @@ queue:
   processing:
     capacity: 30
     rate: 10
+waiting-queue:
+  name: waitingQueue
 token:
   processing:
     valid:

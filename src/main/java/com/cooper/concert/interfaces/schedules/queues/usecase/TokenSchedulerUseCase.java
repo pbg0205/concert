@@ -27,7 +27,9 @@ public class TokenSchedulerUseCase {
 	private final ConcertSeatOccupiedCancelService concertSeatOccupiedCancelService;
 
 	public Integer updateToProcessing(final LocalDateTime expiredAt) {
-		return waitingQueueService.updateToProcessing(expiredAt);
+		final Integer availableActiveTokenCount = activeTokenService.countRemainingActiveTokens();
+		final List<Long> userIds = waitingQueueService.dequeueUserIds(availableActiveTokenCount);
+		return activeTokenService.addActiveTokens(userIds, expiredAt);
 	}
 
 	public Integer expireToken(final LocalDateTime expiredAt) {
