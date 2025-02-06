@@ -36,7 +36,7 @@ public class CacheConfig {
 				RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory))
 			.cacheDefaults(defaultConfig)
 			.withCacheConfiguration("concertAvailableSeats",
-				RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(5)))
+				RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(1)))
 			.build();
 
 		CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager("concertSchedules");
