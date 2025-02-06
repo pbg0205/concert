@@ -79,11 +79,11 @@ public abstract class RestDocsDocumentationTest {
 		final ActiveQueueToken activeQueueToken =
 			new ActiveQueueToken(userId, LocalDateTime.now().plusMinutes(expireValidMinutes));
 
-		redisTemplate.opsForValue().set(key, activeQueueToken);
+		redisTemplate.opsForHash().put(activeTokenKeyPrefix, userId, activeQueueToken);
 	}
 
 	@AfterEach
 	void tearDown() {
-		redisTemplate.delete(activeTokenKeyPrefix + "*");
+		redisTemplate.delete("*");
 	}
 }

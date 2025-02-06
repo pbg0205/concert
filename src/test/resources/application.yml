@@ -27,7 +27,7 @@ token:
     valid:
       minutes: 5
     key:
-      prefix: 'activeTokens:userId:'
+      prefix: 'activeTokens'
   expire:
     rate: 10
   secret-key: 327b11e16b3095aecfebb79d1253a111f54aa2f98a373ed21cf2ff9f9f42c71b

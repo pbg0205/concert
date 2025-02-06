@@ -1,5 +1,6 @@
 package com.cooper.concert.domain.queues.service.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -11,5 +12,5 @@ public record ActiveQueueToken(
 	Long userId,
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	LocalDateTime expiredAt) {
+	LocalDateTime expiredAt) implements Serializable {
 }
