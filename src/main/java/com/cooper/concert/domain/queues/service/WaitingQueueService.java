@@ -28,4 +28,7 @@ public class WaitingQueueService {
 		return waitingQueueRepository.enqueueUserId(userId);
 	}
 
+	public List<Long> dequeueUserIds(final Integer availableActiveTokenCount) {
+		return waitingQueueRepository.dequeueUserIds(availableActiveTokenCount);
+	}
 }
