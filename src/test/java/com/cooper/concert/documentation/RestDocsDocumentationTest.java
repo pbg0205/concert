@@ -5,12 +5,17 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.mo
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.TestExecutionListeners;
@@ -22,6 +27,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
+import com.cooper.concert.domain.queues.service.dto.ActiveQueueToken;
+import com.cooper.concert.domain.queues.service.jwt.QueueTokenGenerator;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
@@ -31,6 +38,12 @@ import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
 	DataCleanUpExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public abstract class RestDocsDocumentationTest {
 
+	@Value("${token.processing.key.prefix}")
+	private String activeTokenKeyPrefix;
+
+	@Value("${token.processing.valid.minutes}")
+	private Integer expireValidMinutes;
+
 	@Autowired
 	protected MockMvc mockMvc;
 
@@ -39,6 +52,12 @@ public abstract class RestDocsDocumentationTest {
 
 	@Autowired
 	protected WebApplicationContext context;
+
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+
+	@Autowired
+	protected QueueTokenGenerator queueTokenGenerator;
 
 	@BeforeEach
 	public void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -51,5 +70,20 @@ public abstract class RestDocsDocumentationTest {
 				.withResponseDefaults(modifyUris().removePort(), prettyPrint()))
 			.alwaysDo(print())
 			.build();
+	}
+
+	@BeforeEach
+	public void initData() {
+		final Long userId = 1L;
+		final String key = activeTokenKeyPrefix + userId;
+		final ActiveQueueToken activeQueueToken =
+			new ActiveQueueToken(userId, LocalDateTime.now().plusMinutes(expireValidMinutes));
+
+		redisTemplate.opsForValue().set(key, activeQueueToken);
+	}
+
+	@AfterEach
+	void tearDown() {
+		redisTemplate.delete(activeTokenKeyPrefix + "*");
 	}
 }

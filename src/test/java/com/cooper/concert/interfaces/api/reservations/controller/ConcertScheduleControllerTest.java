@@ -24,6 +24,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
+import com.cooper.concert.api.components.resolver.QueueTokenArgumentResolver;
+import com.cooper.concert.api.config.WebArgumentsConfig;
 import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
@@ -32,8 +34,10 @@ import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleReadUseCase;
 
-@WebMvcTest(value = ConcertScheduleController.class, excludeFilters = {@ComponentScan.Filter(
-	type = FilterType.ASSIGNABLE_TYPE, classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class})})
+@WebMvcTest(value = ConcertScheduleController.class, excludeFilters = {
+	@ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class, WebArgumentsConfig.class})})
 class ConcertScheduleControllerTest {
 
 	@Autowired

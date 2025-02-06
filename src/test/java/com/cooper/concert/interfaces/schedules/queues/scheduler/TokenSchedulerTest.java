@@ -11,6 +11,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,6 +21,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.cooper.concert.base.listener.DataCleanUpExecutionListener;
+import com.cooper.concert.domain.queues.service.dto.ActiveQueueToken;
 import com.cooper.concert.interfaces.schedules.queues.usecase.TokenSchedulerUseCase;
 
 @SpringBootTest
@@ -81,17 +85,19 @@ class TokenSchedulerTest {
 		assertThat(successCount).isEqualTo(6);
 	}
 
-	@Test
-	@DisplayName("토큰 예정 토큰 만료 상태 변경 성공")
-	@Sql("classpath:sql/scheduler/token_expire_scheduler.sql")
-	void 토큰_예정_토큰_만료_상태_변경_성공() {
-		// given
-		final LocalDateTime expiredAt = LocalDateTime.of(2025, 1, 7, 12, 10);
-
-		// when
-		final Integer successCount = tokenSchedulerUseCase.expireToken(expiredAt);
-
-		// then
-		assertThat(successCount).isEqualTo(2);
+	private static Stream<Arguments> tokenExpireMethodSource() {
+		return Stream.of(
+			Arguments.arguments(
+				List.of(1001L, 1002L, 1003L, 1004L, 1005L, 1006L),
+				List.of(
+					LocalDateTime.of(2025, 1, 7, 12, 0, 0),
+					LocalDateTime.of(2025, 1, 7, 12, 0, 30),
+					LocalDateTime.of(2025, 1, 7, 12, 1, 0),
+					LocalDateTime.of(2025, 1, 7, 12, 1, 30),
+					LocalDateTime.of(2025, 1, 7, 12, 2, 0),
+					LocalDateTime.of(2025, 1, 7, 12, 2, 30)
+				)
+			)
+		);
 	}
 }

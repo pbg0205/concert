@@ -9,6 +9,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,12 +27,14 @@ import com.cooper.concert.documentation.RestDocsDocumentationTest;
 class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 
 	@Test
-	@Sql({"classpath:sql/integration/concert_schedule_available_dates_integration.sql",
-		"classpath:sql/integration/concert_schedule_integration_queue_token.sql"})
+	@Sql({"classpath:sql/integration/concert_schedule_available_dates_integration.sql"})
 	void 예약_가능_날짜_조회_성공() throws Exception {
-		// given, when
+		// given
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+
+		// when
 		final ResultActions result = mockMvc.perform(get("/api/concert/{concertId}/available-dates?page={page}", 1, 1)
-			.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
+			.header("QUEUE-TOKEN", token)
 			.contentType(MediaType.APPLICATION_JSON));
 
 		// then
@@ -66,13 +70,15 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 	}
 
 	@Test
-	@Sql({"classpath:sql/integration/concert_schedule_integration_queue_token.sql",
-		"classpath:sql/integration/concert_available_seats_integration.sql"})
+	@Sql({"classpath:sql/integration/concert_available_seats_integration.sql"})
 	void 예약_가능_날짜_좌석_조회_성공() throws Exception {
-		// given, when
+		// given
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+
+		// when
 		final ResultActions result = mockMvc.perform(
 			get("/api/concert/{concertScheduleId}/seats?page={page}", 1L, 1)
-				.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
+				.header("QUEUE-TOKEN", token)
 				.contentType(MediaType.APPLICATION_JSON));
 
 		// then

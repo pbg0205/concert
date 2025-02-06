@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -30,14 +31,15 @@ class PaymentProcessDocumentationTest extends RestDocsDocumentationTest {
 	@Sql("classpath:sql/integration/payment_process_integration.sql")
 	void 결제_성공() throws Exception {
 		// given
-		UUID paymentId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
 
+		final UUID paymentId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
 		// when
 		final ResultActions result = mockMvc.perform(post("/api/payments")
-			.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
+			.header("QUEUE-TOKEN", token)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
 

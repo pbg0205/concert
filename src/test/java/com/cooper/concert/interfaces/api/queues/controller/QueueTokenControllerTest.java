@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.cooper.concert.api.config.WebArgumentsConfig;
 import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.queues.service.dto.QueueTokenIssueResult;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
@@ -29,9 +30,12 @@ import com.cooper.concert.interfaces.api.queues.dto.request.QueueTokenIssueReque
 import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.queues.usecase.QueueTokenIssueUseCase;
 
-@WebMvcTest(value = QueueTokenController.class, excludeFilters = {@ComponentScan.Filter(
-	type = FilterType.ASSIGNABLE_TYPE, classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class})})
+@WebMvcTest(value = QueueTokenController.class, excludeFilters = {
+	@ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class, WebArgumentsConfig.class})})
 class QueueTokenControllerTest {
+
 	@Autowired
 	private MockMvc mockMvc;
 
