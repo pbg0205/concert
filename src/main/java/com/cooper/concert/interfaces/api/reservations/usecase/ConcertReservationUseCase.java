@@ -25,8 +25,7 @@ public class ConcertReservationUseCase {
 	private final PaymentProcessingService paymentProcessingService;
 
 	@DistributedLock(key = "'SEAT:' + #seatId")
-	public ConcertReservationResult reserveConcertSeat(final UUID tokenId, final Long seatId) {
-		final Long userId = queueTokenReadService.findUserIdByTokenId(tokenId);
+	public ConcertReservationResult reserveConcertSeat(final Long userId, final Long seatId) {
 		final ConcertReservationInfo concertReservationInfo = concertReservationService.reserveSeat(userId, seatId);
 		final PaymentCreationInfo paymentCreationInfo =
 			paymentProcessingService.createPendingPayment(concertReservationInfo.reservationId());

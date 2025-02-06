@@ -29,7 +29,7 @@ public class ConcertReservationController {
 		@RequestBody final ConcertReservationRequest concertReservationRequest
 	) {
 		final ConcertReservationResult concertReservationResult =
-			concertReservationUseCase.reserveConcertSeat(tokenHeader.getTokenId(), concertReservationRequest.getSeatId());
+			concertReservationUseCase.reserveConcertSeat(tokenHeader.userId(), concertReservationRequest.getSeatId());
 
 		final ConcertReservationResponse concertReservationResponse = new ConcertReservationResponse(
 			concertReservationResult.reservationAltId(),

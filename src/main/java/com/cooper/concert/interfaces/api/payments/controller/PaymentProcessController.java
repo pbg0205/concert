@@ -29,7 +29,7 @@ public class PaymentProcessController {
 		@RequestBody final PaymentProcessRequest paymentProcessRequest) {
 
 		final PaymentProcessResult paymentProcessResult = processUseCase.processPayment(
-			paymentProcessRequest.getPaymentId(), tokenHeader.getTokenId());
+			paymentProcessRequest.getPaymentId(), tokenHeader.userId());
 
 		return ResponseEntity.ok()
 			.body(ApiResponse.success(new PaymentProcessResponse(paymentProcessResult.reservationAltId())));
