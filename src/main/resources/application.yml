@@ -47,6 +47,3 @@ concert:
   schedules:
     read:
       limit: 10
-  seats:
-    read:
-      limit: 20

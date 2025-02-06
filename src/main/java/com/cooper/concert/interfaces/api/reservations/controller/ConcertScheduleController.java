@@ -29,9 +29,6 @@ public class ConcertScheduleController {
 	@Value("${concert.schedules.read.limit}")
 	private int scheduleSize;
 
-	@Value("${concert.seats.read.limit}")
-	private int seatSize;
-
 	private final ConcertScheduleReadUseCase concertScheduleReadUseCase;
 
 	@GetMapping("/{concertId}/available-dates")
