@@ -3,6 +3,7 @@ package com.cooper.concert.domain.reservations.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,12 @@ public class ConcertScheduleReadService {
 	private final ConcertScheduleQueryRepository concertScheduleQueryRepository;
 	private final ConcertSeatQueryRepository concertSeatQueryRepository;
 
+	@Cacheable(
+		cacheManager = "cacheManager",
+		value = "concertSchedules",
+		key = "'concertSchedules:' + #concertId + ':' + #offset",
+		condition = "#result != null",
+		sync = true)
 	public List<ConcertScheduleResult> findByAllByConcertIdAndPaging(
 		final Long concertId, final Integer offset, final Integer limit) {
 		if (!concertQueryRepository.existsById(concertId)) {
@@ -37,6 +44,11 @@ public class ConcertScheduleReadService {
 		return concertScheduleQueryRepository.findByAllByConcertIdAndPaging(concertId, offset, limit);
 	}
 
+	@Cacheable(
+		cacheManager = "cacheManager",
+		value = "concertAvailableSeats",
+		key = "'scheduleId:' + #scheduleId",
+		sync = true)
 	public ConcertScheduleSeatsResult findAvailableSeatsByScheduleIdAndPaging(final Long scheduleId) {
 
 		final ConcertScheduleResult concertScheduleResult =
