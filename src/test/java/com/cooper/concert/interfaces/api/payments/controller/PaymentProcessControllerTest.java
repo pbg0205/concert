@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -22,11 +23,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
-import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentProcessResult;
 import com.cooper.concert.domain.payments.service.errors.PaymentErrorType;
 import com.cooper.concert.domain.payments.service.errors.exception.PaymentCompleteFailException;
+import com.cooper.concert.domain.queues.service.ActiveQueueTokenValidationService;
+import com.cooper.concert.domain.queues.service.jwt.QueueTokenExtractor;
+import com.cooper.concert.domain.queues.service.jwt.QueueTokenGenerator;
+import com.cooper.concert.domain.queues.service.repository.ActiveTokenRepository;
 import com.cooper.concert.domain.reservations.service.errors.ReservationErrorType;
 import com.cooper.concert.domain.reservations.service.errors.exception.ReservationCanceledException;
 import com.cooper.concert.domain.reservations.service.errors.exception.ReservationReservedException;
@@ -35,8 +38,10 @@ import com.cooper.concert.domain.users.service.errors.exception.InvalidUserPoint
 import com.cooper.concert.interfaces.api.payments.dto.request.PaymentProcessRequest;
 import com.cooper.concert.interfaces.api.payments.usecase.PaymentProcessUseCase;
 
-@WebMvcTest(value = PaymentProcessController.class, excludeFilters = {@ComponentScan.Filter(
-	type = FilterType.ASSIGNABLE_TYPE, classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class})})
+@WebMvcTest(value = PaymentProcessController.class,
+	includeFilters = {@ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = {QueueTokenExtractor.class, QueueTokenGenerator.class, ActiveQueueTokenValidationService.class})})
 class PaymentProcessControllerTest {
 
 	@Autowired
@@ -45,15 +50,20 @@ class PaymentProcessControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@Autowired
+	private QueueTokenGenerator queueTokenGenerator;
+
 	@MockitoBean
 	private PaymentProcessUseCase paymentProcessUseCase;
+
+	@MockitoBean
+	private ActiveTokenRepository activeTokenRepository;
 
 	@Test
 	@DisplayName("토큰 헤더가 없으면 요청 실패")
 	void 토큰_헤더가_없으면_요청_실패() throws Exception {
 		// given
 		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-
 		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
@@ -73,49 +83,25 @@ class PaymentProcessControllerTest {
 	}
 
 	@Test
-	@DisplayName("잘못된 포맷의 토큰 헤더인 경우 요청 실패")
-	void 잘못된_포맷의_토큰_헤더인_경우_요청_실패() throws Exception {
-		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-
-		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
-		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
-
-		// when
-		final ResultActions result = mockMvc.perform(post("/api/payments")
-			.header("QUEUE-TOKEN", "01944aad-f067-7eef-b2cf")
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(requestBody));
-
-		// then
-		result.andExpectAll(
-				status().isBadRequest(),
-				jsonPath("$.result").value("ERROR"),
-				jsonPath("$.data").doesNotExist(),
-				jsonPath("$.error.code").value("ERROR_TOKEN03"),
-				jsonPath("$.error.message").value("토큰 형식이 올바르지 않습니다."))
-			.andDo(print());
-	}
-
-
-	@Test
 	@DisplayName("결제와 예약 모두 대기 상태인 경우 결제 성공")
 	void 결제_성공() throws Exception {
 		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
 		final UUID reservationId = UUID.fromString("01944c18-83d4-7969-b03e-4157c54a4249");
-		final UUID tokenId = UUID.fromString("01945626-fe29-7070-b761-db6c6655a6b8");
+		when(paymentProcessUseCase.processPayment(any(), any()))
+			.thenReturn(new PaymentProcessResult(reservationId));
 
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
+
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
 		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
-		when(paymentProcessUseCase.processPayment(any(), any()))
-			.thenReturn(new PaymentProcessResult(reservationId));
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/payments")
 			.contentType(MediaType.APPLICATION_JSON)
-			.header("QUEUE-TOKEN", tokenId)
+			.header("QUEUE-TOKEN", token)
 			.content(requestBody));
 
 		// then
@@ -131,19 +117,20 @@ class PaymentProcessControllerTest {
 	@DisplayName("예약 취소 상태에서 재요청하면 요청 실패")
 	void 예약_취소_상태에서_재요청하면_요청_실패() throws Exception {
 		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-		final UUID tokenId = UUID.fromString("01945626-fe29-7070-b761-db6c6655a6b8");
-
-		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
-		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
-
 		when(paymentProcessUseCase.processPayment(any(), any()))
 			.thenThrow(new ReservationCanceledException(ReservationErrorType.RESERVATION_CANCELED));
+
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
+
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
+		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/payments")
 			.contentType(MediaType.APPLICATION_JSON)
-			.header("QUEUE-TOKEN", tokenId)
+			.header("QUEUE-TOKEN", token)
 			.content(requestBody));
 
 		// then
@@ -160,19 +147,21 @@ class PaymentProcessControllerTest {
 	@DisplayName("예약 성공 상태에서 재요청하면 요청 실패")
 	void 예약_성공_상태에서_재요청하면_요청_실패() throws Exception {
 		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-		final UUID tokenId = UUID.fromString("01945626-fe29-7070-b761-db6c6655a6b8");
+		when(paymentProcessUseCase.processPayment(any(), any()))
+			.thenThrow(new ReservationReservedException(ReservationErrorType.RESERVATION_RESERVED));
 
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
+
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
 		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
-		when(paymentProcessUseCase.processPayment(any(), any()))
-			.thenThrow(new ReservationReservedException(ReservationErrorType.RESERVATION_RESERVED));
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/payments")
 			.contentType(MediaType.APPLICATION_JSON)
-			.header("QUEUE-TOKEN", tokenId)
+			.header("QUEUE-TOKEN", token)
 			.content(requestBody));
 
 		// then
@@ -189,19 +178,20 @@ class PaymentProcessControllerTest {
 	@DisplayName("결제 취소 상태에서 재요청하면 요청 실패")
 	void 결제_취소_상태에서_재요청하면_요청_실패() throws Exception {
 		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-		final UUID tokenId = UUID.fromString("01945626-fe29-7070-b761-db6c6655a6b8");
-
-		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
-		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
-
 		when(paymentProcessUseCase.processPayment(any(), any()))
 			.thenThrow(new PaymentCompleteFailException(PaymentErrorType.PAYMENT_CANCELED));
+
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
+
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
+		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/payments")
 			.contentType(MediaType.APPLICATION_JSON)
-			.header("QUEUE-TOKEN", tokenId)
+			.header("QUEUE-TOKEN", token)
 			.content(requestBody));
 
 		// then
@@ -218,19 +208,21 @@ class PaymentProcessControllerTest {
 	@DisplayName("결제 완료 상태에서 재요청하면 요청 실패")
 	void 결제_완료_상태에서_재요청하면_요청_실패() throws Exception {
 		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-		final UUID tokenId = UUID.fromString("01945626-fe29-7070-b761-db6c6655a6b8");
+		when(paymentProcessUseCase.processPayment(any(), any()))
+			.thenThrow(new PaymentCompleteFailException(PaymentErrorType.PAYMENT_COMPLETED));
 
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
+
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
 		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
-		when(paymentProcessUseCase.processPayment(any(), any()))
-			.thenThrow(new PaymentCompleteFailException(PaymentErrorType.PAYMENT_COMPLETED));
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/payments")
 			.contentType(MediaType.APPLICATION_JSON)
-			.header("QUEUE-TOKEN", tokenId.toString())
+			.header("QUEUE-TOKEN", token)
 			.content(requestBody));
 
 		// then
@@ -247,19 +239,21 @@ class PaymentProcessControllerTest {
 	@DisplayName("결제키를 찾지 못하면 요청 실패")
 	void 결제키를_찾지_못하면_요청_실패() throws Exception {
 		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-		final UUID tokenId = UUID.fromString("01945626-fe29-7070-b761-db6c6655a6b8");
+		when(paymentProcessUseCase.processPayment(any(), any()))
+			.thenThrow(new PaymentCompleteFailException(PaymentErrorType.PAYMENT_KEY_NOT_FOUND));
 
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
+
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
 		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
-		when(paymentProcessUseCase.processPayment(any(), any()))
-			.thenThrow(new PaymentCompleteFailException(PaymentErrorType.PAYMENT_KEY_NOT_FOUND));
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/payments")
 			.contentType(MediaType.APPLICATION_JSON)
-			.header("QUEUE-TOKEN", tokenId.toString())
+			.header("QUEUE-TOKEN", token)
 			.content(requestBody));
 
 		// then
@@ -276,19 +270,21 @@ class PaymentProcessControllerTest {
 	@DisplayName("유저 포인트 부족하면 요청 실패")
 	void 유저_포인트_부족하면_요청_실패() throws Exception {
 		// given
-		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
-		final UUID tokenId = UUID.fromString("01945626-fe29-7070-b761-db6c6655a6b8");
+		when(paymentProcessUseCase.processPayment(any(), any()))
+			.thenThrow(new InvalidUserPointException(UserErrorType.INSUFFICIENT_BALANCE));
 
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
+
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
 		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
 		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
 
-		when(paymentProcessUseCase.processPayment(any(), any()))
-			.thenThrow(new InvalidUserPointException(UserErrorType.INSUFFICIENT_BALANCE));
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/payments")
 			.contentType(MediaType.APPLICATION_JSON)
-			.header("QUEUE-TOKEN", tokenId.toString())
+			.header("QUEUE-TOKEN", token)
 			.content(requestBody));
 
 		// then

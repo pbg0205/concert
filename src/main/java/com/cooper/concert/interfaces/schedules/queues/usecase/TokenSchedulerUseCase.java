@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+import com.cooper.concert.domain.queues.service.ActiveTokenService;
 import com.cooper.concert.interfaces.components.annotations.Facade;
 import com.cooper.concert.domain.payments.service.PaymentCancelService;
 import com.cooper.concert.domain.queues.service.QueueTokenExpiredService;
@@ -21,13 +22,16 @@ import com.cooper.concert.domain.reservations.service.dto.response.ReservationCa
 public class TokenSchedulerUseCase {
 
 	private final WaitingQueueService waitingQueueService;
+	private final ActiveTokenService activeTokenService;
 	private final QueueTokenExpiredService queueTokenExpiredService;
 	private final ReservationCancelService reservationCancelService;
 	private final PaymentCancelService paymentCancelService;
 	private final ConcertSeatOccupiedCancelService concertSeatOccupiedCancelService;
 
 	public Integer updateToProcessing(final LocalDateTime expiredAt) {
-		return waitingQueueService.updateToProcessing(expiredAt);
+		final Integer availableActiveTokenCount = activeTokenService.countRemainingActiveTokens();
+		final List<Long> userIds = waitingQueueService.dequeueUserIds(availableActiveTokenCount);
+		return activeTokenService.addActiveTokens(userIds, expiredAt);
 	}
 
 	public Integer expireToken(final LocalDateTime expiredAt) {

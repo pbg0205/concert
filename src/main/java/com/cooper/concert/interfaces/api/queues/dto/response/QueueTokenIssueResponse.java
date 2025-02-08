@@ -1,7 +1,5 @@
 package com.cooper.concert.interfaces.api.queues.dto.response;
 
-import java.util.UUID;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class QueueTokenIssueResponse {
-	private final UUID token;
+	private final String token;
 	private final Long position;
 }

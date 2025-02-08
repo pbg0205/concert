@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.cooper.concert.api.config.WebArgumentsConfig;
 import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.queues.service.dto.QueueTokenIssueResult;
 import com.cooper.concert.domain.users.service.errors.UserErrorType;
@@ -29,9 +30,12 @@ import com.cooper.concert.interfaces.api.queues.dto.request.QueueTokenIssueReque
 import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
 import com.cooper.concert.interfaces.api.queues.usecase.QueueTokenIssueUseCase;
 
-@WebMvcTest(value = QueueTokenController.class, excludeFilters = {@ComponentScan.Filter(
-	type = FilterType.ASSIGNABLE_TYPE, classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class})})
+@WebMvcTest(value = QueueTokenController.class, excludeFilters = {
+	@ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class, WebArgumentsConfig.class})})
 class QueueTokenControllerTest {
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -94,14 +98,14 @@ class QueueTokenControllerTest {
 	void 유저가_존재하면_토큰_발급_성공() throws Exception {
 		// given
 		final UUID userId = UUID.fromString("0194411f-8b49-7d07-8154-2db648d82990");
-		final UUID tokenId = UUID.fromString("01944127-f6ce-7130-9de8-1b39b67c24ce");
+		final String token = "issued token";
 		final Long waitingPosition = 3L;
 
 		final QueueTokenIssueRequest queueTokenIssueRequest = new QueueTokenIssueRequest(userId);
 		final String requestBody = objectMapper.writeValueAsString(queueTokenIssueRequest);
 
 		when(queueTokenIssueUseCase.issueQueueToken(any()))
-			.thenReturn(new QueueTokenIssueResult(tokenId, waitingPosition));
+			.thenReturn(new QueueTokenIssueResult(token, waitingPosition));
 
 		// when
 		final ResultActions sut = mockMvc.perform(post("/api/queue/token/issue")
@@ -112,7 +116,7 @@ class QueueTokenControllerTest {
 		sut.andExpectAll(
 			status().isOk(),
 			jsonPath("$.result").value("SUCCESS"),
-			jsonPath("$.data.token").value(tokenId.toString()),
+			jsonPath("$.data.token").value(token),
 			jsonPath("$.data.position").value(3)
 		);
 	}

@@ -28,7 +28,7 @@ public class PaymentProcessUseCase {
 	private final PaymentProcessingService paymentProcessingService;
 	private final QueueTokenExpiredService queueTokenExpiredService;
 
-	public PaymentProcessResult processPayment(final UUID paymentAltId, final UUID tokenId) {
+	public PaymentProcessResult processPayment(final UUID paymentAltId, final Long userId) {
 		final PaymentCompleteInfo paymentCompleteInfo = paymentProcessingService.completePayment(paymentAltId);
 
 		final ConcertReservationCompletedInfo reservationCompletedInfo =
@@ -39,7 +39,7 @@ public class PaymentProcessUseCase {
 
 		userBalanceUseService.usePoint(reservationCompletedInfo.userId(), concertSeatPriceInfo.price());
 
-		queueTokenExpiredService.expireCompleteToken(tokenId);
+		queueTokenExpiredService.expireCompleteToken(userId);
 
 		return new PaymentProcessResult(reservationCompletedInfo.altId());
 	}

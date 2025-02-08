@@ -24,48 +24,6 @@ VALUES (1, 1, 1000, 1672972800, 1672972800),
        (9, 9, 1000, 1672972800, 1672972800),
        (10, 10, 1000, 1672972800, 1672972800);
 
--- 토큰 아이디 (모두 활성화 토큰으로 설정)
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10001, UUID_TO_BIN(REPLACE('01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e', '-', '')), 1, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10002, UUID_TO_BIN(REPLACE('019481e4-cb8e-7a71-8e38-f3eb3d02a058', '-', '')), 2, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10003, UUID_TO_BIN(REPLACE('019481e4-f587-7707-8270-593b547d0c4f', '-', '')), 3, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10004, UUID_TO_BIN(REPLACE('019481e5-1b7b-77ab-880f-1eb7b59de0e5', '-', '')), 4, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10005, UUID_TO_BIN(REPLACE('019481e6-2fc4-786d-a9f5-87bb05390423', '-', '')), 5, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10006, UUID_TO_BIN(REPLACE('019481e7-f4d8-7109-8bcf-ccd4b212c3de', '-', '')), 6, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10007, UUID_TO_BIN(REPLACE('019481e8-15f6-7968-842a-1be0099d0fea', '-', '')), 7, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10008, UUID_TO_BIN(REPLACE('019481e8-49d7-7dc3-9c59-244cfe0b2722', '-', '')), 8, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10009, UUID_TO_BIN(REPLACE('019481e8-61ea-7f92-a601-647b2f0317d4', '-', '')), 9, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-INSERT INTO queue_token (id, token_id, user_id, status, expired_at)
-VALUES (10010, UUID_TO_BIN(REPLACE('019481e8-7b6d-778e-9c0c-9afbdbb0c7ff', '-', '')), 10, 'PROCESSING',
-        1893456000000); --2030.01.01T00:00:00
-
-
 -- 콘서트 샘플데이터
 INSERT INTO concert (id, concert_id, name, created_at, modified_at)
 VALUES

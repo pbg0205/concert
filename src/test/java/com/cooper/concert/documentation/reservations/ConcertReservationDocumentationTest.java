@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,13 +30,14 @@ class ConcertReservationDocumentationTest extends RestDocsDocumentationTest {
 	@Test
 	void 예약_요청() throws Exception {
 		// given
-		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(1L);
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
 
+		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(1L);
 		final String requestBody = objectMapper.writeValueAsString(concertReservationRequest);
 
 		// when
 		final ResultActions result = mockMvc.perform(post("/api/concert/seats/reservation")
-			.header("QUEUE-TOKEN", "01b8f8a1-6f8c-7b6e-87c3-234a3c15f77e")
+			.header("QUEUE-TOKEN", token)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
 
