@@ -51,14 +51,15 @@ public class ConcertScheduleController {
 			.body(ApiResponse.success(concertAvailableDateResponses));
 	}
 
-	@GetMapping("/{concertScheduleId}/seats")
+	@GetMapping("/{concertId}/concertSchedule/{concertScheduleId}/seats")
 	public ResponseEntity<ApiResponse<ConcertAvailableSeatsResponse>> findAvailableSeats(
+		@PathVariable(name = "concertId") final Long concertId,
 		@PathVariable(name = "concertScheduleId") final Long concertScheduleId) {
 
 		final ConcertScheduleSeatsResult concertScheduleSeatsResult =
-			concertScheduleReadUseCase.readAvailableSeatsByScheduleId(concertScheduleId);
+			concertScheduleReadUseCase.readAvailableSeatsByScheduleId(concertId, concertScheduleId);
 
-		final LocalDate concertDate = concertScheduleSeatsResult.date();
+		final LocalDate concertDate = concertScheduleSeatsResult.dateTime().toLocalDate();
 		final List<ConcertSeatResponse> availableSeats =
 			concertScheduleSeatsResult.availableSeats().stream()
 				.map(result -> new ConcertSeatResponse(result.id(), result.seatNumber()))

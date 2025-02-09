@@ -22,7 +22,7 @@ public class ConcertSeatQueryRepositoryDsl implements ConcertSeatQueryRepository
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<ConcertSeatResult> findConcertSeatsByScheduleIdAndStatusAndPaging(
+	public List<ConcertSeatResult> findConcertSeatsByScheduleIdAndStatus(
 		final Long scheduleId, final String status) {
 		return queryFactory.select(
 				Projections.constructor(ConcertSeatResult.class, concertSeat.id, concertSeat.seatNumber))

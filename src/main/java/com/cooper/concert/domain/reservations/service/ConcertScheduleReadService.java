@@ -44,20 +44,21 @@ public class ConcertScheduleReadService {
 		return concertScheduleQueryRepository.findByAllByConcertIdAndPaging(concertId, offset, limit);
 	}
 
-	@Cacheable(
-		cacheManager = "cacheManager",
-		value = "concertAvailableSeats",
-		key = "'scheduleId:' + #scheduleId",
-		sync = true)
-	public ConcertScheduleSeatsResult findAvailableSeatsByScheduleIdAndPaging(final Long scheduleId) {
+	public ConcertScheduleSeatsResult findAvailableSeatsByScheduleId(final Long scheduleId) {
 
 		final ConcertScheduleResult concertScheduleResult =
 			Optional.ofNullable(concertScheduleQueryRepository.findConcertScheduleResultById(scheduleId))
 				.orElseThrow(() -> new ConcertScheduleNotFoundException(ConcertErrorType.CONCERT_SCHEDULE_NOT_FOUND));
 
-		final List<ConcertSeatResult> availableSeats = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
+		final List<ConcertSeatResult> availableSeats = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatus(
 			scheduleId, ConcertSeatStatus.AVAILABLE.name());
 
-		return new ConcertScheduleSeatsResult(concertScheduleResult.startDateTime().toLocalDate(), availableSeats);
+		return new ConcertScheduleSeatsResult(concertScheduleResult.startDateTime(), availableSeats);
 	}
+
+	public ConcertScheduleResult findConcertScheduleById(final Long concertScheduleId) {
+		return Optional.ofNullable(concertScheduleQueryRepository.findConcertScheduleResultById(concertScheduleId))
+			.orElseThrow(() -> new ConcertScheduleNotFoundException(ConcertErrorType.CONCERT_SCHEDULE_NOT_FOUND));
+	}
+
 }

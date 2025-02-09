@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
-import com.cooper.concert.api.components.resolver.QueueTokenArgumentResolver;
 import com.cooper.concert.api.config.WebArgumentsConfig;
 import com.cooper.concert.api.config.WebInterceptorConfig;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
@@ -113,15 +111,16 @@ class ConcertScheduleControllerTest {
 	@DisplayName("콘서트 일정이 존재하지 않을 경우 요청 실패")
 	void 콘서트_일정이_존재하지_않을_경우_요청_실패() throws Exception {
 		// given
+		final Long concertId = 1000L;
 		final Long scheduleId = 1000L;
-		final int page = 1;
 
-		when(concertScheduleReadUseCase.readAvailableSeatsByScheduleId(anyLong()))
+		when(concertScheduleReadUseCase.readAvailableSeatsByScheduleId(anyLong(), anyLong()))
 			.thenThrow(new ConcertNotFoundException(ConcertErrorType.CONCERT_SCHEDULE_NOT_FOUND));
 
 		// when
 		final ResultActions result = mockMvc.perform(
-			get("/api/concert/{concertScheduleId}/seats", scheduleId)
+			get("/api/concert/{concertId}/concertSchedule/{concertScheduleId}/seats",
+				concertId, scheduleId)
 				.header("QUEUE-TOKEN", "queue-token")
 				.contentType(MediaType.APPLICATION_JSON));
 
@@ -139,13 +138,13 @@ class ConcertScheduleControllerTest {
 	@DisplayName("콘서트 일정이 존재하면 예약 가능 좌석 조회 성공")
 	void 콘서트_일정이_존재하면_예약_가능_좌석_조회_성공() throws Exception {
 		// given
+		final Long concertId = 1L;
 		final Long scheduleId = 1L;
-		final int page = 1;
 
-		when(concertScheduleReadUseCase.readAvailableSeatsByScheduleId(anyLong()))
+		when(concertScheduleReadUseCase.readAvailableSeatsByScheduleId(anyLong(), anyLong()))
 			.thenReturn(
 				new ConcertScheduleSeatsResult(
-					LocalDate.of(2025, 1, 9),
+					LocalDateTime.of(2025, 1, 9, 0, 17, 0),
 					List.of(
 						new ConcertSeatResult(1L, 1L),
 						new ConcertSeatResult(3L, 3L),
@@ -153,7 +152,8 @@ class ConcertScheduleControllerTest {
 
 		// when
 		final ResultActions result = mockMvc.perform(
-			get("/api/concert/{concertScheduleId}/seats", scheduleId)
+			get("/api/concert/{concertId}/concertSchedule/{concertScheduleId}/seats",
+				concertId, scheduleId)
 				.header("QUEUE-TOKEN", "queue-token")
 				.contentType(MediaType.APPLICATION_JSON));
 

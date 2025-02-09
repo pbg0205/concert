@@ -6,6 +6,7 @@ import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatPr
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
 
 public interface ConcertSeatQueryRepository {
-	List<ConcertSeatResult> findConcertSeatsByScheduleIdAndStatusAndPaging(Long scheduleId, String status);
+	List<ConcertSeatResult> findConcertSeatsByScheduleIdAndStatus(Long scheduleId, String status);
+
 	ConcertSeatPriceInfo findConcertSeatPriceInfoById(Long seatId);
 }

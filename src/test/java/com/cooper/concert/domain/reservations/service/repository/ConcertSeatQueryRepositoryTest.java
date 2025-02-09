@@ -30,7 +30,7 @@ class ConcertSeatQueryRepositoryTest {
 		final String status = "AVAILABLE";
 
 		// when
-		final List<ConcertSeatResult> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(
+		final List<ConcertSeatResult> sut = concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatus(
 			scheduleId, status);
 
 		// then

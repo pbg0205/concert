@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -100,7 +99,7 @@ class ConcertScheduleReadServiceTest {
 
 		// when, then
 		assertThatThrownBy(
-			() -> concertScheduleReadService.findAvailableSeatsByScheduleIdAndPaging(scheduleId))
+			() -> concertScheduleReadService.findAvailableSeatsByScheduleId(scheduleId))
 			.isInstanceOf(ConcertScheduleNotFoundException.class)
 			.extracting("errorType")
 			.satisfies(errorType ->
@@ -125,16 +124,16 @@ class ConcertScheduleReadServiceTest {
 		when(concertScheduleQueryRepository.findConcertScheduleResultById(any()))
 			.thenReturn(new ConcertScheduleResult(1L, LocalDateTime.of(2025, 1, 9, 2, 30)));
 		when(
-			concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatusAndPaging(any(), any()))
+			concertSeatQueryRepository.findConcertSeatsByScheduleIdAndStatus(any(), any()))
 			.thenReturn(availableSeats);
 
 		// when
 		final ConcertScheduleSeatsResult sut =
-			concertScheduleReadService.findAvailableSeatsByScheduleIdAndPaging(scheduleId);
+			concertScheduleReadService.findAvailableSeatsByScheduleId(scheduleId);
 
 		// then
 		assertSoftly(softAssertions -> {
-			softAssertions.assertThat(sut.date()).isEqualTo(LocalDate.of(2025, 1, 9));
+			softAssertions.assertThat(sut.dateTime()).isEqualTo(LocalDateTime.of(2025, 1, 9, 2, 30));
 			softAssertions.assertThat(sut.availableSeats()).hasSize(4);
 		});
 	}

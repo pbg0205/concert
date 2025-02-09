@@ -47,3 +47,10 @@ concert:
   schedules:
     read:
       limit: 10
+    cache:
+      format: 'concert:%s:schedules:'
+      ttl:  300 # seconds
+    available-seats:
+      cache:
+        format: 'concertSchedules:%s:seats:'
+        ttl:  300 # seconds

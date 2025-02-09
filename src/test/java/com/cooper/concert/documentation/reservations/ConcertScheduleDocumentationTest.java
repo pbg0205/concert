@@ -77,7 +77,7 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 
 		// when
 		final ResultActions result = mockMvc.perform(
-			get("/api/concert/{concertScheduleId}/seats?page={page}", 1L, 1)
+			get("/api/concert/{concertId}/concertSchedule/{concertScheduleId}/seats", 1L, 1L)
 				.header("QUEUE-TOKEN", token)
 				.contentType(MediaType.APPLICATION_JSON));
 
@@ -87,7 +87,7 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 				jsonPath("$.result").value(ResultType.SUCCESS.name()),
 				jsonPath("$.data").exists(),
 				jsonPath("$.error").doesNotExist())
-			.andDo(document("concert-available-date-seats-success", concertAvailableDateSeatsSuccessResource()));
+			.andDo(document("concert-available-dateTime-seats-success", concertAvailableDateSeatsSuccessResource()));
 	}
 
 	private ResourceSnippet concertAvailableDateSeatsSuccessResource() {
@@ -100,13 +100,15 @@ class ConcertScheduleDocumentationTest extends RestDocsDocumentationTest {
 					headerWithName("QUEUE-TOKEN").description("대기열 토큰"),
 					headerWithName(HttpHeaders.CONTENT_TYPE).description("컨텐츠 타입"))
 				.pathParameters(
+					parameterWithName("concertId").description("콘서트 아이디"),
 					parameterWithName("concertScheduleId").description("콘서트 스케줄 아이디")
 				)
 				.responseFields(
 					fieldWithPath("result").type(JsonFieldType.STRING).description("응답 결과"),
 					fieldWithPath("data.date").type(JsonFieldType.STRING).description("예약 가능 날짜"),
 					fieldWithPath("data.availableSeats[0].id").type(JsonFieldType.NUMBER).description("예약 가능 좌석 아이디"),
-					fieldWithPath("data.availableSeats[0].seatNumber").type(JsonFieldType.NUMBER).description("예약 가능 좌석 번호"),
+					fieldWithPath("data.availableSeats[0].seatNumber").type(JsonFieldType.NUMBER)
+						.description("예약 가능 좌석 번호"),
 					fieldWithPath("error").type(JsonFieldType.NULL).description("에러 정보"))
 				.build()
 		);

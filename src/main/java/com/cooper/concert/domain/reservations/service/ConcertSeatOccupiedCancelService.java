@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.reservations.models.ConcertSeat;
 import com.cooper.concert.domain.reservations.models.ConcertSeatStatus;
+import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatOccupyCancelResult;
 import com.cooper.concert.domain.reservations.service.repository.ConcertSeatCommandRepository;
 
 @Service
@@ -16,9 +17,15 @@ public class ConcertSeatOccupiedCancelService {
 
 	private final ConcertSeatCommandRepository concertSeatCommandRepository;
 
-	public Integer cancelOccupied(final List<Long> concertSeatIds) {
+	public List<ConcertSeatOccupyCancelResult> cancelOccupied(final List<Long> concertSeatIds) {
 		final String seatStatus = ConcertSeatStatus.UNAVAILABLE.name();
-		final List<ConcertSeat> concertSeats = concertSeatCommandRepository.findAllByIdsAndSeatStatus(concertSeatIds, seatStatus);
-		return concertSeats.stream().map(ConcertSeat::updateAvailable).toList().size();
+		final List<ConcertSeat> concertSeats = concertSeatCommandRepository.findAllByIdsAndSeatStatus(concertSeatIds,
+			seatStatus);
+		return concertSeats.stream()
+			.map(concertSeat -> {
+				concertSeat.updateAvailable();
+				return new ConcertSeatOccupyCancelResult(concertSeat.getId(), concertSeat.getSeatNumber(),
+					concertSeat.getScheduleId());
+			}).toList();
 	}
 }
