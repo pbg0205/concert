@@ -1,24 +1,16 @@
-import http from 'k6/http';
 import {check, sleep} from 'k6';
-import { getToken } from '../tokens/QueueTokenIssueSmokeTest.js'; // token.js에서 getToken 함수 불러오기
+import {issueQueueToken} from '../api/queue/QueueTokenIssueApi.js';
+import {getAvailableSeatsResBodyJson} from "../api/concert/ConcertApi.js"; // token.js에서 getToken 함수 불러오기
 
 export default function () {
   // 토큰 발급
-  let token = getToken();
+  let queueTokenResponse = issueQueueToken('0194c534-f4b5-7c63-bfd5-ae9f34f04d01');
+
+  let queueToken = JSON.parse(queueTokenResponse.body).data.token;
 
   sleep(10);
 
   // 첫 번째 API 호출
-  let res1 = getAvailableDates(token);
-  check(res1, { 'status code 200': (r) => r.status === 200 });
-
-}
-
-function getAvailableDates(token) {
-  let headers = {
-    'QUEUE-TOKEN': `${token}`,
-    'Content-Type': 'application/json',
-  };
-
-  return http.get('http://localhost:8080/api/concert/1/seats', {headers});
+  let response = getAvailableSeatsResBodyJson(queueToken, 1, 1);
+  check(response, { 'status code 200': (r) => r.status === 200 });
 }
