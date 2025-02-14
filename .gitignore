@@ -40,3 +40,5 @@ out/
 
 /concert_mysql/
 /grafana-data/
+
+*.csv
