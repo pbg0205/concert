@@ -16,7 +16,7 @@ public class QueueTokenExpireTxEventListener {
 
 	private final QueueTokenExpireUseCase queueTokenExpireUseCase;
 
-	@Async
+	@Async("taskExecutor")
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void consumeQueueTokenExpireEvent(final QueueTokenExpireEvent queueTokenExpireEvent) {
 		queueTokenExpireUseCase.expireToken(queueTokenExpireEvent.userId());
