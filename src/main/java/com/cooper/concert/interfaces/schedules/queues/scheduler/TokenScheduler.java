@@ -39,4 +39,9 @@ public class TokenScheduler {
 		return tokenSchedulerUseCase.expireToken(LocalDateTime.now());
 	}
 
+	@Scheduled(fixedRateString = "${token.expire.retry-rate}", timeUnit = TimeUnit.MINUTES)
+	@SchedulerLock(name = "tokenExpireScheduler", lockAtLeastFor = "PT5S", lockAtMostFor = "PT8S")
+	public Integer tokenExpireRetryScheduler() {
+		return tokenSchedulerUseCase.retryTokenExpire(LocalDateTime.now());
+	}
 }
