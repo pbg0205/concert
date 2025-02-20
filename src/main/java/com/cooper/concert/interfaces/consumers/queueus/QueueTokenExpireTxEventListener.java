@@ -8,17 +8,17 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import lombok.RequiredArgsConstructor;
 
 import com.cooper.concert.domain.queues.service.dto.event.QueueTokenExpireEvent;
-import com.cooper.concert.interfaces.consumers.queueus.usecase.QueueTokenExpireUseCase;
+import com.cooper.concert.domain.queues.service.publisher.QueueTokenExpireEventPublisher;
 
 @Component
 @RequiredArgsConstructor
 public class QueueTokenExpireTxEventListener {
 
-	private final QueueTokenExpireUseCase queueTokenExpireUseCase;
+	private final QueueTokenExpireEventPublisher queueTokenExpireEventPublisher;
 
 	@Async("taskExecutor")
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void consumeQueueTokenExpireEvent(final QueueTokenExpireEvent queueTokenExpireEvent) {
-		queueTokenExpireUseCase.expireToken(queueTokenExpireEvent.userId());
+	public void consumeQueueTokenExpireEvent(QueueTokenExpireEvent queueTokenExpireEvent) {
+		queueTokenExpireEventPublisher.send(queueTokenExpireEvent);
 	}
 }
