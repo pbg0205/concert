@@ -11,6 +11,7 @@ import com.cooper.concert.domain.payments.service.PaymentProcessingService;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentCompleteInfo;
 import com.cooper.concert.domain.payments.service.dto.response.PaymentProcessResult;
 import com.cooper.concert.domain.queues.service.dto.event.QueueTokenExpireEvent;
+import com.cooper.concert.domain.queues.service.dto.event.QueueTokenOutboxEvent;
 import com.cooper.concert.domain.reservations.service.ConcertReservationService;
 import com.cooper.concert.domain.reservations.service.ConcertSeatReadService;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertReservationCompletedInfo;
@@ -32,6 +33,9 @@ public class PaymentProcessUseCase {
 	public PaymentProcessResult processPayment(final UUID paymentAltId, final Long userId) {
 		final PaymentCompleteInfo paymentCompleteInfo = paymentProcessingService.completePayment(paymentAltId);
 
+		final QueueTokenExpireEvent queueTokenExpireEvent = new QueueTokenExpireEvent(userId, paymentAltId);
+		applicationEventPublisher.publishEvent(new QueueTokenOutboxEvent(paymentAltId, queueTokenExpireEvent));
+
 		final ConcertReservationCompletedInfo reservationCompletedInfo =
 			concertReservationService.completeReservation(paymentCompleteInfo.reservationId());
 
@@ -40,7 +44,7 @@ public class PaymentProcessUseCase {
 
 		userBalanceUseService.usePoint(reservationCompletedInfo.userId(), concertSeatPriceInfo.price());
 
-		applicationEventPublisher.publishEvent(new QueueTokenExpireEvent(userId));
+		applicationEventPublisher.publishEvent(queueTokenExpireEvent);
 
 		return new PaymentProcessResult(reservationCompletedInfo.altId());
 	}
