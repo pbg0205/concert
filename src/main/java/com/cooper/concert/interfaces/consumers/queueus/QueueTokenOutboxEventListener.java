@@ -1,6 +1,7 @@
 package com.cooper.concert.interfaces.consumers.queueus;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -17,7 +18,7 @@ import com.cooper.concert.domain.queues.service.dto.event.QueueTokenOutboxSucces
 
 @Component
 @RequiredArgsConstructor
-public class QueueTokenOutboxTxEventListener {
+public class QueueTokenOutboxEventListener {
 
 	@Value("${token.expire.topic}")
 	private String queueTokenExpireTopic;
@@ -32,12 +33,12 @@ public class QueueTokenOutboxTxEventListener {
 		queueTokenOutboxService.saveQueueToken(queueTokenExpireTopic, jsonPayload, queueTokenOutboxEvent.paymentId());
 	}
 
-	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+	@EventListener
 	public void consumeQueueTokenExpireSuccess(QueueTokenOutboxSuccessEvent queueTokenOutboxSuccessEvent) {
 		queueTokenOutboxService.updateSuccess(queueTokenOutboxSuccessEvent.paymentId());
 	}
 
-	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+	@EventListener
 	public void consumeQueueTokenExpireFail(QueueTokenOutboxFailEvent queueTokenOutboxFailEvent) {
 		queueTokenOutboxService.updateFail(queueTokenOutboxFailEvent.paymentId());
 	}
