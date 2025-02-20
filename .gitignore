@@ -42,3 +42,6 @@ out/
 /grafana-data/
 
 *.csv
+
+kafka
+zookeeper
