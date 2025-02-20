@@ -1,4 +1,6 @@
 package com.cooper.concert.domain.queues.service.dto.event;
 
-public record QueueTokenExpireEvent(Long userId) {
+import java.util.UUID;
+
+public record QueueTokenExpireEvent(Long userId, UUID paymentAltId) {
 }
