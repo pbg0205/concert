@@ -28,3 +28,7 @@ scrape_configs:
     static_configs:
       - targets:
         - 172.10.0.8:9121
+  - job_name: kafka
+    static_configs:
+      - targets:
+        - 172.10.0.14:9308
