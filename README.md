@@ -13,3 +13,4 @@
 ### [10. 캐싱 검토 보고서](https://github.com/pbg0205/concert/wiki/(10)-%EC%BA%90%EC%8B%9C-%EB%B3%B4%EA%B3%A0%EC%84%9C)
 ### [11. 인덱스 적용 보고서](https://github.com/pbg0205/concert/wiki/(11)-%EC%9D%B8%EB%8D%B1%EC%8A%A4-%EA%B0%9C%EC%84%A0-%EB%B3%B4%EA%B3%A0%EC%84%9C)
 ### [12. 서비스 구조 개선 검토 보고서](https://github.com/pbg0205/concert/wiki/(12)-%EA%B2%B0%EC%A0%9C-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%A1%B0-%EA%B0%9C%EC%84%A0-%EB%B3%B4%EA%B3%A0%EC%84%9C)
+### [13. HikariCP 개선 보고서](https://github.com/pbg0205/concert/wiki/(12)-%EA%B2%B0%EC%A0%9C-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%A1%B0-%EA%B0%9C%EC%84%A0-%EB%B3%B4%EA%B3%A0%EC%84%9C)
