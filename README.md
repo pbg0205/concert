@@ -15,4 +15,4 @@
 ### [12. 서비스 구조 개선 검토 보고서](https://github.com/pbg0205/concert/wiki/(12)-%EA%B2%B0%EC%A0%9C-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%A1%B0-%EA%B0%9C%EC%84%A0-%EB%B3%B4%EA%B3%A0%EC%84%9C)
 ### [13. HikariCP 개선 보고서](https://github.com/pbg0205/concert/wiki/(12)-%EA%B2%B0%EC%A0%9C-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%A1%B0-%EA%B0%9C%EC%84%A0-%EB%B3%B4%EA%B3%A0%EC%84%9C)
 ### [14. 시나리오 테스트 및 진단 보고서](https://github.com/pbg0205/concert/wiki/(14)-%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4-%ED%85%8C%EC%8A%A4%ED%8A%B8)
-
+### [15. 장애 대응 보고서](https://github.com/pbg0205/concert/wiki/(15)-%EC%9E%A5%EC%95%A0-%EB%8C%80%EC%9D%91-%EB%B3%B4%EA%B3%A0%EC%84%9C)
