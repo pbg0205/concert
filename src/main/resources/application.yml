@@ -12,6 +12,8 @@ spring:
     username: root
     password: concert2025
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 17
   output:
     ansi:
       enabled: never
@@ -48,7 +50,7 @@ token:
     group-id: 'token-group'
     retry-rate: 1
   secret-key: 327b11e16b3095aecfebb79d1253a111f54aa2f98a373ed21cf2ff9f9f42c71b
-  valid-seconds: 60
+  valid-seconds: 600
 concert:
   schedules:
     read:
