@@ -79,6 +79,30 @@ class ConcertReservationControllerTest {
 	}
 
 	@Test
+	@DisplayName("만료 토큰인 경우 요청 실패")
+	void 만료_토큰인_경우_요청_실패() throws Exception {
+		// given
+		final ConcertReservationRequest concertReservationRequest = new ConcertReservationRequest(1L);
+		final String requestBody = objectMapper.writeValueAsString(concertReservationRequest);
+		final String expiredToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImV4cCI6MTcwOTU4MjQwMH0.KXewVF1-wLm2xlhnW0w6ynk9fT0gWFakDKwvtEKDbo4";
+
+		// when
+		final ResultActions result = mockMvc.perform(post("/api/concert/seats/reservation")
+			.contentType(MediaType.APPLICATION_JSON)
+			.header("QUEUE-TOKEN", expiredToken)
+			.content(requestBody));
+
+		// then
+		result.andExpectAll(
+				status().isForbidden(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_TOKEN05"),
+				jsonPath("$.error.message").value("만료된 토큰 입니다."))
+			.andDo(print());
+	}
+
+	@Test
 	@DisplayName("콘서트 좌석이 존재하지 않을 경우 요청 실패")
 	void 콘서트_좌석이_존재하지_않을_경우_요청_실패() throws Exception {
 		// given

@@ -83,6 +83,31 @@ class PaymentProcessControllerTest {
 	}
 
 	@Test
+	@DisplayName("만료 토큰인 경우 요청 실패")
+	void 만료_토큰인_경우_요청_실패() throws Exception {
+		// given
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
+		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
+		final String expiredToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImV4cCI6MTcwOTU4MjQwMH0.KXewVF1-wLm2xlhnW0w6ynk9fT0gWFakDKwvtEKDbo4";
+
+		// when
+		final ResultActions result = mockMvc.perform(post("/api/payments")
+			.contentType(MediaType.APPLICATION_JSON)
+			.header("QUEUE-TOKEN", expiredToken)
+			.content(requestBody));
+
+		// then
+		result.andExpectAll(
+				status().isForbidden(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_TOKEN05"),
+				jsonPath("$.error.message").value("만료된 토큰 입니다."))
+			.andDo(print());
+	}
+
+	@Test
 	@DisplayName("결제와 예약 모두 대기 상태인 경우 결제 성공")
 	void 결제_성공() throws Exception {
 		// given

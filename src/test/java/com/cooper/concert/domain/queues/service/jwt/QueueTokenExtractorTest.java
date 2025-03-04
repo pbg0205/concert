@@ -1,7 +1,7 @@
 package com.cooper.concert.domain.queues.service.jwt;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
@@ -11,12 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 
 import com.cooper.concert.domain.queues.infrastructure.jwt.JwtQueueTokenExtractor;
+import com.cooper.concert.domain.queues.service.errors.exception.ExpiredQueueTokenException;
 
 class QueueTokenExtractorTest {
 
@@ -67,7 +67,7 @@ class QueueTokenExtractorTest {
 
 		// when, then
 		assertThatThrownBy(() -> queueTokenExtractor.extractUserIdFromToken(token))
-			.isInstanceOf(ExpiredJwtException.class);
+			.isInstanceOf(ExpiredQueueTokenException.class);
 	}
 
 	@Test

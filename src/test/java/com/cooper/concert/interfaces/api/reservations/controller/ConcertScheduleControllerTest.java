@@ -22,9 +22,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.cooper.concert.api.components.interceptor.QueueTokenValidationInterceptor;
-import com.cooper.concert.api.config.WebArgumentsConfig;
-import com.cooper.concert.api.config.WebInterceptorConfig;
+import com.cooper.concert.domain.queues.service.ActiveQueueTokenValidationService;
+import com.cooper.concert.domain.queues.service.jwt.QueueTokenExtractor;
+import com.cooper.concert.domain.queues.service.jwt.QueueTokenGenerator;
+import com.cooper.concert.domain.queues.service.repository.ActiveTokenRepository;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertScheduleSeatsResult;
 import com.cooper.concert.domain.reservations.service.dto.response.ConcertSeatResult;
@@ -32,10 +33,10 @@ import com.cooper.concert.domain.reservations.service.errors.ConcertErrorType;
 import com.cooper.concert.domain.reservations.service.errors.ConcertNotFoundException;
 import com.cooper.concert.interfaces.api.reservations.usecase.ConcertScheduleReadUseCase;
 
-@WebMvcTest(value = ConcertScheduleController.class, excludeFilters = {
-	@ComponentScan.Filter(
+@WebMvcTest(value = ConcertScheduleController.class,
+	includeFilters = {@ComponentScan.Filter(
 		type = FilterType.ASSIGNABLE_TYPE,
-		classes = {WebInterceptorConfig.class, QueueTokenValidationInterceptor.class, WebArgumentsConfig.class})})
+		classes = {QueueTokenExtractor.class, QueueTokenGenerator.class, ActiveQueueTokenValidationService.class})})
 class ConcertScheduleControllerTest {
 
 	@Autowired
@@ -43,6 +44,9 @@ class ConcertScheduleControllerTest {
 
 	@MockitoBean
 	private ConcertScheduleReadUseCase concertScheduleReadUseCase;
+
+	@MockitoBean
+	private ActiveTokenRepository activeTokenRepository;
 
 	@Test
 	@DisplayName("콘서트가 존재하지 않을 경우 요청 실패")
