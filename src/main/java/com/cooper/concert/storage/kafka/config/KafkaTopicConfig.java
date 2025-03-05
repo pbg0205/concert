@@ -31,15 +31,15 @@ public class KafkaTopicConfig {
 
 	private NewTopic tokenExpireTopic() {
 		return TopicBuilder.name(tokenExpireTopic)
-			.partitions(2)
-			.replicas(1)
+			.partitions(3)
+			.replicas(3)
 			.build();
 	}
 
 	private NewTopic tokenExpireDlt() {
 		return TopicBuilder.name(tokenExpireDlt)
-			.partitions(2)
-			.replicas(1)
+			.partitions(3)
+			.replicas(3)
 			.build();
 	}
 
