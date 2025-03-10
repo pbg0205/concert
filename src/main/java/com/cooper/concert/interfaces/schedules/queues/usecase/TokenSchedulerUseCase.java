@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import com.cooper.concert.domain.payments.service.PaymentCancelService;
 import com.cooper.concert.domain.queues.service.ActiveTokenService;
 import com.cooper.concert.domain.queues.service.QueueTokenExpiredService;
-import com.cooper.concert.domain.queues.service.QueueTokenOutboxService;
 import com.cooper.concert.domain.queues.service.WaitingQueueService;
 import com.cooper.concert.domain.reservations.service.ConcertScheduleSeatsCacheService;
 import com.cooper.concert.domain.reservations.service.ConcertSeatOccupiedCancelService;
@@ -32,7 +31,6 @@ public class TokenSchedulerUseCase {
 	private final PaymentCancelService paymentCancelService;
 	private final ConcertSeatOccupiedCancelService concertSeatOccupiedCancelService;
 	private final ConcertScheduleSeatsCacheService concertScheduleSeatsCacheService;
-	private final QueueTokenOutboxService queueTokenOutboxService;
 
 	public Integer updateToProcessing(final LocalDateTime expiredAt) {
 		final Integer availableActiveTokenCount = activeTokenService.countRemainingActiveTokens();
@@ -66,7 +64,4 @@ public class TokenSchedulerUseCase {
 		return expiredTokenUserIds.size();
 	}
 
-	public Integer retryTokenExpire(final LocalDateTime retryAt) {
-		return queueTokenOutboxService.retryExpiredTokens(retryAt);
-	}
 }
