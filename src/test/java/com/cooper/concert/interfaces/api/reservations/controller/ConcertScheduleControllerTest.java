@@ -1,5 +1,6 @@
 package com.cooper.concert.interfaces.api.reservations.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,8 +47,34 @@ class ConcertScheduleControllerTest {
 	@MockitoBean
 	private ConcertScheduleReadUseCase concertScheduleReadUseCase;
 
+	@Autowired
+	private QueueTokenGenerator queueTokenGenerator;
+
 	@MockitoBean
 	private ActiveTokenRepository activeTokenRepository;
+
+	@Test
+	@DisplayName("올바르지 않는 토큰인 경우 요청 실패")
+	void 올바르지_않는_토큰인_경우_요청_실패() throws Exception {
+		// given
+		final Long concertId = 1000L;
+		final int page = 1;
+
+		// when
+		final ResultActions result = mockMvc.perform(
+			get("/api/concert/{concertId}/available-dates?page={page}", concertId, page)
+				.header("QUEUE-TOKEN", "invalid token")
+				.contentType(MediaType.APPLICATION_JSON));
+
+		// then
+		result.andExpectAll(
+				status().isForbidden(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_TOKEN03"),
+				jsonPath("$.error.message").value("올바른 형식의 토큰 아닙니다."))
+			.andDo(print());
+	}
 
 	@Test
 	@DisplayName("콘서트가 존재하지 않을 경우 요청 실패")
@@ -54,14 +82,16 @@ class ConcertScheduleControllerTest {
 		// given
 		final Long concertId = 1000L;
 		final int page = 1;
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
 
 		when(concertScheduleReadUseCase.readAllScheduleByConcertIdAndPaging(anyLong(), anyInt(), anyInt()))
 			.thenThrow(new ConcertNotFoundException(ConcertErrorType.CONCERT_NOT_FOUND));
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
 
 		// when
 		final ResultActions result = mockMvc.perform(
 			get("/api/concert/{concertId}/available-dates?page={page}", concertId, page)
-				.header("QUEUE-TOKEN", "queue-token")
+				.header("QUEUE-TOKEN", token)
 				.contentType(MediaType.APPLICATION_JSON));
 
 		// then
@@ -80,6 +110,7 @@ class ConcertScheduleControllerTest {
 		// given
 		final Long concertId = 1000L;
 		final int page = 1;
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
 
 		when(concertScheduleReadUseCase.readAllScheduleByConcertIdAndPaging(anyLong(), anyInt(), anyInt()))
 			.thenReturn(List.of(
@@ -95,11 +126,12 @@ class ConcertScheduleControllerTest {
 					new ConcertScheduleResult(10L, LocalDateTime.of(2025, 1, 17, 0, 0, 0))
 				)
 			);
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
 
 		// when
 		final ResultActions result = mockMvc.perform(
 			get("/api/concert/{concertId}/available-dates?page={page}", concertId, page)
-				.header("QUEUE-TOKEN", "queue-token")
+				.header("QUEUE-TOKEN", token)
 				.contentType(MediaType.APPLICATION_JSON));
 
 		// then
@@ -117,15 +149,17 @@ class ConcertScheduleControllerTest {
 		// given
 		final Long concertId = 1000L;
 		final Long scheduleId = 1000L;
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
 
 		when(concertScheduleReadUseCase.readAvailableSeatsByScheduleId(anyLong(), anyLong()))
 			.thenThrow(new ConcertNotFoundException(ConcertErrorType.CONCERT_SCHEDULE_NOT_FOUND));
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
 
 		// when
 		final ResultActions result = mockMvc.perform(
 			get("/api/concert/{concertId}/concertSchedule/{concertScheduleId}/seats",
 				concertId, scheduleId)
-				.header("QUEUE-TOKEN", "queue-token")
+				.header("QUEUE-TOKEN", token)
 				.contentType(MediaType.APPLICATION_JSON));
 
 		// then
@@ -144,6 +178,7 @@ class ConcertScheduleControllerTest {
 		// given
 		final Long concertId = 1L;
 		final Long scheduleId = 1L;
+		final String token = queueTokenGenerator.generateJwt(1L, Instant.now());
 
 		when(concertScheduleReadUseCase.readAvailableSeatsByScheduleId(anyLong(), anyLong()))
 			.thenReturn(
@@ -153,12 +188,13 @@ class ConcertScheduleControllerTest {
 						new ConcertSeatResult(1L, 1L),
 						new ConcertSeatResult(3L, 3L),
 						new ConcertSeatResult(10L, 10L))));
+		when(activeTokenRepository.existsByUserId(any())).thenReturn(true);
 
 		// when
 		final ResultActions result = mockMvc.perform(
 			get("/api/concert/{concertId}/concertSchedule/{concertScheduleId}/seats",
 				concertId, scheduleId)
-				.header("QUEUE-TOKEN", "queue-token")
+				.header("QUEUE-TOKEN", token)
 				.contentType(MediaType.APPLICATION_JSON));
 
 		// then
