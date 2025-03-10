@@ -88,7 +88,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
-    testImplementation("org.testcontainers:kafka:1.20.4")
 
     // Shed lock
     implementation 'net.javacrumbs.shedlock:shedlock-provider-jdbc-template:6.2.0'
@@ -108,8 +107,6 @@ dependencies {
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 
-    // kafka
-    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 bootJar {
