@@ -60,6 +60,30 @@ class PaymentProcessControllerTest {
 	private ActiveTokenRepository activeTokenRepository;
 
 	@Test
+	@DisplayName("올바르지 않는 토큰인 경우 요청 실패")
+	void 올바르지_않는_토큰인_경우_요청_실패() throws Exception {
+		// given
+		final UUID paymentId = UUID.fromString("01944bfc-3939-7e31-add2-2f356099b3b3");
+		final PaymentProcessRequest paymentProcessRequest = new PaymentProcessRequest(paymentId);
+		final String requestBody = objectMapper.writeValueAsString(paymentProcessRequest);
+
+		// when
+		final ResultActions result = mockMvc.perform(post("/api/payments")
+			.contentType(MediaType.APPLICATION_JSON)
+			.header("QUEUE-TOKEN", "invalid token")
+			.content(requestBody));
+
+		// then
+		result.andExpectAll(
+				status().isForbidden(),
+				jsonPath("$.result").value("ERROR"),
+				jsonPath("$.data").doesNotExist(),
+				jsonPath("$.error.code").value("ERROR_TOKEN03"),
+				jsonPath("$.error.message").value("올바른 형식의 토큰 아닙니다."))
+			.andDo(print());
+	}
+
+	@Test
 	@DisplayName("토큰 헤더가 없으면 요청 실패")
 	void 토큰_헤더가_없으면_요청_실패() throws Exception {
 		// given
