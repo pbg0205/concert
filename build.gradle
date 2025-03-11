@@ -107,6 +107,8 @@ dependencies {
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 
+    // monitoring
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 bootJar {
