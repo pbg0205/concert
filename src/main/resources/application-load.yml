@@ -6,7 +6,6 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
-    defer-datasource-initialization: true
   datasource:
     url: jdbc:mysql://localhost:3306/concert_db
     username: root
@@ -17,17 +16,10 @@ spring:
   output:
     ansi:
       enabled: never
-  sql:
-    init:
-      mode: always
-      data-locations: ignore-data.sql # data.sql 실행을 무시하기 위함
-      schema-locations: schema-perf.sql
   data:
     redis:
       host: localhost
       port: 6379
-  kafka:
-    bootstrap-servers: localhost:19092
 server:
   servlet:
     encoding:

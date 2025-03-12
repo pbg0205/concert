@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `concert_schedule`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
 
-CREATE TABLE `concert_seat`
+CREATE TABLE IF NOT EXISTS `concert_seat`
 (
     `version`     int                                    NOT NULL DEFAULT '0',
     `created_at`  bigint                                 NOT NULL DEFAULT '0',
@@ -49,7 +49,7 @@ CREATE TABLE `concert_seat`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
 
-CREATE TABLE `payment`
+CREATE TABLE IF NOT EXISTS `payment`
 (
     `created_at`     bigint                                 NOT NULL DEFAULT '0',
     `id`             bigint                                 NOT NULL AUTO_INCREMENT,
@@ -65,21 +65,7 @@ CREATE TABLE `payment`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
 
-CREATE TABLE `queue_token_expire_outbox`
-(
-    `created_at`  bigint                                  NOT NULL DEFAULT '0',
-    `id`          bigint                                  NOT NULL AUTO_INCREMENT,
-    `modified_at` bigint                                  NOT NULL DEFAULT '0',
-    `payment_id`  binary(16)                              NOT NULL,
-    `payload`     varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `topic`       varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `type`        varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-
-CREATE TABLE `reservation`
+CREATE TABLE IF NOT EXISTS `reservation`
 (
     `created_at`  bigint                                 NOT NULL DEFAULT '0',
     `id`          bigint                                 NOT NULL AUTO_INCREMENT,
@@ -95,7 +81,7 @@ CREATE TABLE `reservation`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
 
-CREATE TABLE `user`
+CREATE TABLE IF NOT EXISTS `user`
 (
     `created_at`  bigint                                  NOT NULL DEFAULT '0',
     `id`          bigint                                  NOT NULL AUTO_INCREMENT,
@@ -108,7 +94,7 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
 
-CREATE TABLE `user_balance`
+CREATE TABLE IF NOT EXISTS `user_balance`
 (
     `created_at`  bigint NOT NULL DEFAULT '0',
     `id`          bigint NOT NULL AUTO_INCREMENT,
