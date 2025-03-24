@@ -82,4 +82,10 @@ public class RedisConcertScheduleSeatsCacheRepository implements ConcertSchedule
 			redisTemplate.opsForHash().put(concertSeatsKey, request.seatId(), concertSeatResult);
 		}
 	}
+
+	@Override
+	public void updateToUnavailableSeat(final Long scheduleId, final Long seatId, final Long seatNumber) {
+		final String concertSeatsKey = String.format(concertSeatsKeyFormat, scheduleId);
+		redisTemplate.opsForList().remove(concertSeatsKey, 1, new ConcertSeatResult(seatId, seatNumber));
+	}
 }

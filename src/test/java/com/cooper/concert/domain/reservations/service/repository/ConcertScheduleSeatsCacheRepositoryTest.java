@@ -141,4 +141,24 @@ class ConcertScheduleSeatsCacheRepositoryTest {
 		assertThat(keySet).hasSize(3);
 	}
 
+	@Test
+	@DisplayName("콘서트 좌석 점유시 캐싱 제거 성공")
+	void 콘서트_좌석_점유시_캐싱_제거_성공() {
+		// given
+		final String concertScheduleKey = String.format(concertSeatsKeyFormat, 1L);
+
+		redisTemplate.opsForList().rightPush(concertScheduleKey, new ConcertSeatResult(1L, 1L));
+		redisTemplate.opsForList().rightPush(concertScheduleKey, new ConcertSeatResult(1L, 2L));
+		redisTemplate.opsForList().rightPush(concertScheduleKey, new ConcertSeatResult(1L, 3L));
+		redisTemplate.opsForList().rightPush(concertScheduleKey, new ConcertSeatResult(1L, 4L));
+		redisTemplate.opsForList().rightPush(concertScheduleKey, new ConcertSeatResult(1L, 5L));
+
+		// when
+		concertScheduleSeatsCacheRepository.updateToUnavailableSeat(1L, 1L, 1L);
+
+		// then
+		final Long expectedSize = redisTemplate.opsForList().size(concertScheduleKey);
+		assertThat(expectedSize).isEqualTo(4);
+	}
+
 }

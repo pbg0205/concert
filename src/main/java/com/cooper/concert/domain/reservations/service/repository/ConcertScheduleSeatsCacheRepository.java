@@ -13,4 +13,6 @@ public interface ConcertScheduleSeatsCacheRepository {
 	Long saveAllConcertScheduleSeats(Long concertScheduleId, final List<ConcertSeatResult> concertScheduleSeatsResult);
 
 	void updateToAvailableSeats(List<ConcertSeatOccupyCancelRequest> concertSeatOccupyCancelRequests);
+
+	void updateToUnavailableSeat(Long scheduleId, Long seatId, Long seatNumber);
 }
