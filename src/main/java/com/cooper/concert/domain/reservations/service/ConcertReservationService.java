@@ -43,7 +43,11 @@ public class ConcertReservationService {
 		final Reservation savedReservation = reservationCommandRepository.save(
 			Reservation.createPendingReservation(userId, concertSeat.getId(), reservationAltId));
 
-		return new ConcertReservationInfo(savedReservation.getId(), savedReservation.getAltId());
+		return new ConcertReservationInfo(
+			savedReservation.getId(),
+			savedReservation.getAltId(),
+			concertSeat.getScheduleId(),
+			concertSeat.getSeatNumber());
 	}
 
 	public ConcertReservationCompletedInfo completeReservation(final Long reservationId) {

@@ -33,4 +33,8 @@ public class ConcertScheduleSeatsCacheService {
 	public void updateToAvailableSeats(final List<ConcertSeatOccupyCancelRequest> concertSeatOccupyCancelRequests) {
 		concertScheduleSeatsCacheRepository.updateToAvailableSeats(concertSeatOccupyCancelRequests);
 	}
+
+	public void updateToUnAvailableSeat(final Long scheduleId, final Long seatId, final Long seatNumber) {
+		concertScheduleSeatsCacheRepository.updateToUnavailableSeat(scheduleId, seatId, seatNumber);
+	}
 }
