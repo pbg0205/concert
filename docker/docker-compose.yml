@@ -13,6 +13,11 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 1GB
     networks:
       concert-network:
         ipv4_address: 172.10.0.2
@@ -23,8 +28,13 @@ services:
     networks:
       concert-network:
         ipv4_address: 172.10.0.3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 1GB
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:11.5.6
     container_name: grafana
     ports:
       - "3000:3000"
