@@ -1,5 +1,22 @@
 version: '3.8'
 services:
+  concert-application:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: concert-application
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 1GB
+    networks:
+      concert-network:
+        ipv4_address: 172.10.0.250
   mysql:
     image: mysql:8.0
     ports:

@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: concert
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+  datasource:
+    url: jdbc:mysql://172.10.0.2:3306/concert_db
+    username: root
+    password: concert2025
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 17
+  output:
+    ansi:
+      enabled: never
+  sql:
+    init:
+      mode: always
+  data:
+    redis:
+      host: 172.10.0.3
+      port: 6379
+  kafka:
+    bootstrap-servers: localhost:19092
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+queue:
+  processing:
+    capacity: 30
+    rate: 10
+waiting-queue:
+  name: waitingQueue
+token:
+  processing:
+    valid:
+      minutes: 5
+    key:
+      prefix: 'activeTokens'
+  expire:
+    rate: 10
+  secret-key: 327b11e16b3095aecfebb79d1253a111f54aa2f98a373ed21cf2ff9f9f42c71b
+  valid-seconds: 600
+concert:
+  schedules:
+    read:
+      limit: 10
+    cache:
+      format: 'concert:%s:schedules:'
+      ttl:  300 # seconds
+    available-seats:
+      cache:
+        format: 'concertSchedules:%s:seats:'
+        ttl:  300 # seconds
