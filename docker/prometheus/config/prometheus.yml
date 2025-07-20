@@ -41,3 +41,11 @@ scrape_configs:
     static_configs:
       - targets:
           - collector:8889
+  - job_name: concert-instance01
+    honor_timestamps: true
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /actuator/prometheus
+    scheme: http
+    static_configs:
+      - targets: ['172.10.0.250:8080']

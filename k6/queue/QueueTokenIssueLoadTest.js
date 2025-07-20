@@ -25,10 +25,8 @@ const altIds = loadCSV();
 
 // k6 부하 테스트 옵션 설정
 export let options = {
-  rps: 10,
-  iterations: 100,
   vus: 100,
-  duration: '10s',
+  duration: '3m',
 };
 
 export default function () {

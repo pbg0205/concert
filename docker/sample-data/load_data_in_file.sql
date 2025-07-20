@@ -7,7 +7,7 @@ LOAD DATA INFILE '/var/lib/mysql-files/sample-data/user_small.csv'
     LINES TERMINATED BY '\n'
     IGNORE 1 ROWS
     (id, name, @alt_id, created_at, modified_at)
-    SET alt_id = UNHEX(@alt_id);
+    SET alt_id = UUID_TO_BIN(@alt_id);
 
 ## user_balance
 LOAD DATA INFILE '/var/lib/mysql-files/sample-data/user_balance_small.csv'

@@ -27,11 +27,11 @@ public class UserDataGenerator {
 			for (int userId = 1; userId <= totalUsers; userId++) {
 				String name = "user" + String.format("%05d", userId);  // 예: user00001
 				final String altIdStrVal = Generators.timeBasedEpochGenerator().generate().toString();
-				String altId = convertUuidToHex(altIdStrVal);  // UUID -> 16진수 문자열 변환
+				// UUID -> 16진수 문자열 변환
 				long createdAt = startTimestamp + userId;  // 각 사용자마다 타임스탬프 1초씩 증가
 
 				// user 데이터 작성
-				userWriter.write(String.format("%d,%s,%s,%d,%d\n", userId, name, altId, createdAt, createdAt));
+				userWriter.write(String.format("%d,%s,%s,%d,%d\n", userId, name, altIdStrVal, createdAt, createdAt));
 
 				// user_balance 데이터 작성 (포인트는 고정 1000)
 				balanceWriter.write(String.format("%d,%d,1000,%d,%d\n", balanceId++, userId, createdAt, createdAt));
@@ -45,9 +45,5 @@ public class UserDataGenerator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static String convertUuidToHex(String uuid) {
-		return uuid.replace("-", "");
 	}
 }

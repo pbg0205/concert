@@ -58,3 +58,8 @@ concert:
       cache:
         format: 'concertSchedules:%s:seats:'
         ttl:  300 # seconds
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,prometheus"
